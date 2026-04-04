@@ -1,0 +1,38 @@
+jobs:
+  - id: beno_cto
+    achievements:
+      - Established enterprise architecture governance framework supporting 25+ engineers across multiple sister companies, implementing C4 modeling with Structurizr and API-first architecture standards
+      - Led migration of API documentation to custom portal supporting Arazzo standard for documenting complex API flows, improving developer satisfaction and documentation compliance across travel industry integrations
+      - Spearheaded analytics re-architecture initiative consolidating fragmented toolset (HotJar, Smartlook, LangFuse) into unified governance model using Avo, PostHog, and GA4, establishing single source of truth for event documentation and application compliance auditing
+      - Designed and implemented integration architecture for Aventura.com travel system including flight bookings and hotel reservations, leveraging GDS (TravelPort) expertise to navigate complex airline industry standards
+      - Developed AI-enhanced architecture training program delivered to 20+ engineers, managers, and directors across organization, enabling team to maintain throughput despite 13% workforce reduction through improved productivity tools
+      - Cultivated architecture leadership capability by authorizing 3 engineers to suggest and approve architecture changes, establishing distributed architecture decision-making framework
+
+  - id: beno_em
+    achievements:
+      - Scaled engineering organization from 5 to 20 engineers while reducing annual turnover from 70% to 6% through strategic remote hiring across multiple countries
+      - Enhanced agile methodology by implementing Kanban Flight Levels and advanced forecasting techniques using Cycle Time and Monte Carlo simulation for enterprise delivery planning
+      - Implemented comprehensive SaaS vendor selection strategy for OAuth, Analytics Governance, and Testing systems, reducing operational costs by 35% while ensuring seamless integration between enterprise and cloud systems
+
+  - id: beno_lead
+    achievements:
+      - Architected cloud migration from legacy hosting to <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, S3, CloudFront) enabling distributed system architecture with perfect SEO score and 2x web vitals performance improvement
+      - Established comprehensive architecture documentation framework including peer reviews, automated static analysis, CI/CD reports covering API Reference (OpenAPI), documentation (Markdown), and infrastructure-as-code (CloudFormation)
+      - Pioneered API-breaking change detection system and automated client code generation, reducing integration errors and enabling AI-assisted code editing workflows
+
+  - id: roamworks_arch
+    achievements:
+      - Led modernization of legacy application stack migration from Smalltalk to <span class="iconify" data-icon="devicon:spring"></span> Spring backend and <span class="iconify" data-icon="logos:angular-icon"></span> Angular frontend for shipment container security IoT application
+      - Architected ML-based fuel tank theft detection system using <span class="iconify" data-icon="vscode-icons:file-type-azure"></span> Azure Machine Learning, improving theft detection accuracy by 18%
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: Enterprise Architecture, <span class="iconify" data-icon="vscode-icons:file-type-structurizr"></span> C4 Modeling, API-First Design, Arazzo Standards, Solution Architecture, Technology Strategy, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS, <span class="iconify" data-icon="vscode-icons:file-type-azure"></span> Azure, Microservices, DevOps, Infrastructure-as-Code, GDS Integration, Flight Booking Systems, Travel Technology Standards, Airline Domain Expertise
+  - category: Managerial
+    skills: Team Leadership, Agile Methodologies, Change Management, Cross-functional Collaboration, Architecture Training

@@ -1,0 +1,588 @@
+{
+  "configuration" : { },
+  "description" : "AI-assisted resume writing system spanning multiple repos, orchestrated by a Claude skill plugin with MCP-based tooling.",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-ui",
+  "lastModifiedDate" : "2026-04-02T16:02:20Z",
+  "model" : {
+    "people" : [ {
+      "description" : "The human writing and tailoring resumes for job applications. Assigns a db/ directory containing their resume data.",
+      "id" : "1",
+      "name" : "Resume Author",
+      "properties" : {
+        "structurizr.dsl.identifier" : "user"
+      },
+      "relationships" : [ {
+        "description" : "Assigns db/ directory and delegates resume tasks to",
+        "destinationId" : "5",
+        "id" : "11",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Assigns db/ directory and delegates resume tasks to",
+        "destinationId" : "4",
+        "id" : "12",
+        "linkedRelationshipId" : "11",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "description" : "Professional networking platform with job postings.",
+      "documentation" : { },
+      "id" : "2",
+      "name" : "LinkedIn",
+      "properties" : {
+        "structurizr.dsl.identifier" : "linkedin"
+      },
+      "tags" : "Element,Software System,External"
+    }, {
+      "description" : "Local LLM inference server running nomic-embed-text for embeddings.",
+      "documentation" : { },
+      "id" : "3",
+      "name" : "Ollama",
+      "properties" : {
+        "structurizr.dsl.identifier" : "ollama"
+      },
+      "tags" : "Element,Software System,External"
+    }, {
+      "containers" : [ {
+        "description" : "AI coding agent (Claude Code) operating from the user's db/ directory as its working directory. Loads skills and MCP servers to execute resume workflows.",
+        "documentation" : { },
+        "id" : "5",
+        "name" : "Claude CoWork",
+        "properties" : {
+          "structurizr.dsl.identifier" : "claudeCowork"
+        },
+        "relationships" : [ {
+          "description" : "Uses as working directory",
+          "destinationId" : "6",
+          "id" : "13",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Loads and executes skill commands (/fetch, /analyze, /synthesize)",
+          "destinationId" : "7",
+          "id" : "14",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Connects via MCP",
+          "destinationId" : "9",
+          "id" : "15",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Connects via MCP",
+          "destinationId" : "8",
+          "id" : "16",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Connects via MCP",
+          "destinationId" : "10",
+          "id" : "17",
+          "sourceId" : "5",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Agent",
+        "technology" : "Claude Code"
+      }, {
+        "description" : "User-assigned data directory storing resumes, job descriptions, achievements, base.yaml, contact.yaml, and priorities.yaml.",
+        "documentation" : { },
+        "id" : "6",
+        "name" : "db",
+        "properties" : {
+          "structurizr.dsl.identifier" : "thateDb"
+        },
+        "tags" : "Element,Container,DataStore",
+        "technology" : "Git, YAML, Markdown"
+      }, {
+        "description" : "Claude skill plugin that orchestrates the full resume workflow: fetch, lint, analyze, synthesize, render, harvest.",
+        "documentation" : { },
+        "id" : "7",
+        "name" : "write-resume-plugin",
+        "properties" : {
+          "structurizr.dsl.identifier" : "writeResumePlugin"
+        },
+        "relationships" : [ {
+          "description" : "Reads base.yaml, contact.yaml; writes resume YAMLs and rendered output",
+          "destinationId" : "6",
+          "id" : "18",
+          "sourceId" : "7",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Fetches job descriptions via fetch_job",
+          "destinationId" : "9",
+          "id" : "19",
+          "sourceId" : "7",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Queries similar bullets, harvests new bullets, records feedback",
+          "destinationId" : "8",
+          "id" : "20",
+          "sourceId" : "7",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Renders Markdown to PDF via render_resume",
+          "destinationId" : "10",
+          "id" : "21",
+          "sourceId" : "7",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,Orchestrator",
+        "technology" : "Claude Skill, Bash, Mustache"
+      }, {
+        "description" : "MCP server providing vector search over resume bullets with trust signals (groundedness, reuse, feedback).",
+        "documentation" : { },
+        "id" : "8",
+        "name" : "resume-embeddings",
+        "properties" : {
+          "structurizr.dsl.identifier" : "resumeEmbeddings"
+        },
+        "relationships" : [ {
+          "description" : "Generates embeddings via nomic-embed-text",
+          "destinationId" : "3",
+          "id" : "24",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        }, {
+          "description" : "Reads resume YAMLs during harvest",
+          "destinationId" : "6",
+          "id" : "26",
+          "sourceId" : "8",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,MCP",
+        "technology" : "TypeScript, Vectra, MCP"
+      }, {
+        "description" : "MCP server that fetches LinkedIn job postings and converts them to Markdown.",
+        "documentation" : { },
+        "id" : "9",
+        "name" : "linkedin-fetcher",
+        "properties" : {
+          "structurizr.dsl.identifier" : "linkedinFetcher"
+        },
+        "relationships" : [ {
+          "description" : "Scrapes job postings from",
+          "destinationId" : "2",
+          "id" : "22",
+          "sourceId" : "9",
+          "tags" : "Relationship"
+        } ],
+        "tags" : "Element,Container,MCP",
+        "technology" : "TypeScript, Puppeteer, MCP"
+      }, {
+        "description" : "MCP server that renders Markdown resumes to styled PDFs with icon support.",
+        "documentation" : { },
+        "id" : "10",
+        "name" : "oh-my-cv-render",
+        "properties" : {
+          "structurizr.dsl.identifier" : "ohmycvRender"
+        },
+        "tags" : "Element,Container,MCP",
+        "technology" : "TypeScript, Puppeteer, MCP"
+      } ],
+      "description" : "AI-assisted system for writing, tailoring, and rendering resumes.",
+      "documentation" : { },
+      "id" : "4",
+      "name" : "Resume Skill System",
+      "properties" : {
+        "structurizr.dsl.identifier" : "resumeSkill"
+      },
+      "relationships" : [ {
+        "description" : "Scrapes job postings from",
+        "destinationId" : "2",
+        "id" : "23",
+        "linkedRelationshipId" : "22",
+        "sourceId" : "4"
+      }, {
+        "description" : "Generates embeddings via nomic-embed-text",
+        "destinationId" : "3",
+        "id" : "25",
+        "linkedRelationshipId" : "24",
+        "sourceId" : "4"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Resume Skill System",
+  "properties" : {
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.error" : "19",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "ColdStart",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : {
+        "elements" : [ {
+          "background" : "#da7756",
+          "color" : "#ffffff",
+          "shape" : "Robot",
+          "tag" : "Agent"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "Container"
+        }, {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "shape" : "Cylinder",
+          "tag" : "DataStore"
+        }, {
+          "background" : "#999999",
+          "color" : "#ffffff",
+          "tag" : "External"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "MCP"
+        }, {
+          "background" : "#2d882d",
+          "color" : "#ffffff",
+          "tag" : "Orchestrator"
+        }, {
+          "background" : "#08427b",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "description" : "Internal containers showing Claude CoWork as the agent, the db directory, skill plugin, and MCP servers.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "Containers",
+      "name" : "Container View: Resume Skill System",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "11"
+      }, {
+        "id" : "13"
+      }, {
+        "id" : "14"
+      }, {
+        "id" : "15"
+      }, {
+        "id" : "16"
+      }, {
+        "id" : "17"
+      }, {
+        "id" : "18"
+      }, {
+        "id" : "19"
+      }, {
+        "id" : "20"
+      }, {
+        "id" : "21"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "26"
+      } ],
+      "softwareSystemId" : "4"
+    } ],
+    "dynamicViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "description" : "Scenario: embedding database wiped. User requests a resume, system bootstraps with empty index then rebuilds over successive resumes.",
+      "dimensions" : {
+        "height" : 3337,
+        "width" : 3770
+      },
+      "elementId" : "4",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 200,
+        "y" : 162
+      }, {
+        "id" : "2",
+        "x" : 3100,
+        "y" : 2779
+      }, {
+        "id" : "3",
+        "x" : 3100,
+        "y" : 2179
+      }, {
+        "id" : "5",
+        "x" : 900,
+        "y" : 162
+      }, {
+        "id" : "6",
+        "x" : 3100,
+        "y" : 162
+      }, {
+        "id" : "7",
+        "x" : 1600,
+        "y" : 212
+      }, {
+        "id" : "8",
+        "x" : 2350,
+        "y" : 470
+      }, {
+        "id" : "9",
+        "x" : 2350,
+        "y" : 1070
+      }, {
+        "id" : "10",
+        "x" : 2350,
+        "y" : 1670
+      } ],
+      "externalBoundariesVisible" : false,
+      "key" : "ColdStart",
+      "name" : "Dynamic View: Resume Skill System",
+      "order" : 3,
+      "relationships" : [ {
+        "description" : "Requests a tailored resume for a LinkedIn job URL",
+        "id" : "11",
+        "order" : "1",
+        "response" : false
+      }, {
+        "description" : "Invokes /fetch with job URL",
+        "id" : "14",
+        "order" : "2",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 1462,
+          "y" : 362
+        } ]
+      }, {
+        "description" : "Calls fetch_job",
+        "id" : "19",
+        "order" : "3",
+        "response" : false
+      }, {
+        "description" : "Scrapes job posting",
+        "id" : "22",
+        "order" : "4",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2800,
+          "y" : 1520
+        }, {
+          "x" : 3100,
+          "y" : 2629
+        } ]
+      }, {
+        "description" : "Saves raw JD to db/jd-linted/",
+        "id" : "18",
+        "order" : "5",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 920
+        } ]
+      }, {
+        "description" : "Invokes /analyze",
+        "id" : "14",
+        "order" : "6",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 1462,
+          "y" : 212
+        } ]
+      }, {
+        "description" : "Reads base.yaml and prior resumes for context",
+        "id" : "18",
+        "order" : "7",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 920
+        } ]
+      }, {
+        "description" : "Saves annotated JD to db/jd-analyzed/",
+        "id" : "18",
+        "order" : "8",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 920
+        } ]
+      }, {
+        "description" : "Invokes /synthesize",
+        "id" : "14",
+        "order" : "9",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 1462,
+          "y" : 512
+        } ]
+      }, {
+        "description" : "Queries for similar bullets (returns empty — cold start)",
+        "id" : "20",
+        "order" : "10",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2151,
+          "y" : 632
+        } ]
+      }, {
+        "description" : "Embeds query text",
+        "id" : "24",
+        "order" : "11",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2800,
+          "y" : 1070
+        } ]
+      }, {
+        "description" : "Reads base.yaml, contact.yaml",
+        "id" : "18",
+        "order" : "12",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 920
+        } ]
+      }, {
+        "description" : "Writes new AI YAML to db/resumes/",
+        "id" : "18",
+        "order" : "13",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 920
+        } ]
+      }, {
+        "description" : "Renders Markdown to PDF",
+        "id" : "21",
+        "order" : "14",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2350,
+          "y" : 1520
+        } ]
+      }, {
+        "description" : "Harvests bullets from new resume",
+        "id" : "20",
+        "order" : "15",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2248,
+          "y" : 349
+        } ]
+      }, {
+        "description" : "Embeds each bullet",
+        "id" : "24",
+        "order" : "16",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 2800,
+          "y" : 1070
+        } ]
+      }, {
+        "description" : "Reads resume YAML during harvest",
+        "id" : "26",
+        "order" : "17",
+        "response" : false
+      } ]
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "LeftRight",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "description" : "High-level view of the Resume Skill System and its external dependencies.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "SystemContext",
+      "name" : "System Context View: Resume Skill System",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "12"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "25"
+      } ],
+      "softwareSystemId" : "4"
+    } ]
+  }
+}

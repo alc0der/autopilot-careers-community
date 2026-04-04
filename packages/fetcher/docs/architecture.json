@@ -1,0 +1,301 @@
+{
+  "configuration" : { },
+  "description" : "Description",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedAgent" : "structurizr-javascript",
+  "lastModifiedDate" : "2026-02-18T05:44:14Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Job seeker using Thaty",
+      "id" : "1",
+      "location" : "Unspecified",
+      "name" : "User",
+      "properties" : {
+        "structurizr.dsl.identifier" : "user"
+      },
+      "relationships" : [ {
+        "description" : "Uses",
+        "destinationId" : "3",
+        "id" : "10",
+        "properties" : {
+          "structurizr.dsl.identifier" : "308c9b53-f061-40c2-913e-9c2c93afdc1f"
+        },
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Uses",
+        "destinationId" : "2",
+        "id" : "11",
+        "linkedRelationshipId" : "10",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "containers" : [ {
+        "components" : [ {
+          "description" : "Library for browser automation and LinkedIn interaction",
+          "documentation" : { },
+          "group" : "Core External Dependencies",
+          "id" : "4",
+          "name" : "Puppeteer",
+          "properties" : {
+            "structurizr.dsl.identifier" : "puppeteer"
+          },
+          "relationships" : [ {
+            "description" : "full page to article",
+            "destinationId" : "7",
+            "id" : "8",
+            "properties" : {
+              "structurizr.dsl.identifier" : "f5d17f41-4b6c-492c-abb8-402484f314a3"
+            },
+            "sourceId" : "4",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component"
+        }, {
+          "description" : "Library for converting HTML to Markdown",
+          "documentation" : { },
+          "group" : "Core External Dependencies",
+          "id" : "5",
+          "name" : "Turndown",
+          "properties" : {
+            "structurizr.dsl.identifier" : "turndown"
+          },
+          "tags" : "Element,Component"
+        }, {
+          "description" : "Library for interactive command-line prompts",
+          "documentation" : { },
+          "group" : "Core External Dependencies",
+          "id" : "6",
+          "name" : "@clack/prompts",
+          "properties" : {
+            "structurizr.dsl.identifier" : "clackprompts"
+          },
+          "tags" : "Element,Component"
+        }, {
+          "description" : "Library for extracting main content from HTML",
+          "documentation" : { },
+          "group" : "Core External Dependencies",
+          "id" : "7",
+          "name" : "@mozilla/readability",
+          "properties" : {
+            "structurizr.dsl.identifier" : "readability"
+          },
+          "relationships" : [ {
+            "description" : "article to markdown",
+            "destinationId" : "5",
+            "id" : "9",
+            "properties" : {
+              "structurizr.dsl.identifier" : "6c258d50-5519-40ca-b35e-234c5cdba46b"
+            },
+            "sourceId" : "7",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component"
+        } ],
+        "description" : "A CLI application",
+        "documentation" : { },
+        "id" : "3",
+        "name" : "CLI Application",
+        "properties" : {
+          "structurizr.dsl.identifier" : "cliapp"
+        },
+        "tags" : "Element,Container",
+        "technology" : "Node.js, TypeScript"
+      } ],
+      "description" : "A system to automate job hunting.",
+      "documentation" : { },
+      "id" : "2",
+      "location" : "Unspecified",
+      "name" : "Thaty",
+      "properties" : {
+        "structurizr.dsl.identifier" : "softwaresystem"
+      },
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Name",
+  "properties" : {
+    "structurizr.dsl" : "d29ya3NwYWNlIHsKCiAgbW9kZWwgewogICAgICB1c2VyID0gcGVyc29uICJVc2VyIiAiSm9iIHNlZWtlciB1c2luZyBUaGF0eSIKICAgICAgc29mdHdhcmVTeXN0ZW0gPSBzb2Z0d2FyZVN5c3RlbSAiVGhhdHkiIHsKICAgICAgICAgIGRlc2NyaXB0aW9uICJBIHN5c3RlbSB0byBhdXRvbWF0ZSBqb2IgaHVudGluZy4iCiAgICAgICAgICBjbGlBcHAgPSBjb250YWluZXIgIkNMSSBBcHBsaWNhdGlvbiIgewogICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJBIENMSSBhcHBsaWNhdGlvbiIKICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJOb2RlLmpzLCBUeXBlU2NyaXB0IgogICAgICAgICAgICAgIGdyb3VwICJDb3JlIEV4dGVybmFsIERlcGVuZGVuY2llcyIgewogICAgICAgICAgICAgICAgcHVwcGV0ZWVyID0gY29tcG9uZW50ICJQdXBwZXRlZXIiIHsKICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiTGlicmFyeSBmb3IgYnJvd3NlciBhdXRvbWF0aW9uIGFuZCBMaW5rZWRJbiBpbnRlcmFjdGlvbiIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHR1cm5kb3duID0gY29tcG9uZW50ICJUdXJuZG93biIgewogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJMaWJyYXJ5IGZvciBjb252ZXJ0aW5nIEhUTUwgdG8gTWFya2Rvd24iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjbGFja1Byb21wdHMgPSBjb21wb25lbnQgIkBjbGFjay9wcm9tcHRzIiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkxpYnJhcnkgZm9yIGludGVyYWN0aXZlIGNvbW1hbmQtbGluZSBwcm9tcHRzIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgcmVhZGFiaWxpdHkgPSBjb21wb25lbnQgIkBtb3ppbGxhL3JlYWRhYmlsaXR5IiB7CiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkxpYnJhcnkgZm9yIGV4dHJhY3RpbmcgbWFpbiBjb250ZW50IGZyb20gSFRNTCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHB1cHBldGVlciAtPiByZWFkYWJpbGl0eSAiZnVsbCBwYWdlIHRvIGFydGljbGUiCiAgICAgICAgICAgICAgICByZWFkYWJpbGl0eSAtPiB0dXJuZG93biAiYXJ0aWNsZSB0byBtYXJrZG93biIKICAgICAgICAgICAgICB9CiAgICAgICAgICB9CiAgICAgIH0KICAgIHVzZXIgLT4gY2xpQXBwICJVc2VzIgogIH0KCiAgdmlld3MgewogICAgIXNjcmlwdCBncm9vdnkgewogICAgICAgIHdvcmtzcGFjZS52aWV3cy5jcmVhdGVEZWZhdWx0Vmlld3MoKQogICAgfQoKICAgIGR5bmFtaWMgc29mdHdhcmVTeXN0ZW0gIkNMSV9Vc2FnZSIgewogICAgICAgIHVzZXIgLT4gY2xpQXBwICJJbnZva2VzIGNvbW1hbmQgd2l0aCBMaW5rZWRJbiBqb2IgVVJMIgogICAgICAgIGNsaUFwcCAtPiB1c2VyICJDcmVhdGVzIG1hcmtkb3duIGZpbGUgd2l0aCBqb2IgcG9zdCBjb250ZW50IgogICAgICAgIGF1dG9sYXlvdXQKICAgIH0KCiAgICB0aGVtZSBkZWZhdWx0CiAgfQp9Cg=="
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "containerId" : "3",
+      "elements" : [ {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "generatedKey" : true,
+      "key" : "Component-001",
+      "order" : 4,
+      "relationships" : [ {
+        "id" : "8"
+      }, {
+        "id" : "9"
+      } ]
+    } ],
+    "configuration" : {
+      "branding" : { },
+      "lastSavedView" : "CLI_Usage",
+      "metadataSymbols" : "SquareBrackets",
+      "styles" : { },
+      "terminology" : { },
+      "themes" : [ "https://static.structurizr.com/themes/default/theme.json" ]
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "generatedKey" : true,
+      "key" : "Container-001",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "10"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "dynamicViews" : [ {
+      "automaticLayout" : {
+        "applied" : true,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "dimensions" : {
+        "height" : 1420,
+        "width" : 890
+      },
+      "elementId" : "2",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 219,
+        "y" : 820
+      }, {
+        "id" : "3",
+        "x" : 219,
+        "y" : 220
+      } ],
+      "externalBoundariesVisible" : false,
+      "key" : "CLI_Usage",
+      "order" : 5,
+      "relationships" : [ {
+        "description" : "Invokes command with LinkedIn job URL",
+        "id" : "10",
+        "order" : "1",
+        "response" : false,
+        "vertices" : [ {
+          "x" : 581,
+          "y" : 700
+        } ]
+      }, {
+        "description" : "Creates markdown file with job post content",
+        "id" : "10",
+        "order" : "2",
+        "response" : true,
+        "vertices" : [ {
+          "x" : 281,
+          "y" : 689
+        } ]
+      } ]
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemContext-001",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "11"
+      } ],
+      "softwareSystemId" : "2"
+    } ],
+    "systemLandscapeViews" : [ {
+      "automaticLayout" : {
+        "applied" : false,
+        "edgeSeparation" : 0,
+        "implementation" : "Graphviz",
+        "nodeSeparation" : 300,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 300,
+        "vertices" : false
+      },
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "generatedKey" : true,
+      "key" : "SystemLandscape-001",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "11"
+      } ]
+    } ]
+  }
+}

@@ -1,0 +1,39 @@
+name: Sync Community Edition
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Filter and push to community repo
+        env:
+          COMMUNITY_REPO: git@github.com:alc0der/autopilot-careers-community.git
+        run: |
+          # Configure git
+          git config user.name "Autopilot Sync"
+          git config user.email "sync@autopilot.careers"
+
+          # Create a temporary branch with private dirs removed
+          git checkout -b community-sync
+
+          # Remove private packages and sync config
+          git rm -rf packages/fetcher packages/renderer packages/bullet-embeddings copy.bara.sky
+          git commit -m "sync: community edition from $(git rev-parse --short HEAD~1)"
+
+          # Set up deploy key and push
+          mkdir -p ~/.ssh
+          echo "${{ secrets.COMMUNITY_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no"
+
+          git remote add community "$COMMUNITY_REPO"
+          git push community community-sync:main --force

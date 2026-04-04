@@ -1,0 +1,43 @@
+jobs:
+  - id: beno_cto
+    achievements:
+      - Increased frontend team per-engineer throughput by 57.8% (normalized lines added) despite 20% workforce reduction by leading adoption of AI-assisted coding workflows (Cursor, Anti-gravity)
+      - Architected real-time AI voice system using OpenAI Realtime API, automating customer support calls and vendor communications with sub-second latency requirements
+      - Built enterprise developer platform supporting 25+ engineers with automated CI/CD pipelines, API-first architecture, and code generation tooling that improved deployment frequency by 4x
+      - Designed event-driven microservices handling 1,500 requests per 5-minute peaks, implementing WebSocket and SSE for real-time data streaming
+      - Optimized <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS infrastructure reducing costs by 21% while maintaining 99.9% uptime through strategic use of Kubernetes orchestration
+
+  - id: beno_em
+    achievements:
+      - Scaled engineering platform from 5 to 20 engineers, implementing robust release processes and reducing deployment cycle time from monthly to bi-weekly
+      - Designed distributed system architecture with comprehensive monitoring using Prometheus, Grafana, and Monte Carlo simulations for performance forecasting
+      - Built real-time chat system integrating ChatGPT APIs with WebSocket connections, resulting in 10% increase in sales leads
+      - Implemented microservices patterns including API gateways, circuit breakers, and event sourcing for high-availability systems
+
+  - id: beno_lead
+    achievements:
+      - Pioneered API-breaking change detection system and automated client code generation, reducing integration errors by 80%
+      - Established infrastructure-as-code using <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker and Kubernetes, enabling reproducible deployments across environments
+      - Contributed 10,000+ lines of production code implementing core platform services including authentication and data pipelines
+
+  - id: roamworks_arch
+    achievements:
+      - Developed distributed IoT platform using event-driven architecture on Azure Event Hub, processing real-time telemetry from smart devices
+      - Built microservices for parsing and processing IoT device data with sub-second response times using Spring Boot
+      - Implemented server-sent events (SSE) for real-time data streaming to web and mobile clients
+
+  - id: roamworks_bi
+    achievements:
+      - Developed full-stack applications using <span class="iconify" data-icon="devicon:react"></span> React and Node.js for business intelligence and analytics platforms
+      - Built scalable backend services processing large datasets with optimized SQL queries and caching strategies
+
+  - id: fujitsu
+    achievements:
+      - Developed SAP Analytics solutions for enterprise clients, building custom dashboards and reporting tools
+      - Engineered data pipelines and ETL processes for large-scale business intelligence systems
+
+skill_groups:
+  - category: Technical
+    skills: TypeScript, <span class="iconify" data-icon="vscode-icons:file-type-python"></span> Python, Java, Kotlin, JavaScript, SQL, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS, Kubernetes, <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, Terraform, API Gateway, Service Mesh, WebSocket, SSE, Event-Driven Architecture, Message Queuing, OpenAI APIs, Microservices, RESTful APIs, SDK Development, CI/CD, Developer Tooling, Code Generation, PostgreSQL, Redis, MongoDB, Prometheus, Grafana
+  - category: Managerial
+    skills: ""

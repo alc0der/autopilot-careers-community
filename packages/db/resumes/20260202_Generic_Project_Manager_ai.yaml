@@ -1,0 +1,45 @@
+jobs:
+  - id: beno_cto
+    title: Senior Program Manager
+    achievements:
+      - Led enterprise analytics modernization program, consolidating 5 disparate tools (HotJar, Smartlook, LangFuse, multiple trackers) into unified PostHog and Meta Pixel stack, establishing single source of truth for product analytics governance
+      - Implemented AI-powered project reporting automation using Claude Desktop and custom MergeStat Lite MCP integration, reducing manual reporting overhead by 60% while improving visibility into engineering productivity metrics
+      - Directed cross-functional program delivery across 4 product teams (25+ engineers), achieving 3 major product launches on schedule through stakeholder alignment and risk management
+      - Established program management frameworks including OKR-driven planning, sprint retrospectives, and delivery forecasting using Monte Carlo simulation, improving on-time delivery rate from 65% to 90%
+
+  - id: beno_em
+    title: Program Manager
+    achievements:
+      - Scaled engineering organization from 5 to 20 team members while reducing annual turnover from 70% to 6% through strategic hiring, onboarding process improvements, and career development programs
+      - Managed vendor selection and procurement for 5 SaaS platforms (OAuth, Analytics, Testing), negotiating contracts that reduced operational costs by 35% while ensuring seamless integration
+      - Implemented Kanban Flight Levels methodology across multiple workstreams, improving cross-team coordination and reducing cycle time by 40%
+
+  - id: beno_lead
+    title: Technical Project Lead
+    achievements:
+      - Delivered infrastructure migration project from legacy hosting to AWS cloud (EKS, S3, CloudFront), completing 3-month migration on schedule with zero production downtime
+      - Established project governance frameworks including CI/CD pipelines, code review standards, and technical documentation processes, enabling 4x improvement in deployment frequency
+      - Coordinated cross-functional requirements gathering and delivery for core platform features, shipping 20+ customer-facing releases within budget
+
+  - id: roamworks_arch
+    title: Project Manager
+    achievements:
+      - Managed system modernization project migrating legacy Smalltalk application to modern Spring/Angular stack, coordinating 6-person team and delivering shipment container security IoT solution
+      - Developed ML-based analytics solution using Azure Machine Learning for fuel theft detection, improving detection accuracy by 18% and generating significant cost savings
+
+  - id: roamworks_bi
+    title: Business Analyst
+    achievements:
+      - Gathered and translated business requirements into technical specifications for enterprise analytics dashboards serving executive stakeholders across MENA region
+      - Delivered IoT data pipeline integrations enabling real-time telemetry processing and business intelligence reporting
+
+  - id: fujitsu
+    title: SAP Analytics Developer
+    achievements:
+      - Delivered enterprise reporting solutions using SAP BusinessObjects and HANA for government sector clients, managing stakeholder requirements and project timelines
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="simple-icons:jira"></span> Jira, <span class="iconify" data-icon="simple-icons:confluence"></span> Confluence, Agile/Scrum/Kanban, Risk Management, Data Analytics (PostHog, GA4), <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS, CI/CD Pipelines, API Integration
+  - category: Managerial
+    skills: Program Management, Stakeholder Management, Cross-functional Coordination, Process Optimization, Vendor Management, Budget Planning, Team Development, Executive Reporting

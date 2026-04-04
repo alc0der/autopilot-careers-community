@@ -1,0 +1,37 @@
+tagline: "Sr. Eng. Manager"
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Designed event-driven microservices handling 1,500+ req/5-min peaks on AWS EKS, delivering real-time features via WebSocket and SSE to 100K+ monthly active users
+      - Established API-first CI/CD with automated breaking change detection, improving deployment frequency from weekly to daily and enabling trunk-based development across the engineering org
+      - Mentored 20+ engineers on TDD, XP practices, and blameless incident post-mortems, cultivating a self-organizing, quality-first engineering culture
+      - Increased per-engineer throughput by 57.8% by leading AI-assisted engineering adoption (Claude Code, Cursor) across the organization
+
+  - id: beno_em
+    achievements:
+      - Architected high-availability distributed backend with API gateway and circuit breaker patterns, sustaining 99.9% uptime across production services
+      - Built real-time chat backend integrating ChatGPT APIs over WebSocket on Spring Boot, contributing to a 10% increase in sales conversion
+      - Reduced deployment cycle time by 53% using data-driven Monte Carlo simulation forecasting, improving sprint predictability across engineering teams
+
+  - id: beno_lead
+    achievements:
+      - Led cloud migration to AWS EKS with Docker and Kubernetes, achieving 2x performance improvement and 30% infrastructure cost reduction
+      - Pioneered automated API breaking change detection and client code generation, reducing integration errors by 80%
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency using event-driven architecture
+
+  - id: roamworks_bi
+    achievements:
+      - Developed RESTful backend services and data pipelines integrating MySQL and Elasticsearch for real-time IoT telemetry ingestion, search, and analytics
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-java"></span> Java/Kotlin, Go, <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, SQL, Distributed Systems, Microservices, Event-Driven Architecture, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda, CloudWatch), Azure, <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, Kubernetes, Spring Boot, Redis, CI/CD, TDD
+  - category: Managerial
+    skills: System Design & Architecture, XP Practices (TDD, Pair Programming), Trunk-Based Development, Engineering Mentorship, Cross-functional Collaboration, Lean/Agile

@@ -1,0 +1,8 @@
+achievements:
+- date: '2026-01-31'
+  text: Increased frontend team per-engineer throughput by 57.8% (normalized lines
+    added) despite a 20% workforce reduction by leading adoption of AI-assisted coding
+    workflows (Cursor, Anti-gravity)
+  evidence_url: https://claude.ai/share/f4e000c6-094c-4874-ad6d-9efcd86a47b5
+  job_id: beno_cto
+  reviewed: true

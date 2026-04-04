@@ -1,0 +1,45 @@
+jobs:
+  - id: beno_cto
+    achievements:
+      - Architected and developed microservices-based platform using <span class="iconify" data-icon="devicon:spring"></span> Spring Boot and Spring Cloud Stream for ERP integration, implementing event-driven architecture with high-availability patterns
+      - Designed distributed system architecture using C4 modeling (Structurizr), establishing API-first approach with automated code generation and breaking change detection reducing integration errors by 80%
+      - Built real-time AI voice system using OpenAI APIs with sub-second latency requirements, implementing WebSocket and SSE for event streaming in high-throughput environment
+      - Optimized <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS infrastructure with Kubernetes orchestration reducing costs by 21% while maintaining 99.9% uptime, implementing service mesh and API gateways for microservices communication
+      - Developed enterprise analytics platform consolidating multiple systems into unified stack (Avo, PostHog) with event-driven governance, implementing circuit breakers and resilience patterns
+
+  - id: beno_em
+    achievements:
+      - Designed and implemented microservices architecture handling 1,500 requests per 5-minute peaks using Spring Boot, implementing caching strategies with Redis and optimizing database queries for low-latency performance
+      - Built production monitoring infrastructure using <span class="iconify" data-icon="logos:prometheus"></span> Prometheus and Grafana, implementing comprehensive observability for distributed systems with Monte Carlo simulations for capacity planning
+      - Architected secure RESTful APIs following OpenAPI specifications, implementing API security practices that passed rigorous VAPT audits and establishing documentation-first development approach
+      - Led migration of legacy EC2 systems to <span class="iconify" data-icon="logos:kubernetes"></span> Kubernetes clusters using Kustomize for infrastructure-as-code, implementing automated CI/CD pipelines with deployment frequency improvement of 4x
+
+  - id: beno_lead
+    achievements:
+      - Wrote 10,000+ lines of production code in <span class="iconify" data-icon="devicon:java"></span> Java and Kotlin using Spring Boot, establishing best practices including Reactive Spring, TDD, Karate testing framework, and automated API code generation
+      - Established company tech stack with Spring Boot microservices, Angular frontend, PostgreSQL (RDS), MongoDB, and Kubernetes (EKS), proving effective and scalable architecture over 4 years of production use
+      - Implemented infrastructure-as-code using <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker and Kubernetes with automated CI/CD pipelines, enabling reproducible deployments and zero-downtime releases
+      - Pioneered API-breaking change detection system with automated client SDK generation, reducing integration errors by 80% and accelerating development cycles
+
+  - id: roamworks_arch
+    achievements:
+      - Developed distributed IoT platform using event-driven architecture on Azure Event Hub, building microservices with Spring Boot for parsing and processing real-time telemetry data with sub-second response times
+      - Designed and implemented microservices architecture using Spring Framework (Java and Kotlin) with Netflix OSS for service discovery, load balancing, and circuit breakers
+      - Built scalable data streaming pipelines using server-sent events (SSE) for real-time data delivery to web and mobile clients, handling high-throughput IoT device data
+
+  - id: roamworks_bi
+    achievements:
+      - Developed full-stack applications using React and Node.js for business intelligence platforms, building scalable backend services processing large datasets
+      - Optimized SQL queries and implemented caching strategies for high-performance data retrieval, supporting near real-time analytics over IoT data
+      - Migrated legacy ETL system to modern data warehousing stack using Apache Hop (Pentaho), implementing data pipelines for analytics
+
+  - id: fujitsu
+    achievements:
+      - Developed SAP Analytics solutions for enterprise clients, building custom dashboards and reporting tools with complex data transformations
+      - Engineered ETL processes and data pipelines for large-scale business intelligence systems, optimizing performance for high-volume data processing
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="devicon:java"></span> Java, <span class="iconify" data-icon="devicon:spring"></span> Spring Boot, Spring Cloud, Kotlin, Microservices Architecture, <span class="iconify" data-icon="logos:kubernetes"></span> Kubernetes, <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS, PostgreSQL, MongoDB, Redis, Event-Driven Architecture, Message Brokers (Spring Cloud Stream), RESTful APIs, System Architecture, Design Patterns, Distributed Systems, WebSocket/SSE, CI/CD, Infrastructure-as-Code, <span class="iconify" data-icon="logos:prometheus"></span> Prometheus, Grafana, Performance Optimization
+  - category: Managerial
+    skills: Technical Leadership, Code Reviews, Architecture Design, API Governance, System Design

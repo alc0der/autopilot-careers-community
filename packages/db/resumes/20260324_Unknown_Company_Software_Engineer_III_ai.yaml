@@ -1,0 +1,34 @@
+tagline: "Sr. Eng. Manager"
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Designed and implemented event-driven microservices handling 1,500 requests per 5-minute peaks using WebSocket and SSE for real-time data streaming across distributed services
+      - Led microservices migration from Spring monolith to Deno/Hono stack, improving deployment frequency from weekly to daily while maintaining scalability for 100K+ monthly active users
+      - Built real-time AI voice system using OpenAI Realtime API with sub-second latency, integrating backend services for automated customer and vendor communications
+      - Established automated CI/CD pipelines and API-first design standards across the engineering org, reducing integration bugs and accelerating feature delivery
+
+  - id: beno_em
+    achievements:
+      - Architected distributed system with Prometheus/Grafana observability, API gateways, and circuit breaker patterns, sustaining 99.9% uptime SLA
+      - Built real-time chat backend integrating ChatGPT APIs over WebSocket, contributing to a 10% increase in sales conversion
+      - Implemented event sourcing and API gateway patterns for high-availability microservices, reducing deployment cycle time from 30 to 14 days
+
+  - id: beno_lead
+    achievements:
+      - Shipped 10,000+ lines of production code building core platform services including authentication, payment processing, and real-time collaboration features
+      - Led cloud migration to AWS EKS with Docker and Kubernetes, achieving 2x performance improvement and 30% infrastructure cost reduction
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency using event-driven architecture
+
+  - id: roamworks_bi
+    achievements:
+      - Architected data warehouse and ETL pipelines processing 1M+ daily events for real-time fleet management analytics
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-python"></span> Python, <span class="iconify" data-icon="vscode-icons:file-type-java"></span> Java, <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, Go, SQL, Distributed Systems, Microservices, Event-Driven Architecture, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda, S3), <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, Kubernetes, Terraform, CI/CD, Git, PostgreSQL, Redis, WebSocket/SSE, API Design
+  - category: Managerial
+    skills: System Design & Architecture, Backend Service Development, Debugging & Performance Optimization, Observability (Prometheus/Grafana), Secure Coding, Code Review, Cross-functional Collaboration

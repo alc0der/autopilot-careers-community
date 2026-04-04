@@ -1,0 +1,8 @@
+# Companies requiring full human-in-the-loop workflow.
+# Any company not listed here runs autonomously (low priority).
+high:
+  - Careem
+  - Noon
+
+# Flip to "high" to make full workflow the default.
+default_priority: low

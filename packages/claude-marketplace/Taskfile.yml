@@ -1,0 +1,30 @@
+version: "3"
+
+vars:
+  PLUGIN_NAME: write-resume-plugin
+  PLUGIN_VERSION:
+    sh: python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])"
+
+tasks:
+  bundle:
+    desc: Create distributable plugin zip
+    vars:
+      ZIP_FILE: "{{.PLUGIN_NAME}}-{{.PLUGIN_VERSION}}.zip"
+    cmds:
+      - rm -f "{{.ZIP_FILE}}"
+      - zip -r "{{.ZIP_FILE}}"
+          .claude-plugin/
+          CLAUDE.md
+          commands/
+          setup.sh
+          skills/
+          -x "*.DS_Store"
+      - echo "Created {{.ZIP_FILE}}"
+    sources:
+      - .claude-plugin/**/*
+      - CLAUDE.md
+      - commands/**/*
+      - setup.sh
+      - skills/**/*
+    generates:
+      - "{{.ZIP_FILE}}"

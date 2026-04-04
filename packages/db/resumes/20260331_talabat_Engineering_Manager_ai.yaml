@@ -1,0 +1,37 @@
+tagline: "EM | Founding Eng."
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Mentored 20+ engineers on TDD, XP practices, and blameless incident retrospectives, cultivating a self-organizing, quality-first engineering culture
+      - Scaled engineering to three autonomous cross-functional teams (25+ engineers), promoting engineers to Engineering Manager and Technical Lead from individual contributor ranks
+      - Established API-first CI/CD with automated breaking change detection, improving deployment frequency from weekly to daily and enabling trunk-based development across the org
+      - Designed event-driven microservices handling 1,500+ req/5-min peaks with WebSocket and SSE, serving 100K+ monthly active users on AWS EKS
+      - Increased per-engineer throughput by 57.8% by championing AI-assisted engineering adoption across the organization
+
+  - id: beno_em
+    achievements:
+      - Grew engineering from 5 to 20 engineers while reducing annual turnover from 70% to 6% through strategic hiring across five countries
+      - Led mobile and frontend teams to 4x-per-week deployments (up from 2x/month) by introducing Kotlin Multiplatform Mobile and a shared UI Kit
+      - Improved sprint predictability by 53% using Monte Carlo simulation and Kanban Flight Levels, embedding lean continuous delivery across teams
+
+  - id: beno_lead
+    achievements:
+      - Led cloud migration to <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS EKS with Docker and Kubernetes, achieving 2x performance improvement and 30% infrastructure cost reduction
+      - Established the company's core technology stack as founding engineer — Spring Boot microservices, Angular, PostgreSQL — and introduced automated API contract testing to eliminate integration regressions
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency using event-driven architecture
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-java"></span> Java/Kotlin, <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, Distributed Systems, Microservices, Event-Driven Architecture, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda, CloudWatch), <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker/Kubernetes, Spring Boot, TDD, CI/CD
+  - category: Managerial
+    skills: XP Practices (TDD, Pair Programming, Trunk-Based Dev), Engineering Leadership, Lean/Agile (Kanban, Monte Carlo), Team Scaling, Mentoring & Coaching, Stakeholder Management

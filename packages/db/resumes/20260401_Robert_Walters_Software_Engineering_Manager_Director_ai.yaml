@@ -1,0 +1,37 @@
+tagline: "EM | Founding Eng."
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Scaled engineering to three distributed cross-functional teams (25+ engineers), setting team-level OKRs and roadmaps; cultivated new leadership by promoting one EM and preparing two senior engineers for future EM roles
+      - Drove global resource allocation and quarterly delivery planning in direct partnership with the CEO and department heads, aligning engineering priorities with business outcomes
+      - Increased per-engineer throughput by 57.8% by championing org-wide adoption of AI-assisted engineering workflows (Claude Code, Cursor)
+      - Established API-first CI/CD with automated breaking change detection, improving deployment frequency from weekly to daily across backend and frontend teams
+      - Mentored 20+ engineers on TDD, XP practices, and blameless incident retrospectives, cultivating a self-organizing, quality-first engineering culture
+
+  - id: beno_em
+    achievements:
+      - Grew engineering from 5 to 20 engineers while reducing annual turnover from 70% to 6% through remote hiring across five countries
+      - Improved sprint predictability by 53% by introducing data-driven delivery forecasting using Monte Carlo simulation and Kanban Flight Levels
+      - Defined end-to-end engineering processes — skill levels framework, salary scales, hiring pipeline, and performance review system
+
+  - id: beno_lead
+    achievements:
+      - Established the company's core technology stack as founding engineer — Spring Boot microservices, Angular, PostgreSQL on AWS EKS — architecture proven in production for 5+ years
+      - Pioneered API-first practices with automated breaking change detection and client code generation, adopted org-wide
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="devicon:java"></span> Java/Kotlin, <span class="iconify" data-icon="devicon:spring"></span> Spring Boot, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda), Microservices, CI/CD, Distributed Systems
+  - category: Managerial
+    skills: Engineering Leadership, Team Scaling, Distributed Teams, OKRs & Roadmapping, Hiring & Retention, Data-Driven Delivery, Stakeholder Management

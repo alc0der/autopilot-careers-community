@@ -1,0 +1,37 @@
+tagline: "Sr. Eng. Manager"
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Architected event-driven microservices platform using <span class="iconify" data-icon="devicon:spring"></span> Spring Boot and Spring Cloud Stream for ERP integration, handling 1,500+ req/5-min peaks for 100K+ monthly active users with high-availability patterns
+      - Built real-time AI voice system using OpenAI APIs with sub-second latency requirements, implementing WebSocket and SSE for event streaming in high-throughput environment
+      - Designed distributed system architecture with API-first standards and automated breaking change detection, reducing integration errors by 80% across microservices boundaries
+      - Optimized <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS EKS infrastructure with Kubernetes orchestration, reducing costs by 21% while maintaining 99.9% uptime with service mesh and API gateway patterns
+
+  - id: beno_em
+    achievements:
+      - Implemented Spring Boot microservices with Redis caching and optimized PostgreSQL queries, achieving low-latency performance at 1,500 req/5-min production peaks
+      - Architected secure RESTful APIs following OpenAPI specifications with API security practices that passed rigorous VAPT audits, establishing documentation-first development
+      - Led migration from legacy EC2 systems to <span class="iconify" data-icon="logos:kubernetes"></span> Kubernetes using <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker and Kustomize, implementing automated CI/CD pipelines with 4x improvement in deployment frequency
+
+  - id: beno_lead
+    achievements:
+      - Wrote 10,000+ lines of production code in <span class="iconify" data-icon="devicon:java"></span> Java and Kotlin using Spring Boot, establishing best practices including Reactive Spring, TDD, Karate testing framework, and automated API code generation
+      - Established company tech stack with Spring Boot microservices, PostgreSQL (RDS), MongoDB, and Kubernetes (EKS) as founding engineer — architecture proven in production over 4+ years
+
+  - id: roamworks_arch
+    achievements:
+      - Developed distributed IoT platform using event-driven architecture on Azure Event Hub, building Spring Boot microservices in Java and Kotlin for real-time telemetry processing from 10,000+ connected devices with sub-second response times
+      - Designed microservices architecture with Netflix OSS for service discovery, load balancing, and circuit breakers across a multi-service Java backend
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="devicon:java"></span> Java, Kotlin, <span class="iconify" data-icon="devicon:spring"></span> Spring Boot, Spring Cloud Stream, Microservices Architecture, Event-Driven Architecture, Message Brokers, <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, Kubernetes, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda), PostgreSQL, MongoDB, Redis, RESTful APIs, CI/CD, TDD, Reactive Spring
+  - category: Managerial
+    skills: System Design & Architecture, API Governance, Agile/Kanban, Technical Mentorship, Code Review

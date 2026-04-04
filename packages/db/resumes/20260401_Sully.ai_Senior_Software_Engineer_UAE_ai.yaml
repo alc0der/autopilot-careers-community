@@ -1,0 +1,36 @@
+tagline: "Sr. Eng. Manager"
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Architected cross-agent LLM systems deployed into production for HR sourcing, QA regression, and release workflows — with typed contracts, CloudWatch observability, and responsible AI governance
+      - Designed event-driven microservices on AWS EKS delivering real-time data via WebSocket and SSE to 100K+ MAU, handling 1,500+ req/5-min peaks with typed API contracts
+      - Established automated CI/CD pipelines with API-first standards and breaking change detection, enabling daily trunk-based deployments across the engineering org
+      - Increased per-engineer throughput by 57.8% by driving org-wide adoption of AI-assisted engineering workflows (Claude Code, Cursor)
+
+  - id: beno_em
+    achievements:
+      - Built real-time chat backend integrating ChatGPT APIs over WebSocket on Spring Boot, contributing to a 10% increase in sales conversion
+      - Accelerated frontend deployments from 2x/month to 4x/week by introducing a shared UI Kit and Kotlin Multiplatform Mobile to unify cross-platform component delivery
+      - Architected high-availability distributed backend with API gateways and circuit breaker patterns, sustaining 99.9% uptime across production services
+
+  - id: beno_lead
+    achievements:
+      - Established core full-stack technology stack as founding engineer — Spring Boot microservices, Angular, PostgreSQL, MongoDB on AWS EKS — architecture running 5+ years in production
+      - Pioneered automated API breaking change detection and typed client SDK generation, reducing integration errors by 80%
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency using event-driven architecture
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, Python, <span class="iconify" data-icon="vscode-icons:file-type-java"></span> Java/Kotlin, LLM Integration & AI Agents, Distributed Systems, WebSocket/SSE, API Design & Streaming, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda, CloudWatch), Azure, Docker/Kubernetes, CI/CD
+  - category: Managerial
+    skills: System Design & Architecture, Engineering Leadership, Cross-functional Collaboration, Lean/Agile

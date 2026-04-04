@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  docs:
+    desc: Run Structurizr Lite to view architecture diagrams at http://localhost:8080
+    cmds:
+      - container run --rm -p 8080:8080 -v {{.ROOT_DIR}}/docs:/usr/local/structurizr structurizr/lite:latest

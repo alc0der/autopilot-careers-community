@@ -1,0 +1,44 @@
+jobs:
+  - id: beno_cto
+    achievements:
+      - Led engineering team of 25+ engineers delivering 6 AI-powered products from concept to production, including real-time voice AI system and customer-facing chatbot, driving 10% increase in sales conversion
+      - Architected microservices migration strategy from Spring monolith to modern Deno+Hono stack, reducing deployment complexity and improving system scalability for 100K+ monthly active users
+      - Established engineering best practices using Atlassian suite (Jira, Confluence, Compass) with automated CI/CD pipelines and API-first design, improving deployment frequency from weekly to daily
+      - Built and mentored high-performing engineering leadership team, promoting 2 engineers to Engineering Manager and 1 to Tech Lead through structured career development and 1-on-1 coaching
+      - Drove product-engineering collaboration initiatives resulting in faster iteration cycles, better feature prioritization, and improved alignment between technical architecture and business goals
+
+  - id: beno_em
+    achievements:
+      - Scaled engineering organization from 5 to 20 engineers while reducing turnover from 70% to 6% through strategic hiring, remote-first culture building, and comprehensive onboarding programs
+      - Designed and implemented distributed system architecture with observability stack (Prometheus, Grafana), API gateways, and circuit breaker patterns supporting 99.9% uptime SLA
+      - Introduced data-driven agile forecasting using Kanban Flight Levels and Monte Carlo simulation, reducing deployment cycle time from 30 to 14 days and improving predictability by 40%
+      - Partnered with product management to define technical roadmap, balancing feature development with technical debt reduction and infrastructure improvements
+
+  - id: beno_lead
+    achievements:
+      - Shipped 10,000+ lines of production code as founding engineer, building core platform including authentication, payment processing, data pipelines, and real-time collaboration features
+      - Pioneered developer tooling including API-breaking change detection and automated client SDK generation, reducing integration bugs by 80% and accelerating partner integrations
+      - Led cloud migration from legacy hosting to <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS EKS, achieving 2x performance improvement, perfect SEO scores, and 30% cost reduction through infrastructure optimization
+      - Collaborated directly with founders to validate product-market fit through rapid prototyping, A/B testing, and iterative feature development based on user feedback
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on <span class="iconify" data-icon="vscode-icons:file-type-azure"></span> Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency and event-driven architecture
+      - Developed ML-based anomaly detection system for fuel theft prevention using Azure Machine Learning, improving detection accuracy by 18% and reducing false positives by 25%
+      - Led technical team of 4 engineers, establishing code review practices, sprint planning, and technical documentation standards
+
+  - id: roamworks_bi
+    achievements:
+      - Architected data warehouse and ETL pipelines processing 1M+ daily events, enabling real-time analytics dashboards for fleet management and operational intelligence
+      - Built custom BI reporting platform reducing report generation time from hours to minutes, empowering business users with self-service analytics capabilities
+
+  - id: fujitsu
+    achievements:
+      - Delivered SAP Analytics solutions for government and enterprise clients, implementing custom reporting modules and data integration workflows
+      - Collaborated with cross-functional teams to gather requirements, design solutions, and deploy analytics applications meeting strict compliance and security standards
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, <span class="iconify" data-icon="vscode-icons:file-type-python"></span> Python, Java, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda, S3, CloudFront), Kubernetes, Docker, OpenAI APIs, LLM Integration, Microservices Architecture, Event-Driven Systems, PostgreSQL, Redis, API Design
+  - category: Managerial
+    skills: Engineering Leadership, Product Strategy, Agile/Scrum/Kanban, Technical Mentoring, Team Scaling, Cross-functional Collaboration, Performance Management, Stakeholder Communication

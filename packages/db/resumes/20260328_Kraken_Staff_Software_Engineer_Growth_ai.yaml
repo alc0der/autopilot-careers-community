@@ -1,0 +1,30 @@
+tagline: "Sr. Eng. Manager"
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Designed event-driven microservices handling 1,500+ req/5-min peaks with WebSocket and SSE for real-time user engagement, serving 100K+ monthly active users on AWS EKS
+      - Architected real-time AI voice and chat systems integrating OpenAI APIs with sub-second latency, driving a 10% increase in sales conversion
+      - Increased per-engineer throughput by 57.8% by leading AI-assisted engineering adoption (Claude Code, Cursor) across the organization
+      - Established API-first CI/CD standards with automated breaking change detection, improving deployment frequency from weekly to daily
+      - Mentored 20+ engineers using Grafana and MergeStat dashboards to surface per-engineer contribution data, enabling data-driven coaching and cross-functional alignment across product, platform, and design
+
+  - id: beno_em
+    achievements:
+      - Scaled engineering org from 5 to 20 engineers; reduced deployment cycle time by 53% using data-driven Monte Carlo simulation forecasting
+      - Architected high-availability distributed system with API gateways and circuit breaker patterns, monitored via CloudWatch, sustaining 99.9% uptime across production services
+
+  - id: beno_lead
+    achievements:
+      - Led cloud migration to AWS EKS with Docker and Kubernetes, achieving 2x performance improvement and 30% infrastructure cost reduction
+      - Pioneered automated API breaking change detection and client code generation, reducing integration errors by 80%
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency using event-driven architecture
+
+skill_groups:
+  - category: Technical
+    skills: <span class="iconify" data-icon="vscode-icons:file-type-typescript-official"></span> TypeScript, Java/Kotlin, <span class="iconify" data-icon="vscode-icons:file-type-python"></span> Python, Go, SQL, Distributed Systems, Microservices, Event-Driven Architecture, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, Lambda), <span class="iconify" data-icon="vscode-icons:file-type-docker"></span> Docker, Kubernetes, Terraform, Redis, CI/CD, WebSocket/SSE, API Design, OpenAI APIs
+  - category: Managerial
+    skills: Technical Leadership, Engineering Mentorship, Cross-functional Collaboration, System Design & Architecture, Agile/Scrum, Engineering Analytics (Grafana/MergeStat), Technical Roadmapping

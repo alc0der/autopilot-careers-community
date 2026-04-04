@@ -1,0 +1,8 @@
+extends: existence
+message: "Non-standard list marker — convert to a markdown bullet (- or *) or ordered list (1.)."
+level: warning
+nonword: true
+scope:
+  - raw
+raw:
+  - '(?m)^\s*(?:[•●►‣⁃◦]|[‐–—]|\d+\)|[a-zA-Z]\))\s'

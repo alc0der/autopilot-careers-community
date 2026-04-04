@@ -1,0 +1,8 @@
+extends: existence
+message: "Bold line looks like a heading — convert to a markdown heading (## or ###)."
+level: warning
+nonword: true
+scope:
+  - raw
+raw:
+  - '(?m)^\*\*[^*\n]+\*\*\s*$'

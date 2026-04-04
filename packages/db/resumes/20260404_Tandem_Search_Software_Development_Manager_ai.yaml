@@ -1,0 +1,37 @@
+tagline: "EM | Founding Eng."
+
+jobs:
+  - id: beno_cto
+    achievements:
+      - Led three distributed cross-functional engineering teams (25+ engineers) across AI-driven cloud products, partnering directly with the CEO to set technical direction and translate business goals into quarterly delivery plans
+      - Architected LLM agent systems deployed to production for HR sourcing, QA regression, and release workflows — with typed contracts, CloudWatch observability, and responsible AI governance
+      - Increased per-engineer throughput by 57.8% by driving org-wide adoption of AI-assisted engineering workflows (Claude Code, Cursor)
+      - Designed and operated event-driven microservices on AWS EKS delivering real-time data via WebSocket and SSE to 100K+ MAU, sustaining 99.9% uptime with typed API contracts and circuit breaker patterns
+      - Established automated CI/CD pipelines with API-first standards and breaking change detection, enabling daily trunk-based deployments across the engineering org
+
+  - id: beno_em
+    achievements:
+      - Grew engineering from 5 to 20 engineers while reducing annual turnover from 70% to 6% through remote hiring across five countries
+      - Improved sprint predictability by 53% by introducing data-driven delivery forecasting using Monte Carlo simulation and Kanban Flight Levels
+      - Defined end-to-end engineering processes — skill levels framework, salary scales, hiring pipeline, and performance review system
+
+  - id: beno_lead
+    achievements:
+      - Established core technology stack as founding engineer — Spring Boot microservices, Angular, PostgreSQL on AWS EKS — architecture running 5+ years in production
+      - Pioneered API-first CI/CD with automated breaking change detection and typed client SDK generation, adopted org-wide
+
+  - id: roamworks_arch
+    achievements:
+      - Built distributed IoT platform on Azure Event Hub processing real-time telemetry from 10,000+ connected devices with sub-second latency
+
+  - id: roamworks_bi
+    achievements: []
+
+  - id: fujitsu
+    achievements: []
+
+skill_groups:
+  - category: Technical
+    skills: Java/Kotlin, Python, <span class="iconify" data-icon="vscode-icons:file-type-aws"></span> AWS (EKS, CloudWatch), <span class="iconify" data-icon="devicon:azure"></span> Azure (Event Hub), LLM Integration & AI Agents, Microservices, CI/CD, REST APIs
+  - category: Managerial
+    skills: Engineering Leadership, Team Scaling & Retention, Distributed Teams, OKRs & Roadmapping, Startup Execution, Hiring & Performance Management, Agile/Kanban
