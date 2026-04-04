@@ -26,7 +26,7 @@ jobs:
           git checkout -b community-sync
 
           # Remove private packages and sync config
-          git rm -rf packages/fetcher packages/renderer packages/bullet-embeddings copy.bara.sky
+          git rm -rf packages/fetcher packages/renderer packages/bullet-embeddings copy.bara.sky .github
           git commit -m "sync: community edition from $(git rev-parse --short HEAD~1)"
 
           # Set up deploy key and push
