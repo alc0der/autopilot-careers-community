@@ -27,6 +27,20 @@ jobs:
 
           # Remove private packages and sync config
           git rm -rf packages/fetcher packages/renderer packages/bullet-embeddings copy.bara.sky .github
+
+          # Remove personal data from db but keep directory structure
+          git rm -rf packages/db/resumes/* packages/db/job-descriptions/* packages/db/jd-analyzed/* \
+                     packages/db/jd-linted/* packages/db/rendered/* packages/db/journal/* \
+                     packages/db/feedback/* packages/db/base.yaml packages/db/contact.yaml \
+                     packages/db/priorities.yaml 2>/dev/null || true
+
+          # Preserve directory structure with .gitkeep
+          for dir in resumes job-descriptions jd-analyzed jd-linted rendered journal feedback forms; do
+            mkdir -p "packages/db/$dir"
+            touch "packages/db/$dir/.gitkeep"
+            git add "packages/db/$dir/.gitkeep"
+          done
+
           git commit -m "sync: community edition from $(git rev-parse --short HEAD~1)"
 
           # Set up deploy key and push
