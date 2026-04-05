@@ -23,8 +23,12 @@ else
 fi
 
 # Create temp files for mustache processing
-TEMP_TEMPLATE=$(mktemp)
-TEMP_DATA=$(mktemp)
+# TMP_DIR is provided by the plugin config (via environment variable)
+TEMP_DIR="${TMP_DIR:-.}"
+mkdir -p "$TEMP_DIR"
+
+TEMP_TEMPLATE="${TEMP_DIR}/.render_template_$$.tmp"
+TEMP_DATA="${TEMP_DIR}/.render_data_$$.tmp"
 trap "rm -f '$TEMP_TEMPLATE' '$TEMP_DATA'" EXIT
 
 cat "$TEMPLATE" > "$TEMP_TEMPLATE"

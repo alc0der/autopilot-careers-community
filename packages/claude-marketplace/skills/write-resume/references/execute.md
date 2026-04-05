@@ -38,8 +38,8 @@ template -> pdf
 
 #### Reference Files
 
-- **./base.yaml** (user-provided in working directory **root**, not `db/`): Hardcoded job structure (titles, companies, dates) - the "source of truth"
-- **./contact.yaml** (user-provided in working directory **root**, not `db/`): Personal contact information (name, phone, email, etc.)
+- **./base.yaml** (in working directory root): Hardcoded job structure (titles, companies, dates) - the "source of truth"
+- **./contact.yaml** (in working directory root): Personal contact information (name, phone, email, etc.)
 - **template.md**: Mustache template for final resume rendering
 - **`<skill-base-dir>/scripts/render.sh`**: Shell script to merge and render
 
@@ -59,7 +59,7 @@ template -> pdf
      - Job 3: 2-3 bullets
      - Job 4+: 1-2 bullets
      - Oldest 1-2 jobs: may be omitted entirely if space is tight
-4. Write AI YAML to `db/resumes/YYYYMMDD_<Target>_<Role>_ai.yaml` with:
+4. Write AI YAML to `resumes/YYYYMMDD_<Target>_<Role>_ai.yaml` with:
    - `tagline` — pick the best fit for the target role:
      - `"EM | Founding Eng."` — for people-focused roles (Engineering Manager, etc.)
      - `"Sr. Eng. Manager"` — for technical leadership roles (Tech Lead, Staff Engineer, etc.)
@@ -68,12 +68,13 @@ template -> pdf
    - `skill_groups` with populated skills strings
    - Decorate skills with logos: `<span class="iconify" data-icon="vscode-icons:file-type-{{technology}}"></span>`
    - Don't overuse logos. Keep it between 2-5 logos
-5. Run the render script to merge and generate the final resume (output to `db/rendered/`):
+5. Run the render script to merge and generate the final resume (output to `rendered/`).
+   Pass `$TMP_DIR` from plugin config as an environment variable:
    ```sh
-   <skill-base-dir>/scripts/render.sh db/resumes/<ai.yaml> db/rendered/<output>.md
+   TMP_DIR=<resolved_tmp_dir> <skill-base-dir>/scripts/render.sh resumes/<ai.yaml> rendered/<output>.md
    ```
 6. Render the markdown to PDF using the `mcp__oh-my-cv-render__render_resume` MCP tool. It converts the markdown to a styled, print-ready PDF, waiting for Iconify icons to load so skill logos render correctly.
-   Call with `input` set to the **absolute path** of `db/rendered/<output>.md`.
+   Call with `input` set to the **absolute path** of `rendered/<output>.md`.
    The tool returns JSON: `{ "pdf": "<path>", "pageCount": <n> }`.
    Pass `html: true` to also save the intermediate HTML for debugging.
    Pass `metadata` to stamp PDF-level metadata for traceability:

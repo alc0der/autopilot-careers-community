@@ -4,3 +4,5 @@ bundle/
 logs/
 *.tsbuildinfo
 .turbo/
+.task/
+*.zip

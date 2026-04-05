@@ -98,9 +98,12 @@ else
   MUSTACHE_TARBALL="mustache_${MUSTACHE_VERSION}_${OS}_${ARCH}.tar.gz"
   MUSTACHE_URL="https://github.com/cbroglie/mustache/releases/download/v${MUSTACHE_VERSION}/${MUSTACHE_TARBALL}"
   info "Downloading mustache v${MUSTACHE_VERSION}…"
-  curl -fsSL -o "/tmp/${MUSTACHE_TARBALL}" "$MUSTACHE_URL"
-  tar -xzf "/tmp/${MUSTACHE_TARBALL}" -C "${VENDOR_BIN}" mustache
-  rm -f "/tmp/${MUSTACHE_TARBALL}"
+  # TMP_DIR is provided by the plugin config (via environment variable)
+  DL_DIR="${TMP_DIR:-${VENDOR_BIN}}"
+  mkdir -p "$DL_DIR"
+  curl -fsSL -o "${DL_DIR}/${MUSTACHE_TARBALL}" "$MUSTACHE_URL"
+  tar -xzf "${DL_DIR}/${MUSTACHE_TARBALL}" -C "${VENDOR_BIN}" mustache
+  rm -f "${DL_DIR}/${MUSTACHE_TARBALL}"
   ok "Downloaded mustache v${MUSTACHE_VERSION}"
 fi
 

@@ -1,14 +1,14 @@
 ### Plan
 
 1. Read annotated job description
-1. Read previous resumes in `db/resumes` and note titles
+1. Read previous resumes in `resumes` and note titles
 1. Construct a career progression plan (a story)
   - Decide if target job is people focus or technical focuss
   - Use EM progression for people focus jobs and use SWE and TM for technical focus jobs
   - You may use EM and Tech Lead interchangeably
   - Avoid progression shifts between people focus and technical focus jobs
   - Never make a career progression that implies demotions
-1. Read achievements journal (`db/journal/achievements.yaml`)
+1. Read achievements journal (`journal/achievements.yaml`)
    - Filter achievements by relevance to target role
    - Prioritize achievements marked `reviewed: true` (already refined)
    - Achievements with `job_id` can be mapped to specific positions

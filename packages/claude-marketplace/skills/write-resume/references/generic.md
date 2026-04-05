@@ -12,9 +12,9 @@ Use web search to understand the target company:
 
 ### 2. Plan
 
-Read previous resumes in `db/resumes` to understand career history.
+Read previous resumes in `resumes` to understand career history.
 
-Read achievements journal (`db/journal/achievements.yaml`):
+Read achievements journal (`journal/achievements.yaml`):
 - Filter achievements by relevance to target role
 - Prioritize achievements marked `reviewed: true` (already refined)
 - Achievements with `job_id` can be mapped to specific positions
@@ -37,8 +37,8 @@ If needed, ask the user about:
 Follow [execute](execute.md) to generate AI YAML and render the resume.
 
 **File naming:**
-- YAML source: `db/resumes/YYYYMMDD_Generic_<Role>_ai.yaml`
-- Rendered output: `db/rendered/YYYYMMDD_Generic_<Role>_Resume.md`
+- YAML source: `resumes/YYYYMMDD_Generic_<Role>_ai.yaml`
+- Rendered output: `rendered/YYYYMMDD_Generic_<Role>_Resume.md`
 
 When writing achievements:
 - For company-targeted: emphasize relevant domain experience

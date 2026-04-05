@@ -11,7 +11,7 @@ You are helping the user capture a professional achievement in their journal.
 
 ## Achievement File
 
-Location: `db/journal/achievements.yaml`
+Location: `journal/achievements.yaml`
 
 ## Workflow
 
@@ -50,16 +50,16 @@ Default to today's date if skipped.
 
 ### Step 5: Link to Job (Optional)
 
-Read `db/base.yaml` to check for available job IDs. If jobs exist, ask:
+Read `base.yaml` to check for available job IDs. If jobs exist, ask:
 
 "Would you like to link this to a specific role? Available job IDs: [list them]. (Press Enter to skip)"
 
 ### Step 6: Save the Achievement
 
-Use yq to append the new achievement to `db/journal/achievements.yaml`:
+Use yq to append the new achievement to `journal/achievements.yaml`:
 
 ```bash
-yq -i '.achievements += [{"date": "DATE", "text": "TEXT", "reviewed": REVIEWED}]' db/journal/achievements.yaml
+yq -i '.achievements += [{"date": "DATE", "text": "TEXT", "reviewed": REVIEWED}]' journal/achievements.yaml
 ```
 
 Add optional fields only if provided:

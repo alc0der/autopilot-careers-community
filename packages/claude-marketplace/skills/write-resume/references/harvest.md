@@ -5,13 +5,13 @@ Indexes AI-generated bullets from resume YAML files into the embeddings system f
 #### Usage
 
 - `/harvest <file>` — harvest a specific AI YAML file
-- `/harvest --all` — harvest all `*_ai.yaml` files in `db/resumes/`
+- `/harvest --all` — harvest all `*_ai.yaml` files in `resumes/`
 
 #### Steps
 
 1. Verify the `bullet-embeddings` MCP server is available
 2. If a specific file is given, call `mcp__bullet-embeddings__harvest` with the absolute path
-3. If `--all`, scan `db/resumes/` for `*_ai.yaml` files and harvest each one
+3. If `--all`, scan `resumes/` for `*_ai.yaml` files and harvest each one
 4. Report summary: how many bullets harvested, new vs updated
 
 #### What Happens

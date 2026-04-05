@@ -2,7 +2,7 @@
 
 Follow these steps to analyze a job description:
 1. Read and remember previous resumes
-  - Previous resumes are available at `db/resumes`
+  - Previous resumes are available at `resumes`
 1. Create an annotated version of the linted job description following these guidelines:
 	- Never change a word from the original
 	- Remove markdown bold, italic, underline, and strikethrough from the original Job Description
@@ -14,7 +14,7 @@ Follow these steps to analyze a job description:
 		- ... experienced in ==scalling teams==%% scaled team in Beno as Engineering Manager %%
 	- Never highlight or comment on `non-relevant` sections
 	- Produce the annotated job description as an artifact
-1. Write the analized resume to `db/jd-analyzed`
+1. Write the analized resume to `jd-analyzed`
 1. Review the annotated result for vague or generic postings:
 	- If the ratio of `%% non-relevant %%` sections is very high relative to highlighted content, or if very few highlights were found, flag this to the user:
 		- "This JD appears to be a generic talent pipeline posting with few specific requirements. Consider using a generic resume instead of a fully tailored one."

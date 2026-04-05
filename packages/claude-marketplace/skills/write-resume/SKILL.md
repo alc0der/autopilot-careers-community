@@ -2,7 +2,7 @@
 name: write-resume
 description: Use this skill to write resumes or write cover letters. Resumes could be generic or tailored for a job description. The skill provides guide to effectively utilize job descriptions. When users share a LinkedIn job URL or job ID, use this skill to fetch the posting and begin the resume workflow.
 metadata:
-  version: 1.11.0
+  version: 1.13.5
 allowed-tools: Bash(jq:*) Bash(mustache:*) Bash(./scripts/render.sh:*) Bash(vale:*) mcp__linkedin-fetcher__fetch_job mcp__oh-my-cv-render__render_resume mcp__bullet-embeddings__harvest mcp__bullet-embeddings__query mcp__bullet-embeddings__feedback mcp__bullet-embeddings__embed_achievement mcp__bullet-embeddings__stats Read Write
 ---
 
@@ -21,6 +21,14 @@ If tools are not yet installed, run the setup script from the plugin root:
 ```
 
 This installs jq and mustache into the plugin's `vendor/` directory, and verifies python3 + PyYAML are available. LinkedIn job fetching and resume rendering are handled by MCP tools (no local install needed).
+
+## Plugin Config
+
+User-configurable settings are declared in `plugin.json` under `userConfig`. Pass resolved values as environment variables when invoking scripts.
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `$TMP_DIR` | `.` | Directory for temporary files during rendering |
 
 ## Prerequisites
 
@@ -93,7 +101,7 @@ visa: Work Authorization  # optional
 
 ### Resume Files (YAML source)
 
-Resume source files are stored in `db/resumes/` and follow the pattern:
+Resume source files are stored in `resumes/` and follow the pattern:
 
 ```
 YYYYMMDD_<target>_<role>_ai.yaml
@@ -111,7 +119,7 @@ Where:
 
 ### Rendered Files (MD output)
 
-Rendered markdown resumes are stored in `db/rendered/` and follow the pattern:
+Rendered markdown resumes are stored in `rendered/` and follow the pattern:
 
 ```
 YYYYMMDD_<target>_<role>_Resume.md
