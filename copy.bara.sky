@@ -19,6 +19,7 @@ core.workflow(
             "packages/renderer/**",
             "packages/bullet-embeddings/**",
             "copy.bara.sky",
+            ".claude-sessions",
         ],
     ),
     authoring = authoring.pass_thru("Autopilot Sync <sync@autopilot.careers>"),

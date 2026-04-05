@@ -6,3 +6,4 @@ logs/
 .turbo/
 .task/
 *.zip
+.claude-sessions
