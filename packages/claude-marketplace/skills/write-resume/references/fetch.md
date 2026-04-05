@@ -1,6 +1,6 @@
 ## /Fetch
 
-Fetches a LinkedIn job description. This step should already be complete by the time you read this file — see "Eager Fetch" in SKILL.md.
+Fetch a LinkedIn job description. This reference covers duplicate detection and the fetch procedure.
 
 ### Recognizing LinkedIn Input
 
@@ -13,9 +13,12 @@ Any other URL format is **not supported**. Tell the user and stop the workflow.
 
 ### Duplicate Check
 
-Before fetching, check if the job was already fetched:
-1. Search files in `job-descriptions/` for a `source` frontmatter value that matches the URL or job ID
-2. If found, announce "Already fetched — <filename>" and skip to [/priority](priority.md)
+Extract the numeric job ID from the URL (the segment in `/jobs/view/<id>/`). Then, before any network call:
+
+1. Search `job-descriptions/` for a file whose `source` frontmatter value contains the job ID
+2. Search `resumes/` for an existing resume matching the company/role
+
+If either search finds a match, announce "Already fetched — <filename>" and skip to [/priority](priority.md). Only proceed to fetching if no local match exists.
 
 ### Fetching the Job Description
 
