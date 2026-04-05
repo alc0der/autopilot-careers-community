@@ -2,7 +2,7 @@
 name: write-resume
 description: Use this skill to write resumes or write cover letters. Resumes could be generic or tailored for a job description. The skill provides guide to effectively utilize job descriptions. When users share a LinkedIn job URL or job ID, use this skill to fetch the posting and begin the resume workflow.
 metadata:
-  version: 1.13.5
+  version: 1.14.2
 allowed-tools: Bash(jq:*) Bash(mustache:*) Bash(./scripts/render.sh:*) Bash(vale:*) mcp__linkedin-fetcher__fetch_job mcp__oh-my-cv-render__render_resume mcp__bullet-embeddings__harvest mcp__bullet-embeddings__query mcp__bullet-embeddings__feedback mcp__bullet-embeddings__embed_achievement mcp__bullet-embeddings__stats Read Write
 ---
 
@@ -74,11 +74,30 @@ location: City, Country
 visa: Work Authorization  # optional
 ```
 
+## Preflight
+
+Before doing anything else — before Eager Fetch, before reading reference files — verify the workspace:
+
+1. Check that `base.yaml` exists in the working directory: `test -f base.yaml`
+2. If **missing**, stop immediately. Tell the user:
+   > ⚠️ `base.yaml` not found in the working directory.
+   > This usually means the conversation isn't running inside a project, or the career data directory hasn't been assigned.
+   > Please assign your project directory and start a new conversation.
+3. Do **not** proceed with any workflow steps until this check passes.
+
+## Eager Fetch
+
+When the user provides a URL or job ID, act on it **immediately** — before reading any reference files, before listing directories, before anything else.
+
+1. **Validate the link.** If the input is not a LinkedIn URL or numeric job ID, stop and tell the user: "This skill only supports LinkedIn job postings. Please provide a LinkedIn job URL or ID." Do not proceed with the rest of the workflow.
+2. **Check for duplicates.** Search existing files in `job-descriptions/` for a matching `source` frontmatter value (the URL or job ID). If a match exists, skip fetching, announce "Already fetched — <filename>", and continue from [/priority](references/priority.md).
+3. **Fetch first, read later.** Call `mcp__linkedin-fetcher__fetch_job` as your very first tool call. Do not read reference files or check workspace layout beforehand — the fetch is a network call and everything else can happen while you process the result. Read reference files only when you actually need them for the current step.
+
 ## Workflow: Writing a Resume
 
 ### Tailored Resume
 
-- [/fetch](references/fetch.md) (when the user provides a LinkedIn job URL or ID — normalization is automatic)
+- [/fetch](references/fetch.md) (eager — should already be done per above)
 - [/priority](references/priority.md) (determine company priority)
 - [/analyze](references/analyze.md)
 - [/synthesize](references/synthesize.md)

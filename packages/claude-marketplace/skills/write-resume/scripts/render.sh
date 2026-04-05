@@ -4,6 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE="./base.yaml"
 CONTACT="./contact.yaml"
+[[ -f "$BASE" ]]    || { echo "Error: $BASE not found in $(pwd). Is the project directory assigned?" >&2; exit 1; }
+[[ -f "$CONTACT" ]] || { echo "Error: $CONTACT not found in $(pwd). Is the project directory assigned?" >&2; exit 1; }
 TEMPLATE="${SCRIPT_DIR}/../references/template.md"
 AI_DATA="${1:?Usage: $0 <ai.yaml> [output.md]}"
 OUTPUT="${2:-}"

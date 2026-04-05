@@ -1,6 +1,46 @@
 version: "3"
 
+# ── Claude Desktop (CoWork) MCP Server Installation ──
+#
+# The monorepo provides three MCP servers that Claude Desktop consumes via
+# stdio transport. `mcp:install` patches claude_desktop_config.json to point
+# each server at the monorepo package (using `pnpm --prefix`).
+#
+# After running `task mcp:install`, restart Claude Desktop for changes to
+# take effect.
+
+vars:
+  CLAUDE_CONFIG: "{{.HOME}}/Library/Application Support/Claude/claude_desktop_config.json"
+
 tasks:
+  mcp:install:
+    desc: Register monorepo MCP servers in Claude Desktop config
+    cmds:
+      - |
+        jq --arg root "{{.ROOT_DIR}}" '
+          .mcpServers["linkedin-fetcher"] = {
+            command: "pnpm",
+            args: ["--prefix", ($root + "/packages/fetcher"), "--silent", "run", "mcp"]
+          } |
+          .mcpServers["oh-my-cv-render"] = {
+            command: "pnpm",
+            args: ["--prefix", ($root + "/packages/renderer"), "--silent", "run", "mcp"]
+          } |
+          .mcpServers["bullet-embeddings"] = {
+            command: "pnpm",
+            args: ["--prefix", ($root + "/packages/bullet-embeddings"), "--silent", "run", "mcp"]
+          }
+        ' "{{.CLAUDE_CONFIG}}" > "$TMPDIR/claude_desktop_config.json" \
+        && mv "$TMPDIR/claude_desktop_config.json" "{{.CLAUDE_CONFIG}}"
+      - echo "✓ Updated 3 MCP servers in claude_desktop_config.json"
+      - echo "  Restart Claude Desktop for changes to take effect."
+
+  mcp:status:
+    desc: Show current MCP server paths in Claude Desktop config
+    cmds:
+      - |
+        jq -r '.mcpServers | to_entries[] | select(.key == "linkedin-fetcher" or .key == "oh-my-cv-render" or .key == "bullet-embeddings") | "\(.key): \(.value.args | join(" "))"' "{{.CLAUDE_CONFIG}}"
+
   docs:
     desc: Run Structurizr Lite to view architecture diagrams at http://localhost:8080
     cmds:
