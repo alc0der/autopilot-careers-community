@@ -1,7 +1,7 @@
 import fs from "node:fs";
-import path from "node:path";
 import {
   tailwindResetCss,
+  resumeTemplateCss,
   fontRegular,
   fontBold,
   fontItalic,
@@ -32,21 +32,11 @@ export const DEFAULT_STYLES: ResumeStyles = {
 
 const S = "#resume";
 
-const DEFAULT_CSS_PATH = path.resolve(process.cwd(), "style.css");
-
 function loadResetCss(): string {
   return tailwindResetCss;
 }
 
-function loadUserCss(cssPath: string = DEFAULT_CSS_PATH): string {
-  let raw: string;
-  try {
-    raw = fs.readFileSync(cssPath, "utf-8");
-  } catch {
-    console.warn(`Warning: CSS file not found at ${cssPath}, skipping user CSS.`);
-    return "";
-  }
-
+function preprocessCss(raw: string): string {
   let css = raw;
 
   // Rewrite vue-smart-pages wrapper selector to #resume
@@ -68,6 +58,22 @@ function loadUserCss(cssPath: string = DEFAULT_CSS_PATH): string {
   css = css.replace(/\n{3,}/g, "\n\n");
 
   return css.trim();
+}
+
+function loadDefaultTemplateCss(): string {
+  return preprocessCss(resumeTemplateCss);
+}
+
+function loadUserCss(cssPath?: string): string {
+  if (!cssPath) return "";
+  let raw: string;
+  try {
+    raw = fs.readFileSync(cssPath, "utf-8");
+  } catch {
+    console.warn(`Warning: CSS file not found at ${cssPath}, skipping user CSS.`);
+    return "";
+  }
+  return preprocessCss(raw);
 }
 
 function buildDynamicCss(styles: ResumeStyles): string {
@@ -135,6 +141,7 @@ export function buildCss(styles: ResumeStyles = DEFAULT_STYLES, cssPath?: string
     loadResetCss(),
     RESET_OVERRIDES,
     buildFontFaceCss(),
+    loadDefaultTemplateCss(),
     loadUserCss(cssPath),
     POST_USER_OVERRIDES,
     buildDynamicCss(styles),
