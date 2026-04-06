@@ -1,6 +1,8 @@
-import { fetchJobWithApi } from "./api";
+import { fetchJobWithApi, RateLimitError } from "./api";
 import { fetchJobWithPuppeteer } from "./puppeteer";
 import { parseArticle } from "../html-processor";
+
+export { RateLimitError } from "./api";
 
 export const fetchJob = async (urlOrId: string, usePuppeteer = false) => {
   // Use Puppeteer for non-LinkedIn URLs or when requested
@@ -30,8 +32,12 @@ export const fetchJob = async (urlOrId: string, usePuppeteer = false) => {
     `;
     return { html, title: `${jobData.title} | ${jobData.company}`, jobData };
   } catch (error) {
-    // Fallback to Puppeteer if API fails
-    console.log("API failed, using Puppeteer");
+    // Let rate limit errors propagate so the MCP layer can inform the agent
+    if (error instanceof RateLimitError) {
+      throw error;
+    }
+    // Fallback to Puppeteer for other API failures
+    console.log(`API failed (${error instanceof Error ? error.message : error}), falling back to Puppeteer`);
     const url = /^\d+$/.test(urlOrId)
       ? `https://www.linkedin.com/jobs/view/${urlOrId}`
       : urlOrId;

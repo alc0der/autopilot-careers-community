@@ -2,7 +2,8 @@ import { extractArticle, htmlToMarkdown } from "./htmlToMarkdown";
 import { extractReadModeHTML } from "./markdownProcessor";
 import { normalizeMarkdown } from "./normalizeMarkdown";
 import { classifyJobPosting } from "./classifyJobPosting";
-import { fetchJob } from "./fetchers";
+import { fetchJob, RateLimitError } from "./fetchers";
+export { RateLimitError } from "./fetchers";
 import { fileLogger as fileLoggerFn, logger } from "./loggers";
 
 function resolveUrl(input: { url?: string; id?: string }): { url: URL; id: string } {

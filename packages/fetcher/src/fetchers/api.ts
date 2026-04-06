@@ -10,6 +10,16 @@ export type JobData = {
   url: string;
 };
 
+export class RateLimitError extends Error {
+  public readonly retryAfterSeconds: number;
+
+  constructor(message: string, retryAfterSeconds = 60) {
+    super(message);
+    this.name = "RateLimitError";
+    this.retryAfterSeconds = retryAfterSeconds;
+  }
+}
+
 const extractJobId = (urlOrId: string): string => {
   if (/^\d+$/.test(urlOrId)) {
     return urlOrId;
@@ -76,6 +86,10 @@ const extractJobDataFromHtml = (html: string, url: string): JobData => {
   };
 };
 
+const isRateLimited = (html: string): boolean =>
+  html.includes("Job search smarter with Premium") ||
+  html.includes("Retry Premium for");
+
 export const fetchJobWithApi = async (urlOrId: string) => {
   const jobId = extractJobId(urlOrId);
   const apiUrl = `https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/${jobId}`;
@@ -87,5 +101,12 @@ export const fetchJobWithApi = async (urlOrId: string) => {
   }
 
   const html = await response.text();
+
+  if (isRateLimited(html)) {
+    throw new RateLimitError(
+      "LinkedIn rate limit hit (Premium upsell returned instead of job data)",
+    );
+  }
+
   return extractJobDataFromHtml(html, apiUrl);
 };

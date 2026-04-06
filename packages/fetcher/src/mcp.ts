@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod/v4";
-import { fetchJobAsMarkdown } from "./core";
+import { fetchJobAsMarkdown, RateLimitError } from "./core";
 
 const server = new McpServer({
   name: "linkedin-fetcher",
@@ -29,6 +29,22 @@ server.tool(
         content: [{ type: "text" as const, text: markdown }],
       };
     } catch (error) {
+      if (error instanceof RateLimitError) {
+        const input = url || id;
+        return {
+          content: [{
+            type: "text" as const,
+            text: [
+              `RATE_LIMITED: LinkedIn is throttling requests from this IP.`,
+              `The job posting (${input}) could not be fetched right now.`,
+              ``,
+              `Suggested action: Wait ${error.retryAfterSeconds} seconds, then call this tool again with the same arguments.`,
+              `Do NOT fall back to a different method — the rate limit is temporary.`,
+            ].join("\n"),
+          }],
+          isError: true,
+        };
+      }
       const message = error instanceof Error ? error.message : String(error);
       return {
         content: [{ type: "text" as const, text: `Error fetching job: ${message}` }],

@@ -29,6 +29,10 @@ class ParseError extends Error {
 }
 
 // Function implementations with neverthrow
+const isRateLimited = (html: string): boolean =>
+  html.includes("Job search smarter with Premium") ||
+  html.includes("Retry Premium for");
+
 export const fetchHtml = (id: JobId): ResultAsync<PartialHtml, FetchError> => {
   return ResultAsync.fromPromise(
     fetch(`https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/${id}`),
@@ -42,6 +46,10 @@ export const fetchHtml = (id: JobId): ResultAsync<PartialHtml, FetchError> => {
               response.status,
               `Failed to read response: ${error}`,
             ),
+        ).andThen((html) =>
+          isRateLimited(html)
+            ? err(new FetchError(429, "LinkedIn rate limit hit (Premium upsell returned instead of job data)"))
+            : ok(html),
         )
       : ResultAsync.fromSafePromise(
           Promise.resolve(
