@@ -1,6 +1,23 @@
 # Autopilot Careers
 
-Monorepo for career automation tools — resume rendering, job fetching, bullet embeddings, and a Claude Code plugin.
+A system to allow Claude CoWork to handle applying to jobs, and more.
+
+## Quick Start
+
+### Claude Desktop
+
+- Install Claude plugin package manually or though the marketplace
+- Configure the MCP servers
+- Test it by `/write-resume for <linkedIn_URL>
+
+## Contributing
+
+```bash
+pnpm install
+pnpm build        # typecheck + bundle all packages
+pnpm test         # run tests across all packages
+pnpm typecheck    # type-check only
+```
 
 ## Packages
 
@@ -11,15 +28,6 @@ Monorepo for career automation tools — resume rendering, job fetching, bullet 
 | `packages/bullet-embeddings` | Bullet trust signals via Vectra + Ollama (MCP server) |
 | `packages/db` | Career data: resumes, job descriptions, journal |
 | `packages/claude-marketplace` | Claude Code write-resume plugin |
-
-## Quick Start
-
-```bash
-pnpm install
-pnpm build        # typecheck + bundle all packages
-pnpm test         # run tests across all packages
-pnpm typecheck    # type-check only
-```
 
 ## Debugging with Claude Sessions
 
