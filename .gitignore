@@ -9,4 +9,5 @@ logs/
 .claude-sessions
 docs/.structurizr
 docs/.structurizr/workspace.json
+docs/workspace.json
 .claude/settings.local.json
