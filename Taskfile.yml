@@ -1,13 +1,13 @@
 version: "3"
 
-# ── Claude Desktop (CoWork) MCP Server Installation ──
+# ── Agent Runtime MCP Server Installation ──
 #
-# The monorepo provides three MCP servers that Claude Desktop consumes via
-# stdio transport. `mcp:install` patches claude_desktop_config.json to point
-# each server at the monorepo package (using `pnpm --prefix`).
+# The monorepo provides three MCP servers shared by Claude Desktop and Codex.
+# Claude Desktop uses its app config, while Codex is configured project-locally
+# via `.codex/config.toml`.
 #
-# After running `task mcp:install`, restart Claude Desktop for changes to
-# take effect.
+# After running one of the install tasks, restart the target agent runtime for
+# changes to take effect.
 
 vars:
   CLAUDE_CONFIG: "{{.HOME}}/Library/Application Support/Claude/claude_desktop_config.json"

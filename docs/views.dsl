@@ -5,21 +5,21 @@ views {
         autolayout lr
     }
 
-    container resumeSkill "Containers" "Internal containers showing Claude CoWork as the agent, the db directory, skill plugin, and MCP servers." {
+    container resumeSkill "Containers" "Internal containers showing the agent runtime, the db directory, shared skill package, and MCP servers." {
         include *
         autolayout lr
     }
 
     dynamic resumeSkill "ColdStart" "Scenario: embedding database wiped. User requests a resume, system bootstraps with empty index then rebuilds over successive resumes." {
-        user -> claudeCowork "Requests a tailored resume for a LinkedIn job URL"
-        claudeCowork -> writeResumePlugin "Invokes /fetch with job URL"
+        user -> agentRuntime "Requests a tailored resume for a LinkedIn job URL"
+        agentRuntime -> writeResumePlugin "Invokes /fetch with job URL"
         writeResumePlugin -> linkedinFetcher "Calls fetch_job"
         linkedinFetcher -> linkedin "Scrapes job posting"
         writeResumePlugin -> thateDb "Saves raw JD to db/jd-linted/"
-        claudeCowork -> writeResumePlugin "Invokes /analyze"
+        agentRuntime -> writeResumePlugin "Invokes /analyze"
         writeResumePlugin -> thateDb "Reads base.yaml and prior resumes for context"
         writeResumePlugin -> thateDb "Saves annotated JD to db/jd-analyzed/"
-        claudeCowork -> writeResumePlugin "Invokes /synthesize"
+        agentRuntime -> writeResumePlugin "Invokes /synthesize"
         writeResumePlugin -> resumeEmbeddings "Queries for similar bullets (returns empty — cold start)"
         resumeEmbeddings -> ollama "Embeds query text"
         writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml"

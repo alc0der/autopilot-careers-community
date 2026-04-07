@@ -1,22 +1,43 @@
 # Autopilot Careers
 
-A system to allow Claude CoWork to handle applying to jobs, and more.
+A system for resume tailoring, job application support, and career planning.
 
-## Quick Start
+## Installation
+
+### Codex
+
+- Download the latest Codex plugin release from the GitHub Releases page.
+- Install or extract it into your Codex environment.
+- Configure the MCP servers for your installation.
+- Start Codex in your career data project and invoke `$write-resume`.
 
 ### Claude Desktop
 
-- Install Claude plugin package manually or though the marketplace
-- Configure the MCP servers
-- Test it by `/write-resume for <linkedIn_URL>
+- Download the latest Claude plugin release from the GitHub Releases page, or install it through the marketplace when available.
+- Configure the MCP servers for your installation.
+- Start Claude in your career data project and invoke `/write-resume`.
+
+## Usage
+
+Start a chat thread in Claude or Codex:
+```
+/write-resume for https://www.linkedin.com/jobs/view/${jobUrl:-1234567890}
+```
 
 ## Contributing
+
+Use the package manager from the repo root:
 
 ```bash
 pnpm install
 pnpm build        # typecheck + bundle all packages
 pnpm test         # run tests across all packages
 pnpm typecheck    # type-check only
+pnpm mcp:install
+pnpm mcp:status
+pnpm mcp:install:codex
+pnpm mcp:status:codex
+pnpm codex:publish
 ```
 
 ## Packages
@@ -27,7 +48,7 @@ pnpm typecheck    # type-check only
 | `packages/fetcher` | Job posting fetcher (MCP server + CLI) |
 | `packages/bullet-embeddings` | Bullet trust signals via Vectra + Ollama (MCP server) |
 | `packages/db` | Career data: resumes, job descriptions, journal |
-| `packages/claude-marketplace` | Claude Code write-resume plugin |
+| `packages/claude-marketplace` | Shared agent packaging for Claude and Codex |
 
 ## Debugging with Claude Sessions
 

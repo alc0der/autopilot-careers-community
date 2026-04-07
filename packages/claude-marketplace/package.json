@@ -1,6 +1,10 @@
 {
   "name": "@autopilot/claude-marketplace",
-  "version": "1.12.0",
+  "version": "1.15.4",
   "private": true,
-  "description": "Claude Code skill: resume writing and career planning"
+  "description": "Agent packaging for the write-resume workflow",
+  "scripts": {
+    "version:bump": "python3 scripts/version_bump.py",
+    "codex:publish": "pnpm run version:bump && python3 scripts/publish_codex_plugin.py"
+  }
 }

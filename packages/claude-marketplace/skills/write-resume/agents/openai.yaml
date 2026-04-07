@@ -1,0 +1,18 @@
+interface:
+  display_name: "Write Resume"
+  short_description: "Tailor resumes, critique drafts, manage bullet evidence, and render output for job applications."
+  brand_color: "#0F766E"
+  default_prompt: "Use write-resume to tailor my resume for a LinkedIn job posting."
+policy:
+  allow_implicit_invocation: true
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "linkedin-fetcher"
+      description: "Fetch LinkedIn job postings as markdown"
+    - type: "mcp"
+      value: "oh-my-cv-render"
+      description: "Render markdown resumes to styled PDFs"
+    - type: "mcp"
+      value: "bullet-embeddings"
+      description: "Harvest, query, and score resume bullets and achievements"

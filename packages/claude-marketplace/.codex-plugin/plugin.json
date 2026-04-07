@@ -1,0 +1,18 @@
+{
+  "name": "write-resume-plugin",
+  "version": "1.15.4",
+  "description": "Resume writing, job analysis, and career planning tools",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Write Resume",
+    "shortDescription": "Resume writing and career planning workflow",
+    "developerName": "Autopilot Careers",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": "Use write-resume to tailor my resume for a LinkedIn job posting.",
+    "brandColor": "#0F766E"
+  }
+}

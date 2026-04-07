@@ -12,7 +12,7 @@ model {
 
     resumeSkill = softwareSystem "Resume Skill System" "AI-assisted system for writing, tailoring, and rendering resumes." {
 
-        claudeCowork = container "Claude CoWork" "AI coding agent (Claude Code) operating from the user's db/ directory as its working directory. Loads skills and MCP servers to execute resume workflows." "Claude Code" {
+        agentRuntime = container "Agent Runtime" "AI coding agent runtime operating from the user's db/ directory as its working directory. Claude Desktop and Codex both load the same skills and MCP servers to execute resume workflows." "Claude Code / Codex" {
             tags "Agent"
         }
 
@@ -20,7 +20,7 @@ model {
             tags "DataStore"
         }
 
-        writeResumePlugin = container "write-resume-plugin" "Claude skill plugin that orchestrates the full resume workflow: fetch, lint, analyze, synthesize, render, harvest." "Claude Skill, Bash, Mustache" {
+        writeResumePlugin = container "write-resume-plugin" "Shared skill package that orchestrates the full resume workflow: fetch, lint, analyze, synthesize, render, harvest." "Claude Skill, Codex Skill, Bash, Mustache" {
             tags "Orchestrator"
         }
 
@@ -38,14 +38,14 @@ model {
     }
 
     # User relationships
-    user -> claudeCowork "Assigns db/ directory and delegates resume tasks to"
+    user -> agentRuntime "Assigns db/ directory and delegates resume tasks to"
 
-    # Claude CoWork relationships
-    claudeCowork -> thateDb "Uses as working directory"
-    claudeCowork -> writeResumePlugin "Loads and executes skill commands (/fetch, /analyze, /synthesize)"
-    claudeCowork -> linkedinFetcher "Connects via MCP"
-    claudeCowork -> resumeEmbeddings "Connects via MCP"
-    claudeCowork -> ohmycvRender "Connects via MCP"
+    # Agent runtime relationships
+    agentRuntime -> thateDb "Uses as working directory"
+    agentRuntime -> writeResumePlugin "Loads and executes skill commands (/fetch, /analyze, /synthesize)"
+    agentRuntime -> linkedinFetcher "Connects via MCP"
+    agentRuntime -> resumeEmbeddings "Connects via MCP"
+    agentRuntime -> ohmycvRender "Connects via MCP"
 
     # Orchestrator relationships
     writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml; writes resume YAMLs and rendered output"
