@@ -3,6 +3,10 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod/v4";
 import { fetchJobAsMarkdown, RateLimitError } from "./core";
 
+console.log = (...args: unknown[]) => console.error(...args);
+console.info = (...args: unknown[]) => console.error(...args);
+console.warn = (...args: unknown[]) => console.error(...args);
+
 const server = new McpServer({
   name: "linkedin-fetcher",
   version: "1.0.0",

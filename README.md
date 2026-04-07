@@ -8,7 +8,6 @@ A system for resume tailoring, job application support, and career planning.
 
 - Download the latest Codex plugin release from the GitHub Releases page.
 - Install or extract it into your Codex environment.
-- Configure the MCP servers for your installation.
 - Start Codex in your career data project and invoke `$write-resume`.
 
 ### Claude Desktop
@@ -35,8 +34,6 @@ pnpm test         # run tests across all packages
 pnpm typecheck    # type-check only
 pnpm mcp:install
 pnpm mcp:status
-pnpm mcp:install:codex
-pnpm mcp:status:codex
 pnpm codex:publish
 ```
 

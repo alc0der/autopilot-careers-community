@@ -1,8 +1,9 @@
 {
   "name": "write-resume-plugin",
-  "version": "1.15.4",
+  "version": "1.15.6",
   "description": "Resume writing, job analysis, and career planning tools",
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Write Resume",
     "shortDescription": "Resume writing and career planning workflow",
@@ -12,7 +13,7 @@
       "Read",
       "Write"
     ],
-    "defaultPrompt": "Use write-resume to tailor my resume for a LinkedIn job posting.",
+    "defaultPrompt": "for <linkedIn Job URL>",
     "brandColor": "#0F766E"
   }
 }

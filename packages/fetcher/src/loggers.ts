@@ -4,6 +4,8 @@ import { tmpdir } from "os";
 import * as fs from "fs";
 import * as path from "path";
 
+const stderrLevels = ["error", "warn", "info", "http", "verbose", "debug", "silly"];
+
 const customFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.json(),
@@ -67,12 +69,12 @@ export const fileLogger = (name: string) => {
   return winston.createLogger({
     level: "debug",
     format: winston.format.simple(),
-    transports: transports.length > 0 ? transports : [new winston.transports.Console()],
+    transports: transports.length > 0 ? transports : [new winston.transports.Console({ stderrLevels })],
   });
 };
 
 export const logger = winston.createLogger({
   level: "debug",
   format: winston.format.simple(),
-  transports: [new winston.transports.Console()],
+  transports: [new winston.transports.Console({ stderrLevels })],
 });
