@@ -10,7 +10,7 @@
     "mcp:status": "python3 scripts/claude_mcp.py status",
     "mcp:install:codex": "python3 scripts/codex_mcp.py install",
     "mcp:status:codex": "python3 scripts/codex_mcp.py status",
-    "codex:publish": "pnpm --dir packages/claude-marketplace codex:publish"
+    "codex:publish": "pnpm --dir packages/agent-marketplace codex:publish"
   },
   "devDependencies": {
     "turbo": "^2.0.0",

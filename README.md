@@ -48,7 +48,7 @@ pnpm codex:publish
 | `packages/fetcher` | Job posting fetcher (MCP server + CLI) |
 | `packages/bullet-embeddings` | Bullet trust signals via Vectra + Ollama (MCP server) |
 | `packages/db` | Career data: resumes, job descriptions, journal |
-| `packages/claude-marketplace` | Shared agent packaging for Claude and Codex |
+| `packages/agent-marketplace` | Shared agent packaging for Claude and Codex |
 
 ## Debugging with Claude Sessions
 

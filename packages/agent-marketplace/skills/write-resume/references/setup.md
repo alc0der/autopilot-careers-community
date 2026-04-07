@@ -7,7 +7,7 @@ First-time setup for the write-resume skill package.
 Run the setup script from the agent package root:
 
 ```bash
-packages/claude-marketplace/setup.sh
+packages/agent-marketplace/setup.sh
 ```
 
 This installs jq and mustache into the plugin's `vendor/` directory and verifies python3 + PyYAML are available. LinkedIn job fetching and resume rendering are handled by MCP tools (no local install needed).
