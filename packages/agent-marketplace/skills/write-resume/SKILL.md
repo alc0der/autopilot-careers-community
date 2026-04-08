@@ -2,7 +2,7 @@
 name: write-resume
 description: Write resumes (tailored or generic), cover letters, and manage career data. Use when users share a LinkedIn job URL or job ID to fetch the posting and begin the resume workflow. Also use for critiquing existing resumes, harvesting achievement bullets into embeddings, recording feedback on bullet quality, or generating generic resumes without a specific job target.
 metadata:
-  version: 1.15.6
+  version: 1.15.7
 allowed-tools: Bash(jq:*) Bash(mustache:*) Bash(./scripts/render.sh:*) Bash(vale:*) mcp__linkedin-fetcher__fetch_job mcp__oh-my-cv-render__render_resume mcp__bullet-embeddings__harvest mcp__bullet-embeddings__query mcp__bullet-embeddings__feedback mcp__bullet-embeddings__embed_achievement mcp__bullet-embeddings__stats Read Write
 ---
 
@@ -26,6 +26,25 @@ Before doing anything else — before Eager Fetch, before reading reference file
    > This usually means the conversation isn't running inside a project, or the career data directory hasn't been assigned.
    > Please assign your project directory and start a new conversation.
 3. Do **not** proceed with any workflow steps until this check passes.
+
+## Abort on Persistent Filesystem Errors
+
+If any file read fails with `EDEADLK`, `Resource deadlock avoided`, or any repeated I/O error (same error on **2 consecutive attempts** to read the same file, or **3 total I/O errors** across different files):
+
+1. **Stop all workflow steps immediately.**
+2. Do **not** attempt workarounds — do not fall back to Obsidian, MCP tools, search tools, external APIs, or any other data source to retrieve the data that couldn't be read from the filesystem.
+3. Report the failure to the user:
+   > ⛔ Aborting: persistent filesystem error (`<error message>`).
+   > The workspace mount may be in a bad state. Please restart the session.
+4. Do **not** continue the resume workflow, even partially.
+
+This rule is **non-negotiable** — creative workarounds to bypass filesystem errors risk accessing personal data from unintended sources.
+
+## Data Source Boundaries
+
+This skill reads career data **only** from files in the working directory (`base.yaml`, `contact.yaml`, `resumes/`, `job-descriptions/`, etc.) and from the allowed MCP tools listed in the frontmatter.
+
+**Never** use Obsidian, Contacts, memory graphs, search tools, or any other external data source to obtain the user's personal information (name, phone, email, work history, etc.) — even if the working-directory files are temporarily unavailable. The `allowed-tools` list in the frontmatter is the exhaustive set of tools this skill may use.
 
 ## Eager Fetch
 

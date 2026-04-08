@@ -20,9 +20,29 @@ Extract the numeric job ID from the URL (the segment in `/jobs/view/<id>/`). The
 
 Record the results (existing JD path, existing resume path, or neither). Then **always proceed to fetch** — do not skip the fetch even if a local copy exists.
 
+### Paywall / Login-Wall Detection
+
+LinkedIn sometimes returns a stub page (e.g., "Select language" with no job content) instead of the full posting. This happens when LinkedIn requires authentication or rate-limits anonymous access. It is usually transient.
+
+**Detection:** After each fetch, check whether the returned markdown contains an actual job title and description body. If the content is missing or consists only of YAML frontmatter plus a short stub (e.g., "Select language", "Join to view", or fewer than 50 words of body text after the frontmatter), treat it as a **paywall hit**.
+
+**Retry procedure:**
+
+1. Wait **30 seconds** (`sleep 30`), then call `mcp__linkedin-fetcher__fetch_job` again.
+2. If the second attempt also returns a stub, wait **60 seconds** and retry once more (3 attempts total).
+3. If all 3 attempts return stubs, **then** fall back to asking the user:
+   > LinkedIn is gating this posting behind a login wall. After 3 attempts I still couldn't retrieve the full content.
+   >
+   > You can:
+   > 1. **Paste the full JD text** — copy it from your browser
+   > 2. **Share a different URL** — company careers page, Indeed, etc.
+   > 3. **Wait and retry later** — I'll try fetching again after a longer delay
+
+   If the user chooses option 3, wait **5 minutes** (`sleep 300`) and perform one final fetch attempt. If that also fails, present only options 1 and 2.
+
 ### Handling the Fetched Result
 
-After fetching, compare against the duplicate check results:
+After fetching (and passing paywall detection), compare against the duplicate check results:
 
 - **No local JD exists** → write the new file (see [After Fetching](#after-fetching)) and proceed to [/priority](priority.md).
 - **Local JD exists — no meaningful changes**: Announce "JD unchanged — `<filename>`". If a rendered resume already exists in `rendered/`, present it to the user and ask:
