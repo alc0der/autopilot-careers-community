@@ -16,6 +16,20 @@ A system for resume tailoring, job application support, and career planning.
 - Configure the MCP servers for your installation.
 - Start Claude in your career data project and invoke `/write-resume`.
 
+## Important: iCloud Drive Compatibility
+
+If your career data directory lives inside `~/Documents` or `~/Desktop` and you have **iCloud Drive "Desktop & Documents Folders"** enabled, you will encounter `EDEADLK` / `Resource deadlock avoided` errors when Claude's VM tries to read your files.
+
+**Why it happens:** iCloud's sync daemon holds advisory locks on managed files. When Claude's Linux VM mounts the directory via its FUSE bridge, the macOS kernel detects a circular lock dependency and returns `EDEADLK` (errno 35) instead of hanging. The error is per-file and intermittent — some files read fine while others fail in the same session.
+
+**How to fix (pick one):**
+
+1. **Move the project outside iCloud-managed folders** — e.g., `~/Projects/Career on Autopilot` instead of `~/Documents/Projects/Career on Autopilot`. This is the recommended fix.
+2. **Disable "Desktop & Documents Folders"** in System Settings → Apple Account → iCloud → iCloud Drive (or iCloud Drive Options on older macOS).
+3. **Pin the folder as "Always Keep on This Mac"** — right-click the project folder in Finder → Download Now. This reduces but may not fully eliminate the issue.
+
+> **Note:** Restarting Claude, killing processes, or rebooting will **not** resolve this — iCloud re-establishes its locks immediately upon restart.
+
 ## Usage
 
 Start a chat thread in Claude or Codex:

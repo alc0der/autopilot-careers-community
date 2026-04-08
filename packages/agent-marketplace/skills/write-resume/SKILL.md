@@ -2,7 +2,7 @@
 name: write-resume
 description: Write resumes (tailored or generic), cover letters, and manage career data. Use when users share a LinkedIn job URL or job ID to fetch the posting and begin the resume workflow. Also use for critiquing existing resumes, harvesting achievement bullets into embeddings, recording feedback on bullet quality, or generating generic resumes without a specific job target.
 metadata:
-  version: 1.15.7
+  version: 1.15.8
 allowed-tools: Bash(jq:*) Bash(mustache:*) Bash(./scripts/render.sh:*) Bash(vale:*) mcp__linkedin-fetcher__fetch_job mcp__oh-my-cv-render__render_resume mcp__bullet-embeddings__harvest mcp__bullet-embeddings__query mcp__bullet-embeddings__feedback mcp__bullet-embeddings__embed_achievement mcp__bullet-embeddings__stats Read Write
 ---
 
@@ -32,10 +32,18 @@ Before doing anything else — before Eager Fetch, before reading reference file
 If any file read fails with `EDEADLK`, `Resource deadlock avoided`, or any repeated I/O error (same error on **2 consecutive attempts** to read the same file, or **3 total I/O errors** across different files):
 
 1. **Stop all workflow steps immediately.**
-2. Do **not** attempt workarounds — do not fall back to Obsidian, MCP tools, search tools, external APIs, or any other data source to retrieve the data that couldn't be read from the filesystem.
-3. Report the failure to the user:
+2. Do **not** attempt workarounds — do not fall back to Obsidian, MCP tools, search tools, external APIs, or any other data source to retrieve the data that couldn't be read from the filesystem. Do **not** try alternative read methods (`cat`, `head`, `cp`, `rsync`, `dd`, `strings`, `mmap`, etc.) — if the Read tool failed, shell commands will fail for the same reason.
+3. Report the failure to the user with the **specific diagnosis**:
    > ⛔ Aborting: persistent filesystem error (`<error message>`).
-   > The workspace mount may be in a bad state. Please restart the session.
+   >
+   > **Most likely cause:** Your project directory is inside `~/Documents`, which is synced by iCloud Drive. When Claude's VM mounts iCloud-managed files, the macOS kernel detects a lock conflict between iCloud's daemon and the VM's FUSE layer, returning `EDEADLK` (Resource deadlock avoided). This is per-file and intermittent — some files may read fine while others fail.
+   >
+   > **To fix:**
+   > 1. Open **System Settings → Apple Account → iCloud → iCloud Drive → Options** (or toggle "Desktop & Documents Folders" off).
+   > 2. Alternatively, move your project folder outside of `~/Documents` (e.g., to `~/Projects`) so iCloud doesn't manage it.
+   > 3. If you've already disabled iCloud sync, the files may still be "downloading" — open Finder, right-click the project folder, and choose **Download Now**, then restart this session.
+   >
+   > Restarting Claude, killing processes, or rebooting will **not** fix this — iCloud re-establishes its locks immediately.
 4. Do **not** continue the resume workflow, even partially.
 
 This rule is **non-negotiable** — creative workarounds to bypass filesystem errors risk accessing personal data from unintended sources.
