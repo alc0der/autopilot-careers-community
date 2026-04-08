@@ -39,17 +39,7 @@ Start a chat thread in Claude or Codex:
 
 ## Contributing
 
-Use the package manager from the repo root:
-
-```bash
-pnpm install
-pnpm build        # typecheck + bundle all packages
-pnpm test         # run tests across all packages
-pnpm typecheck    # type-check only
-pnpm mcp:install
-pnpm mcp:status
-pnpm codex:publish
-```
+All repeatable operations are defined as scripts in `package.json` (root and per-package). Run `pnpm run` to list available scripts.
 
 ## Packages
 

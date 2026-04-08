@@ -5,6 +5,8 @@
   "description": "Agent packaging for the write-resume workflow",
   "scripts": {
     "version:bump": "python3 scripts/version_bump.py",
+    "bundle": "python3 scripts/claude_plugin.py bundle",
+    "claude:deploy": "python3 scripts/claude_plugin.py deploy",
     "codex:publish": "pnpm run version:bump && python3 scripts/publish_codex_plugin.py"
   }
 }
