@@ -62,6 +62,68 @@ One JSON object per line. This is where the actual conversation lives, but it al
 
 3. **`tool_result` content can be wrapped in `<persisted-output>` tags** when output exceeds a size limit. The tag contains a file path and a preview. Extract the preview or read the referenced file.
 
-4. **Grep is unreliable on these files.** Lines are too long for ripgrep (which truncates with `[Omitted long matching line]`), and keywords like "error" or "fetch" appear in tool descriptions, not just conversation. Use the extraction script or parse the JSONL directly.
+4. **Grep is unreliable on these files.** Lines are too long for ripgrep (which truncates with `[Omitted long matching line]`), and keywords like "error" or "fetch" appear in tool descriptions, not just conversation. Use DuckDB or the session.sh wrapper.
 
-5. **The `message` wrapper.** Assistant lines sometimes nest content under `.message.content` rather than `.content` directly. Always check both: `data.get("message", data).get("content", [])`.
+5. **The `message` wrapper.** Assistant lines sometimes nest content under `.message.content` rather than `.content` directly. DuckDB auto-detects this as `message.content` in its schema.
+
+## Querying with DuckDB
+
+DuckDB reads `audit.jsonl` natively. The canonical invocation:
+
+```sql
+-- Single session
+SELECT *
+FROM read_json_auto('path/to/audit.jsonl',
+  format='newline_delimited',
+  maximum_object_size=10485760)
+WHERE type IN ('user', 'assistant');
+
+-- All sessions (glob)
+SELECT *
+FROM read_json_auto('.claude-sessions/local_*/audit.jsonl',
+  format='newline_delimited',
+  maximum_object_size=10485760,
+  filename=true,
+  union_by_name=true);
+```
+
+### Key parameters
+
+| Parameter | Value | Why |
+|-----------|-------|-----|
+| `format` | `'newline_delimited'` | Tells DuckDB this is JSONL, not a single JSON array |
+| `maximum_object_size` | `10485760` (10 MB) | System/init lines can exceed the 1 MB default |
+| `filename` | `true` | Adds source file path as a column (needed for cross-session) |
+| `union_by_name` | `true` | Different sessions may have slightly different schemas |
+
+### Auto-detected schema (key fields)
+
+| Column | DuckDB Type | Notes |
+|--------|-------------|-------|
+| `type` | `varchar` | `'system'`, `'user'`, `'assistant'` |
+| `subtype` | `varchar` | `'init'`, `'permission_request'`, etc. NULL for conversation lines |
+| `session_id` | `uuid` | The CLI session UUID (not the `local_` prefixed ID) |
+| `message.role` | `varchar` | `'user'` or `'assistant'` |
+| `message.content` | `json` | Array of content blocks — cast to `::varchar` for text operations |
+| `_audit_timestamp` | `varchar` | ISO 8601 timestamp of the log entry |
+
+### DuckDB-specific gotchas
+
+1. **`message.content` is typed as `json`.** You must cast to `::varchar` for string operations like `ILIKE`: `WHERE message.content::varchar ILIKE '%error%'`
+
+2. **Unnesting content arrays** requires `from_json` + `LATERAL`:
+   ```sql
+   SELECT el.*
+   FROM read_json_auto(...),
+     LATERAL (SELECT unnest(from_json(message.content::varchar, '["json"]')) as el)
+   ```
+
+3. **Cross-session schema variation.** Always use `union_by_name=true` when globbing multiple sessions. Without it, DuckDB fails if any session has extra or missing columns.
+
+4. **Metadata lives in a separate file.** The `.json` metadata (title, model, dates) is not in `audit.jsonl`. Query it separately:
+   ```sql
+   SELECT sessionId, title, model, createdAt, lastActivityAt
+   FROM read_json_auto('.claude-sessions/local_*.json',
+     format='auto', maximum_object_size=10485760,
+     filename=true, union_by_name=true);
+   ```
