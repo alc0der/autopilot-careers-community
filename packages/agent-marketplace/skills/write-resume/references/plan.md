@@ -3,11 +3,8 @@
 1. Read annotated job description
 1. Read previous resumes in `resumes` and note titles
 1. Construct a career progression plan (a story)
-  - Decide if target job is people focus or technical focuss
-  - Use EM progression for people focus jobs and use SWE and TM for technical focus jobs
-  - You may use EM and Tech Lead interchangeably
-  - Avoid progression shifts between people focus and technical focus jobs
-  - Never make a career progression that implies demotions
+  - Read `./techniques/career-narrative.md` if it exists and follow its rules for career path focus, track separation, and demotion avoidance.
+  - If absent, construct a coherent progression story using your best judgment.
 1. Read achievements journal (`journal/achievements.yaml`)
    - Filter achievements by relevance to target role
    - Prioritize achievements marked `reviewed: true` (already refined)
@@ -57,11 +54,4 @@
    These contain ground-truth corrections about the user's experience (e.g., which tools were used at which company, what was exaggerated, what was a prototype vs production).
    Apply these constraints when planning bullets — they override assumptions from prior resumes or embeddings.
 1. Construct multiple plans and select the best one
-1. The list of allowed job titles for most recent occupation (from most preferable to lowest):
-- Senior Engineering Manager
-- Senior Technical Lead
-- Solutions Architect
-- Technical Program Manager
-- Senior Full Stack Engineer
-- Senior Backend Engineer
-- Senior Frontend Engineer
+1. Read `./techniques/allowed-title-whitelist.md` if it exists. Use its title list to constrain the most recent role's title selection. If absent, do not constrain titles beyond what `base.yaml` shows.

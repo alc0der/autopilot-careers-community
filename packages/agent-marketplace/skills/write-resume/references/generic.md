@@ -21,9 +21,8 @@ Read achievements journal (`journal/achievements.yaml`):
 - Nominate the most impactful achievements for inclusion in AI yaml
 
 Construct a career progression story for the target role:
-- Decide if target is people-focused (EM path) or technical (SWE/TM path)
-- Align recent roles with target trajectory
-- Avoid progression shifts or implied demotions
+- Read `./techniques/career-narrative.md` if it exists and follow its rules for career path focus and demotion avoidance.
+- If absent, construct a coherent progression using your best judgment, aligning recent roles with the target trajectory.
 
 ### 3. Interview (optional)
 

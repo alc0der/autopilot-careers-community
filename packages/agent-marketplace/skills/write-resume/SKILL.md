@@ -2,7 +2,7 @@
 name: write-resume
 description: Write resumes (tailored or generic), cover letters, and manage career data. Use when users share a LinkedIn job URL or job ID to fetch the posting and begin the resume workflow. Also use for critiquing existing resumes, harvesting achievement bullets into embeddings, recording feedback on bullet quality, or generating generic resumes without a specific job target.
 metadata:
-  version: 1.15.9
+  version: 1.17.1
 allowed-tools: Bash(jq:*) Bash(mustache:*) Bash(./scripts/render.sh:*) Bash(vale:*) mcp__linkedin-fetcher__fetch_job mcp__oh-my-cv-render__render_resume mcp__bullet-embeddings__harvest mcp__bullet-embeddings__query mcp__bullet-embeddings__feedback mcp__bullet-embeddings__embed_achievement mcp__bullet-embeddings__stats Read Write
 ---
 
@@ -20,12 +20,15 @@ For first-time setup or missing tools, see [/setup](references/setup.md).
 
 Before doing anything else — before Eager Fetch, before reading reference files — verify the workspace:
 
-1. Check that `base.yaml` exists in the working directory: `test -f base.yaml`
-2. If **missing**, stop immediately. Tell the user:
+1. Check that `base.yaml` exists in the working directory: `test -f base.yaml` — **record the result** but do not stop yet.
+2. Check if `./techniques/` exists and contains at least one `.md` file: `ls techniques/*.md 2>/dev/null`
+3. If techniques are **missing or empty**, run the onboarding flow: [/onboard](references/onboard.md). Onboarding may create `base.yaml` via [/ground](references/ground.md) if the user selects the `linkedin-grounding` technique.
+4. After onboarding completes (or if techniques were already present), **re-check** that `base.yaml` exists.
+5. If `base.yaml` is **still missing**, stop. Tell the user:
    > ⚠️ `base.yaml` not found in the working directory.
    > This usually means the conversation isn't running inside a project, or the career data directory hasn't been assigned.
-   > Please assign your project directory and start a new conversation.
-3. Do **not** proceed with any workflow steps until this check passes.
+   > Please assign your project directory and start a new conversation, or run `/ground` with a LinkedIn data export to generate it.
+6. If both `base.yaml` and `./techniques/` are present, proceed normally — the workflow files will read techniques from `./techniques/` at the appropriate steps.
 
 ## Abort on Persistent Filesystem Errors
 
@@ -85,6 +88,8 @@ When the user provides a URL or job ID, act on it **immediately** — before rea
 
 ## Workflow: Maintenance
 
+- [/onboard](references/onboard.md) — select and customize resume techniques (runs automatically on first use)
+- [/ground](references/ground.md) — import or re-sync base.yaml from a LinkedIn data export
 - [/harvest](references/harvest.md) — index bullets from a resume YAML into embeddings
 - [/feedback](references/feedback.md) — capture corrections and clarifications as ground truth, apply per-bullet signals
 

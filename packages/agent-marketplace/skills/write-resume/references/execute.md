@@ -45,29 +45,21 @@ template -> pdf
 
 #### Steps
 
-1. Read `base.yaml` to get the job structure with ids
-2. **Do not modify job titles** - they must stay consistent with LinkedIn. If a title change seems beneficial for the target role, ask the user for approval first.
+1. Read `base.yaml` to get the job structure with ids. Read `./techniques/linkedin-grounding.md` if it exists and follow its strictness rules: in strict mode, titles and dates must match base.yaml exactly; in moderate mode, title adjustments require user approval; in loose mode, adjustments are free. If absent, treat base.yaml as manually maintained with no strictness enforcement.
+2. **Job titles** — Read `./techniques/job-title-lock.md` if it exists and follow its instructions regarding job title modifications. If absent (and linkedin-grounding is also absent), use titles from `base.yaml` as-is.
 3. Generate achievements and skills that best demonstrate qualifications for the target role:
    - Highlight skills and achievements that directly relate to the job requirements
-   - **The resume must fit on one page.** Optimize for this from the start using graduated bullet counts (see below), but do not aggressively cut content on the first pass.
+   - Read `./techniques/page-layout.md` if it exists and follow its rules for page constraints and bullet counts. If absent, use your best judgment for content length and bullet distribution.
    - Use action verbs (i.e led) and quantify achievements where possible
    - Refer to technologies by name when possible (i.e built using Spring)
    - Never over explain points relevance to Job Description (i.e demonstrating ability to leverage cutting-edge technologies for business growth)
-   - **Graduated bullet counts by job recency** (most recent job listed first):
-     - Job 1 (most recent): 4-5 bullets
-     - Job 2: 3-4 bullets
-     - Job 3: 2-3 bullets
-     - Job 4+: 1-2 bullets
-     - Oldest 1-2 jobs: may be omitted entirely if space is tight
 4. Write AI YAML to `resumes/YYYYMMDD_<Target>_<Role>_ai.yaml` with:
-   - `tagline` — pick the best fit for the target role:
-     - `"EM | Founding Eng."` — for people-focused roles (Engineering Manager, etc.)
-     - `"Sr. Eng. Manager"` — for technical leadership roles (Tech Lead, Staff Engineer, etc.)
+   - `tagline` — Read `./techniques/dual-tagline.md` if it exists and pick a tagline per its rules. If absent, choose an appropriate tagline for the target role.
    - Jobs matched by `id` field from base.yaml
    - `achievements` array for each job (graduated counts per step 3)
    - `skill_groups` with populated skills strings
    - Decorate skills with logos: `<span class="iconify" data-icon="vscode-icons:file-type-{{technology}}"></span>`
-   - Don't overuse logos. Keep it between 2-5 logos
+   - Read `./techniques/skill-logo-limit.md` if it exists and follow its logo count rules. If absent, use a reasonable number of logos (avoid overuse).
 5. Run the render script to merge and generate the final resume (output to `rendered/`).
    Pass `$TMP_DIR` from plugin config as an environment variable:
    ```sh
@@ -85,15 +77,7 @@ template -> pdf
      subject: "Tailored for: {target} — {role}"       # from JD
      keywords: ["{target company}", "{role}"]          # from JD
    ```
-7. **Page-fit verification loop.** Check the `pageCount` from the render tool's JSON response:
-   - If `pageCount` is **1** → done, proceed to step 8.
-   - If `pageCount` is **2+** → trim content and re-render. Apply these reductions in order, one at a time, re-rendering after each until it fits:
-     1. Remove all bullets from the oldest job (or omit it entirely)
-     2. Remove all bullets from the second-oldest job (or omit it)
-     3. Remove 1 bullet from each remaining job, starting from the oldest
-     4. Shorten the skills list (remove least-relevant skills)
-   - Re-run steps 5-6 after each trim, then re-check page count.
-   - **Max 4 iterations** to avoid infinite loops. If still 2+ pages after 4 rounds, present the result and ask the user for guidance.
+7. **Page-fit verification.** Read `./techniques/page-layout.md` if it exists — follow its page-fit verification loop instructions (page limit, trim cascade, max iterations). Re-run steps 5-6 after each trim. If no page-layout technique exists, check whether the resume exceeds 2 pages and flag it to the user for guidance.
 8. If you are Claude, present the resume in an artifact
 9. **Harvest bullets into embeddings** (skip if `bullet-embeddings` MCP not available)
    Call `mcp__bullet-embeddings__harvest` with `file` set to the **absolute path** of the AI YAML file.
@@ -105,6 +89,14 @@ template -> pdf
     - **Apply** — provide the original LinkedIn job URL from the JD front matter (`rel:source`) so the user can go apply directly
     - **Cover letter** — offer to run `/cover` to generate a tailored cover letter while the JD context is fresh
     - **Feedback** — offer to run `/feedback` to capture corrections, clarifications, and per-bullet signals as ground truth for future resumes
+12. **Technique update check** — Compare the user's `./techniques/` against the technique library at `<skill-base-dir>/techniques-library/`:
+    - **New techniques**: If library techniques are not present in `./techniques/` and were not available when the user last ran `/onboard`, tip:
+      > New technique available: **{name}** — {summary}. Run `/onboard` to add it, or create `./techniques/{name}.md` manually.
+    - **Updated techniques**: Compare the `version` field in library frontmatter against when the user last onboarded. If a library technique has a higher version, tip:
+      > **{name}** has been updated (v{old} → v{new}). Run `/onboard` to review changes.
+    - **Deprecated techniques**: If the user has a technique with `deprecated: true` in the library and a `recommended-replacement` exists, tip:
+      > **{name}** is deprecated — consider switching to **{replacement}**. Run `/onboard` to reconfigure.
+    If all library techniques are accounted for and up to date, say nothing.
 
 #### AI YAML Output Format
 
@@ -117,7 +109,7 @@ jobs:
       - Achievement 1...
       - Achievement 2...
 
-  - id: beno_em
+  - id: beno_lead
     achievements:
       - Achievement 1...
 
@@ -134,7 +126,7 @@ skill_groups:
 
 | Variable | Type | Source | Description |
 |----------|------|--------|-------------|
-| `tagline` | string | AI | One of: `"EM \| Founding Eng."` or `"Sr. Eng. Manager"` |
+| `tagline` | string | AI | Per `./techniques/dual-tagline.md` or user's choice |
 | `name` | string | Contact | Full name |
 | `phone` | string | Contact | Phone number (display format) |
 | `phone_link` | string | Derived | Phone number stripped to +digits only |
