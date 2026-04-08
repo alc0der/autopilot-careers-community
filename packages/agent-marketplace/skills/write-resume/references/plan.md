@@ -10,7 +10,7 @@
    - Prioritize achievements marked `reviewed: true` (already refined)
    - Achievements with `job_id` can be mapped to specific positions
    - Nominate the most impactful achievements for inclusion in AI yaml
-1. **Query embeddings for bullet intelligence** (skip if `bullet-embeddings` MCP not available)
+1. **Query embeddings for bullet intelligence** (skip only if the user opted out of embeddings during Preflight step 7; do **not** silently skip)
 
    **Phase A — Identify points to cover:**
    Based on the annotated JD highlights and the career progression plan from step 3, list all key points/themes the resume must demonstrate (e.g., "technical leadership", "AI/ML delivery", "team scaling", "cross-functional collaboration"). Each point is a focused semantic theme derived from JD requirements.

@@ -79,7 +79,7 @@ template -> pdf
    ```
 7. **Page-fit verification.** Read `./techniques/page-layout.md` if it exists — follow its page-fit verification loop instructions (page limit, trim cascade, max iterations). Re-run steps 5-6 after each trim. If no page-layout technique exists, check whether the resume exceeds 2 pages and flag it to the user for guidance.
 8. If you are Claude, present the resume in an artifact
-9. **Harvest bullets into embeddings** (skip if `bullet-embeddings` MCP not available)
+9. **Harvest bullets into embeddings** (skip only if the user opted out of embeddings during Preflight step 7; do **not** silently skip)
    Call `mcp__bullet-embeddings__harvest` with `file` set to the **absolute path** of the AI YAML file.
    This indexes all generated bullets for future reuse intelligence. No user interaction needed.
 10. **Finalize** — Once the user approves or deems the resume good enough:

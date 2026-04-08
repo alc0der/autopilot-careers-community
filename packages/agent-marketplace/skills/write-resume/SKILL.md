@@ -29,6 +29,19 @@ Before doing anything else — before Eager Fetch, before reading reference file
    > This usually means the conversation isn't running inside a project, or the career data directory hasn't been assigned.
    > Please assign your project directory and start a new conversation, or run `/ground` with a LinkedIn data export to generate it.
 6. If both `base.yaml` and `./techniques/` are present, proceed normally — the workflow files will read techniques from `./techniques/` at the appropriate steps.
+7. **Check Ollama reachability.** Run: `curl -sf http://localhost:11434/api/tags > /dev/null 2>&1 && echo "ok" || echo "unreachable"`
+   - If **ok**, record `ollama_available = true` and proceed.
+   - If **unreachable**, stop and tell the user:
+     > ⚠️ Ollama is not running at `http://localhost:11434`.
+     > The `bullet-embeddings` MCP server requires Ollama with the `nomic-embed-text` model for embedding queries, harvesting, and feedback.
+     >
+     > **Options:**
+     > 1. Start Ollama (`ollama serve`) and re-run this command.
+     > 2. Continue without embeddings — the resume will be generated using only file-based context (prior resumes, achievements journal, feedback files). No bullet intelligence, harvesting, or feedback signals will be available.
+     >
+     > Which would you prefer?
+   - If the user chooses option 2, record `ollama_available = false` and proceed. Workflow steps gated on `bullet-embeddings` will be skipped — but **only** because the user explicitly opted in.
+   - Do **not** silently skip embedding steps. Do **not** improvise alternatives. The user must make this choice.
 
 ## Abort on Persistent Filesystem Errors
 
