@@ -2,20 +2,20 @@
 
 First-time setup for the write-resume skill package.
 
-### Install Tools
+### Prerequisites
 
-Run the setup script from the agent package root:
+The write-resume skill requires two MCP servers:
 
-```bash
-packages/agent-marketplace/setup.sh
-```
+1. **oh-my-cv-render** — Merges YAML files (JSON Resume schema) and renders resumes to PDF
+2. **linkedin-fetcher** — Fetches LinkedIn job descriptions
+3. **bullet-embeddings** (optional) — Indexes achievement bullets for reuse intelligence (requires Ollama)
 
-This installs jq and mustache into the plugin's `vendor/` directory and verifies python3 + PyYAML are available. LinkedIn job fetching and resume rendering are handled by MCP tools (no local install needed).
+All resume merging and rendering is handled by the `oh-my-cv-render` MCP server — no external binaries (jq, mustache, python3) are needed.
 
-### Agent Package Config
+### Working Directory
 
-When the skill is packaged for an agent runtime, runtime-specific config may pass environment variables into scripts.
+The working directory must contain:
+- `base.yaml` — Work history, education, and skills following JSON Resume schema with `x-id` extensions
+- `contact.yaml` — Personal info following JSON Resume `basics` shape
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `$TMP_DIR` | `.` | Directory for temporary files during rendering |
+See [/ground](ground.md) to generate `base.yaml` from a LinkedIn data export.

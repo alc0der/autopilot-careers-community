@@ -19,7 +19,7 @@ The resume header includes a tagline under your name. By default, the skill pick
 
 ## Instructions
 
-When writing the `tagline` field in the AI YAML, pick the best fit for the target role from this list:
+When writing the `basics.label` field in the AI overlay YAML, pick the best fit for the target role from this list:
 
 {{#taglines}}
 - **"{{tagline}}"** — {{when}}

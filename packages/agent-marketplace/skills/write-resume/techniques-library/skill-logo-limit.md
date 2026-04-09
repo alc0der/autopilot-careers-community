@@ -17,7 +17,7 @@ The skills section can include technology logos (Iconify icons) next to skill na
 
 ## Instructions
 
-When decorating skills with Iconify logos (`<span class="iconify" data-icon="vscode-icons:file-type-{{technology}}"></span>`):
+When decorating skills with icon shortcodes (`:icon-set--icon-name:`, e.g. `:vscode-icons--file-type-aws: AWS`):
 - Keep the total logo count between **{{min_logos}}** and **{{max_logos}}**.
 - Prioritize logos for the most recognizable and relevant technologies.
 {{#always_logo}}

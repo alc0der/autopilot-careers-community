@@ -8,9 +8,15 @@
 1. Read achievements journal (`journal/achievements.yaml`)
    - Filter achievements by relevance to target role
    - Prioritize achievements marked `reviewed: true` (already refined)
-   - Achievements with `job_id` can be mapped to specific positions
-   - Nominate the most impactful achievements for inclusion in AI yaml
-1. **Query embeddings for bullet intelligence** (skip only if the user opted out of embeddings during Preflight step 7; do **not** silently skip)
+   - Achievements with `job_id` can be mapped to specific work entries (by `x-id`)
+   - Nominate the most impactful achievements for inclusion in AI overlay yaml
+1. **Query embeddings for bullet intelligence**
+
+   If `mcp__bullet-embeddings__query` returns an error containing "Ollama is not reachable" or the tool call fails entirely (MCP server not connected), **stop and present the user with two options:**
+   1. Fix the issue (start Ollama / connect the MCP server) and retry.
+   2. Continue without embeddings — no bullet intelligence for this run.
+
+   Record the user's choice. If the user chose option 2, skip all remaining embedding steps. Do **not** silently skip.
 
    **Phase A — Identify points to cover:**
    Based on the annotated JD highlights and the career progression plan from step 3, list all key points/themes the resume must demonstrate (e.g., "technical leadership", "AI/ML delivery", "team scaling", "cross-functional collaboration"). Each point is a focused semantic theme derived from JD requirements.

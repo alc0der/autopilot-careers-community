@@ -58,10 +58,10 @@ The user must provide a LinkedIn data export containing at least `Positions.csv`
 7. **Handle brownfield merge.** If `base.yaml` already exists:
    - Snapshot the current file to `base-history/base.<today's date>.yaml` (create the directory if needed)
    - Preserve the `education` section from existing base.yaml (unless Education.csv is present and user wants to update it)
-   - Preserve the `skill_groups` section from existing base.yaml
+   - Preserve the `skills` section from existing base.yaml
    - If any existing base.yaml entries have no match in the LinkedIn export, flag them:
-     > These jobs are in base.yaml but not in your LinkedIn export:
-     > - {id}: {title} at {company}
+     > These work entries are in base.yaml but not in your LinkedIn export:
+     > - {x-id}: {position} at {name}
      >
      > **Keep** or **remove** them?
 
@@ -69,19 +69,19 @@ The user must provide a LinkedIn data export containing at least `Positions.csv`
    - Generate all IDs fresh (per step 6)
    - If Education.csv is present, populate the `education` section
    - If no Education.csv, create an empty `education` section for the user to fill manually
-   - Create `skill_groups` with standard categories:
+   - Create `skills` with standard categories:
      ```yaml
-     skill_groups:
-       - category: Technical
-         skills: ""
-       - category: Managerial
-         skills: ""
+     skills:
+       - name: Technical
+         keywords: []
+       - name: Managerial
+         keywords: []
      ```
 
-9. **Convert dates.** Transform LinkedIn date formats to base.yaml format:
-   - "Jan 2020" → "01/2020"
+9. **Convert dates.** Transform LinkedIn date formats to JSON Resume ISO 8601 partial dates:
+   - "Jan 2020" → "2020-01"
    - "2020" → "2020"
-   - Empty / current → "Present"
+   - Empty / current → omit `endDate` field
 
 10. **Write base.yaml.** Present the proposed base.yaml to the user for review. After approval, write it to the working directory.
 
