@@ -22,10 +22,10 @@
    Based on the annotated JD highlights and the career progression plan from step 3, list all key points/themes the resume must demonstrate (e.g., "technical leadership", "AI/ML delivery", "team scaling", "cross-functional collaboration"). Each point is a focused semantic theme derived from JD requirements.
 
    **Phase B — Parallel queries:**
-   Fire all queries in parallel — one `mcp__bullet-embeddings__query` call per point, each with `text` set to a focused description of that point, `top: 5`.
+   Fire all queries in parallel — one `mcp__bullet-embeddings__query` call per point, each with `text` set to a focused description of that point, `top` set to the integer `5` (not a string).
    Example:
    ```
-   query(text="engineering team leadership mentorship performance management", top=5)
+   query(text="engineering team leadership mentorship performance management", top=5)   // top must be a number, NOT "5"
    query(text="AI generative systems production delivery LLM integration", top=5)
    query(text="microservices architecture scalability code quality reviews", top=5)
    ```

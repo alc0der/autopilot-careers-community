@@ -139,7 +139,7 @@ export function registerQueryTool(server: McpServer): void {
     {
       jd: z.string().optional().describe("Path to annotated JD file"),
       text: z.string().optional().describe("Free text query"),
-      top: z.number().optional().default(20).describe("Number of results"),
+      top: z.coerce.number().optional().default(20).describe("Number of results"),
       jobId: z.string().optional().describe("Filter by job_id"),
     },
     async ({ jd, text, top, jobId }) => {
