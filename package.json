@@ -10,7 +10,7 @@
     "mcp:status": "python3 scripts/claude_mcp.py status",
     "bundle": "pnpm --dir packages/agent-marketplace bundle",
     "claude:deploy": "pnpm --dir packages/agent-marketplace claude:deploy",
-    "docs": "container run --rm -p 8080:8080 -v \"$(pwd)/docs\":/usr/local/structurizr structurizr/lite:latest",
+    "docs": "container run --rm -p 8080:8080 -v \"$(pwd)\":/usr/local/structurizr structurizr/lite:latest",
     "codex:publish": "pnpm --dir packages/agent-marketplace codex:publish"
   },
   "devDependencies": {

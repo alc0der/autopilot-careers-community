@@ -1,44 +1,58 @@
-workspace {
+# Component model for the linkedin-fetcher container.
+# Included by docs/model.dsl — do NOT wrap in workspace { }.
 
-  model {
-      user = person "User" "Job seeker using Thaty"
-      softwareSystem = softwareSystem "Thaty" {
-          description "A system to automate job hunting."
-          cliApp = container "CLI Application" {
-              description "A CLI application"
-              technology "Node.js, TypeScript"
-              group "Core External Dependencies" {
-                puppeteer = component "Puppeteer" {
-                    description "Library for browser automation and LinkedIn interaction"
-                }
-                turndown = component "Turndown" {
-                    description "Library for converting HTML to Markdown"
-                }
-                clackPrompts = component "@clack/prompts" {
-                    description "Library for interactive command-line prompts"
-                }
-                readability = component "@mozilla/readability" {
-                    description "Library for extracting main content from HTML"
-                }
-                puppeteer -> readability "full page to article"
-                readability -> turndown "article to markdown"
-              }
-          }
-      }
-    user -> cliApp "Uses"
-  }
-
-  views {
-    !script groovy {
-        workspace.views.createDefaultViews()
-    }
-
-    dynamic softwareSystem "CLI_Usage" {
-        user -> cliApp "Invokes command with LinkedIn job URL"
-        cliApp -> user "Creates markdown file with job post content"
-        autolayout
-    }
-
-    theme default
-  }
+# ── Components ────────────────────────────────────────────────
+mcpServer = component "MCP Server" {
+    description "Exposes fetch_job tool over stdio; returns Markdown or RateLimitError"
+    technology "@modelcontextprotocol/sdk, Zod"
 }
+
+corePipeline = component "Core Pipeline" {
+    description "Orchestrates resolve → fetch → extract → convert → normalize → classify"
+    technology "TypeScript"
+}
+
+fetcherRouter = component "Fetcher Router" {
+    description "Selects LinkedIn API (default) or Puppeteer; propagates RateLimitError, falls back to Puppeteer for other failures"
+    technology "TypeScript"
+}
+
+apiFetcher = component "LinkedIn API Fetcher" {
+    description "Calls jobs-guest public API, parses HTML with Cheerio, detects rate limits"
+    technology "Cheerio"
+}
+
+puppeteerFetcher = component "Puppeteer Fetcher" {
+    description "Headless browser with stealth plugin for non-API and fallback fetches"
+    technology "puppeteer-extra, puppeteer-extra-plugin-stealth"
+}
+
+readabilityExtractor = component "Readability Extractor" {
+    description "Extracts article content from raw HTML"
+    technology "@mozilla/readability, JSDOM"
+}
+
+htmlToMarkdown = component "HTML-to-Markdown" {
+    description "Converts article HTML to Markdown, strips spans and inline breaks"
+    technology "Turndown"
+}
+
+markdownNormalizer = component "Markdown Normalizer" {
+    description "Fixes bold-as-heading, non-standard list markers, and indentation"
+    technology "TypeScript"
+}
+
+jobClassifier = component "Job Classifier" {
+    description "Heuristic scorer: specific-role vs pipeline posting"
+    technology "TypeScript"
+}
+
+# ── Relationships ─────────────────────────────────────────────
+mcpServer          -> corePipeline         "delegates to"
+corePipeline       -> fetcherRouter        "fetch HTML"
+fetcherRouter      -> apiFetcher           "LinkedIn URLs (default)"
+fetcherRouter      -> puppeteerFetcher     "non-LinkedIn or API fallback"
+corePipeline       -> readabilityExtractor "extract article"
+readabilityExtractor -> htmlToMarkdown     "article HTML"
+corePipeline       -> markdownNormalizer   "normalize"
+corePipeline       -> jobClassifier        "classify posting type"

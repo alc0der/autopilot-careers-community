@@ -2,6 +2,18 @@ model {
 
     user = person "Resume Author" "The human writing and tailoring resumes for job applications. Assigns a db/ directory containing their resume data."
 
+    claude = softwareSystem "Claude" "Anthropic's AI assistant ecosystem: desktop app (CoWork) for agentic coding and mobile app for dispatching tasks." {
+        tags "External"
+
+        claudeDesktop = container "Claude Desktop" "AI coding agent (CoWork) that loads skills and MCP servers to execute resume workflows from the user's db/ directory." "Claude Code / Codex" {
+            tags "Agent"
+        }
+
+        claudeMobile = container "Claude Mobile" "Mobile app interface for dispatching resume tasks to Claude Desktop (CoWork)." "Claude iOS / Android" {
+            tags "Agent"
+        }
+    }
+
     linkedin = softwareSystem "LinkedIn" "Professional networking platform with job postings." {
         tags "External"
     }
@@ -11,10 +23,6 @@ model {
     }
 
     resumeSkill = softwareSystem "Resume Skill System" "AI-assisted system for writing, tailoring, and rendering resumes." {
-
-        agentRuntime = container "Agent Runtime" "AI coding agent runtime operating from the user's db/ directory as its working directory. Claude Desktop and Codex both load the same skills and MCP servers to execute resume workflows." "Claude Code / Codex" {
-            tags "Agent"
-        }
 
         thateDb = container "db" "User-assigned data directory storing resumes, job descriptions, achievements, base.yaml, contact.yaml, and priorities.yaml." "Git, YAML, Markdown" {
             tags "DataStore"
@@ -30,6 +38,7 @@ model {
 
         linkedinFetcher = container "linkedin-fetcher" "MCP server that fetches LinkedIn job postings and converts them to Markdown." "TypeScript, Puppeteer, MCP" {
             tags "MCP"
+            !include ../packages/fetcher/docs/architecture.dsl
         }
 
         ohmycvRender = container "oh-my-cv-render" "MCP server that renders Markdown resumes to styled PDFs with icon support." "TypeScript, Puppeteer, MCP" {
@@ -38,14 +47,18 @@ model {
     }
 
     # User relationships
-    user -> agentRuntime "Assigns db/ directory and delegates resume tasks to"
+    user -> claudeDesktop "Uses directly for resume tasks"
+    user -> claudeMobile "Dispatches resume tasks via mobile"
 
-    # Agent runtime relationships
-    agentRuntime -> thateDb "Uses as working directory"
-    agentRuntime -> writeResumePlugin "Loads and executes skill commands (/fetch, /analyze, /synthesize)"
-    agentRuntime -> linkedinFetcher "Connects via MCP"
-    agentRuntime -> resumeEmbeddings "Connects via MCP"
-    agentRuntime -> ohmycvRender "Connects via MCP"
+    # Claude internal relationships
+    claudeMobile -> claudeDesktop "Dispatches work to"
+
+    # Claude Desktop -> Resume Skill System
+    claudeDesktop -> writeResumePlugin "Loads and executes skill commands (/fetch, /analyze, /synthesize)"
+    claudeDesktop -> thateDb "Uses as working directory"
+    claudeDesktop -> linkedinFetcher "Connects via MCP"
+    claudeDesktop -> resumeEmbeddings "Connects via MCP"
+    claudeDesktop -> ohmycvRender "Connects via MCP"
 
     # Orchestrator relationships
     writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml; writes resume YAMLs and rendered output"
