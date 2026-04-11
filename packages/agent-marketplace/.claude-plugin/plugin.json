@@ -1,5 +1,5 @@
 {
   "name": "write-resume-plugin",
-  "version": "1.17.7",
-  "description": "Resume writing, job analysis, and career planning tools"
+  "version": "1.17.12",
+  "description": "Resume writing, job analysis, and career planning tools. Try: /write-resume for <LinkedIn job URL>"
 }

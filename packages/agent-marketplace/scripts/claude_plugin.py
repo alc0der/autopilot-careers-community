@@ -49,33 +49,37 @@ def _detect_mcp_mode(root: Path) -> str:
 def _build_mcp_config(mode: str, root: Path) -> dict[str, object]:
     if mode == "hosted":
         return {
-            "linkedin-fetcher": {
-                "type": "http",
-                "url": os.environ.get("FETCHER_MCP_URL", DEFAULT_FETCHER_URL),
-            },
-            "oh-my-cv-render": {
-                "type": "http",
-                "url": os.environ.get("RENDERER_MCP_URL", DEFAULT_RENDERER_URL),
-            },
-            "bullet-embeddings": {
-                "type": "http",
-                "url": os.environ.get("EMBEDDINGS_MCP_URL", DEFAULT_EMBEDDINGS_URL),
-            },
+            "mcpServers": {
+                "linkedin-fetcher": {
+                    "type": "http",
+                    "url": os.environ.get("FETCHER_MCP_URL", DEFAULT_FETCHER_URL),
+                },
+                "oh-my-cv-render": {
+                    "type": "http",
+                    "url": os.environ.get("RENDERER_MCP_URL", DEFAULT_RENDERER_URL),
+                },
+                "bullet-embeddings": {
+                    "type": "http",
+                    "url": os.environ.get("EMBEDDINGS_MCP_URL", DEFAULT_EMBEDDINGS_URL),
+                },
+            }
         }
 
     return {
-        "linkedin-fetcher": {
-            "command": "pnpm",
-            "args": ["--prefix", str(root / "packages/fetcher"), "--silent", "run", "mcp"],
-        },
-        "oh-my-cv-render": {
-            "command": "pnpm",
-            "args": ["--prefix", str(root / "packages/renderer"), "--silent", "run", "mcp"],
-        },
-        "bullet-embeddings": {
-            "command": "pnpm",
-            "args": ["--prefix", str(root / "packages/bullet-embeddings"), "--silent", "run", "mcp"],
-        },
+        "mcpServers": {
+            "linkedin-fetcher": {
+                "command": "pnpm",
+                "args": ["--prefix", str(root / "packages/fetcher"), "--silent", "run", "mcp"],
+            },
+            "oh-my-cv-render": {
+                "command": "pnpm",
+                "args": ["--prefix", str(root / "packages/renderer"), "--silent", "run", "mcp"],
+            },
+            "bullet-embeddings": {
+                "command": "pnpm",
+                "args": ["--prefix", str(root / "packages/bullet-embeddings"), "--silent", "run", "mcp"],
+            },
+        }
     }
 
 

@@ -1,6 +1,7 @@
 ---
 allowed-tools: Bash(yq:*) Read Write AskUserQuestion
 description: Add achievement to journal
+argument-hint: "<what you accomplished and the impact>"
 ---
 
 <command-name>achievement</command-name>
