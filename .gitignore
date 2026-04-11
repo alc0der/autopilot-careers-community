@@ -6,7 +6,6 @@ logs/
 .turbo/
 *.zip
 .claude-sessions
-docs/.structurizr
-docs/.structurizr/workspace.json
-docs/workspace.json
+.structurizr/
+workspace.json
 .claude/settings.local.json
