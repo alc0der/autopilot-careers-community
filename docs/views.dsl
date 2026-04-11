@@ -5,21 +5,30 @@ views {
         autolayout lr
     }
 
-    container resumeSkill "Containers" "Internal containers showing the agent runtime, the db directory, shared skill package, and MCP servers." {
+    container resumeSkill "Containers" "Internal containers showing the skill package, data directory, and MCP servers — with the Claude ecosystem as external actor." {
         include *
         autolayout lr
     }
 
-    dynamic resumeSkill "ColdStart" "Scenario: embedding database wiped. User requests a resume, system bootstraps with empty index then rebuilds over successive resumes." {
-        user -> agentRuntime "Requests a tailored resume for a LinkedIn job URL"
-        agentRuntime -> writeResumePlugin "Invokes /fetch with job URL"
+    container claude "ClaudeEcosystem" "Claude Desktop (CoWork) and Claude Mobile (Dispatch) within the Claude ecosystem." {
+        include *
+        autolayout lr
+    }
+
+    component linkedinFetcher "FetcherComponents" "Internal components of the linkedin-fetcher MCP server." {
+        include *
+        autolayout
+    }
+
+    dynamic resumeSkill "ColdStart" "Scenario: embedding database wiped. User requests a resume via CoWork, system bootstraps with empty index then rebuilds over successive resumes." {
+        claudeDesktop -> writeResumePlugin "Invokes /fetch with job URL"
         writeResumePlugin -> linkedinFetcher "Calls fetch_job"
         linkedinFetcher -> linkedin "Scrapes job posting"
         writeResumePlugin -> thateDb "Saves raw JD to db/jd-linted/"
-        agentRuntime -> writeResumePlugin "Invokes /analyze"
+        claudeDesktop -> writeResumePlugin "Invokes /analyze"
         writeResumePlugin -> thateDb "Reads base.yaml and prior resumes for context"
         writeResumePlugin -> thateDb "Saves annotated JD to db/jd-analyzed/"
-        agentRuntime -> writeResumePlugin "Invokes /synthesize"
+        claudeDesktop -> writeResumePlugin "Invokes /synthesize"
         writeResumePlugin -> resumeEmbeddings "Queries for similar bullets (returns empty — cold start)"
         resumeEmbeddings -> ollama "Embeds query text"
         writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml"
@@ -28,6 +37,14 @@ views {
         writeResumePlugin -> resumeEmbeddings "Harvests bullets from new resume"
         resumeEmbeddings -> ollama "Embeds each bullet"
         resumeEmbeddings -> thateDb "Reads resume YAML during harvest"
+        autolayout lr
+    }
+
+    dynamic * "Dispatch" "Scenario: user dispatches a resume task from Claude Mobile, which routes it to Claude Desktop (CoWork) for execution." {
+        user -> claude "Sends LinkedIn job URL from mobile"
+        claude -> resumeSkill "Executes fetch, analyze, synthesize, render"
+        resumeSkill -> linkedin "Fetches job posting"
+        claude -> user "Delivers completed resume"
         autolayout lr
     }
 
