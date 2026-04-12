@@ -54,17 +54,14 @@ Suggested action: Wait 60 seconds, then call this tool again with the same argum
 Do NOT fall back to a different method -- the rate limit is temporary.
 ```
 
-## merge_and_render
+## render_resume (local mode)
 
 ### Request
 
 ```json
 {
-  "base": "/Users/alc0der/Documents/Projects/Career on Autopilot/base.yaml",
-  "contact": "/Users/alc0der/Documents/Projects/Career on Autopilot/contact.yaml",
-  "ai": "/Users/alc0der/Documents/Projects/Career on Autopilot/resumes/20260410_Energetech_Technology_AI_Lead_ai.yaml",
+  "input": "/Users/alc0der/Documents/Projects/Career on Autopilot/rendered/20260410_Energetech_Technology_AI_Lead_Resume.md",
   "output": "/Users/alc0der/Documents/Projects/Career on Autopilot/rendered/20260410_Energetech_Technology_AI_Lead_Resume.pdf",
-  "html": true,
   "metadata": {
     "title": "Ahmad Akilan - Energetech Technology & AI Lead",
     "author": "Ahmad Akilan",
@@ -79,18 +76,6 @@ Do NOT fall back to a different method -- the rate limit is temporary.
 ```json
 {
   "pdf": "/Users/alc0der/Documents/Projects/Career on Autopilot/rendered/20260410_Energetech_Technology_AI_Lead_Resume.pdf",
-  "pageCount": 1,
-  "markdown": "/Users/alc0der/Documents/Projects/Career on Autopilot/rendered/20260410_Energetech_Technology_AI_Lead_Resume.md",
-  "json": "/Users/alc0der/Documents/Projects/Career on Autopilot/rendered/20260410_Energetech_Technology_AI_Lead_Resume.json"
+  "pageCount": 1
 }
-```
-
-### Response (validation error)
-
-When the merged JSON Resume fails schema validation:
-
-```text
-Validation errors:
-basics.email: Invalid email format
-work[0].startDate: Expected ISO 8601 date (YYYY, YYYY-MM, or YYYY-MM-DD)
 ```

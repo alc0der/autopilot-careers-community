@@ -59,8 +59,10 @@ function findBrowser(choice: string): string {
   );
 }
 
-async function stampMetadata(pdfPath: string, metadata?: PdfMetadata): Promise<number> {
-  const pdfBytes = fs.readFileSync(pdfPath);
+async function stampMetadataBytes(
+  pdfBytes: Uint8Array,
+  metadata?: PdfMetadata,
+): Promise<{ stamped: Uint8Array; pageCount: number }> {
   const doc = await PDFDocument.load(pdfBytes);
 
   // Always set renderer-owned fields
@@ -75,21 +77,24 @@ async function stampMetadata(pdfPath: string, metadata?: PdfMetadata): Promise<n
   if (metadata?.subject) doc.setSubject(metadata.subject);
   if (metadata?.keywords) doc.setKeywords(metadata.keywords);
 
-  // Get the page count before saving
   const pageCount = doc.getPageCount();
-
   const stamped = await doc.save();
-  fs.writeFileSync(pdfPath, stamped);
 
+  return { stamped, pageCount };
+}
+
+async function stampMetadata(pdfPath: string, metadata?: PdfMetadata): Promise<number> {
+  const pdfBytes = fs.readFileSync(pdfPath);
+  const { stamped, pageCount } = await stampMetadataBytes(pdfBytes, metadata);
+  fs.writeFileSync(pdfPath, stamped);
   return pageCount;
 }
 
-export async function generatePdf(
+/** Launch Puppeteer, render HTML, wait for icons, and return raw PDF bytes. */
+async function renderHtmlToPdfBytes(
   htmlContent: string,
-  outputPath: string,
   browser: string = "chrome",
-  metadata?: PdfMetadata,
-): Promise<number> {
+): Promise<Uint8Array> {
   const executablePath = findBrowser(browser);
   const instance = await puppeteer.launch({
     headless: true,
@@ -113,17 +118,36 @@ export async function generatePdf(
       console.warn("Warning: Some Iconify icons may not have loaded.");
     });
 
-    await page.pdf({
-      path: outputPath,
+    return await page.pdf({
       preferCSSPageSize: true,
       printBackground: true,
       margin: { top: "0", right: "0", bottom: "0", left: "0" },
     });
-
-    // Stamp PDF metadata after Puppeteer writes the file and get page count
-    const pageCount = await stampMetadata(outputPath, metadata);
-    return pageCount;
   } finally {
     await instance.close();
   }
+}
+
+export async function generatePdf(
+  htmlContent: string,
+  outputPath: string,
+  browser: string = "chrome",
+  metadata?: PdfMetadata,
+): Promise<number> {
+  const rawBytes = await renderHtmlToPdfBytes(htmlContent, browser);
+  fs.writeFileSync(outputPath, rawBytes);
+
+  // Stamp PDF metadata after writing the file and get page count
+  const pageCount = await stampMetadata(outputPath, metadata);
+  return pageCount;
+}
+
+export async function generatePdfToBuffer(
+  htmlContent: string,
+  browser: string = "chrome",
+  metadata?: PdfMetadata,
+): Promise<{ pdfBytes: Uint8Array; pageCount: number }> {
+  const rawBytes = await renderHtmlToPdfBytes(htmlContent, browser);
+  const { stamped, pageCount } = await stampMetadataBytes(rawBytes, metadata);
+  return { pdfBytes: stamped, pageCount };
 }

@@ -17,18 +17,18 @@ ai: AI Overlay YAML {
   label: "AI Overlay\n(highlights, keywords)"
 }
 
-merge: Merge & Render {
-  label: "merge_and_render\n(TypeScript)"
+md: Rendered Markdown {
+  label: "oh-my-cv Markdown\n(LLM generates)"
 }
 
 pdf: PDF {
-  label: "PDF\n(Puppeteer)"
+  label: "render_resume\n(Puppeteer)"
 }
 
-base -> merge
-contact -> merge
-ai -> merge
-merge -> pdf
+base -> md
+contact -> md
+ai -> md
+md -> pdf
 ```
 
 #### Reference Files
@@ -53,13 +53,11 @@ merge -> pdf
    - `skills[]` with populated `keywords` arrays
    - Decorate skills with icon shortcodes: `:icon-set--icon-name:` (e.g., `:vscode-icons--file-type-aws: AWS`)
    - Read `./techniques/skill-logo-limit.md` if it exists and follow its logo count rules. If absent, use a reasonable number of logos (avoid overuse).
-5. Merge and render using the `mcp__oh-my-cv-render__merge_and_render` MCP tool.
+5. **Generate rendered markdown.** Read `base.yaml` and `contact.yaml`, merge with the AI overlay data from step 4, and write the complete oh-my-cv markdown file to `rendered/YYYYMMDD_<Target>_<Role>_Resume.md`. Follow the **oh-my-cv Markdown Template** section below exactly. Also write a merged JSON Resume document to `rendered/YYYYMMDD_<Target>_<Role>_Resume.json`.
+6. **Render to PDF** using the `mcp__oh-my-cv-render__render_resume` MCP tool.
    Call with:
-   - `base`: absolute path to `./base.yaml`
-   - `contact`: absolute path to `./contact.yaml`
-   - `ai`: absolute path to `resumes/<ai.yaml>`
-   - `output`: absolute path to `rendered/<output>.pdf`
-   - `html: true` to save intermediate HTML for debugging
+   - `input`: absolute path to `rendered/<Resume>.md`
+   - `output`: absolute path to `rendered/<Resume>.pdf`
    - `metadata` to stamp PDF-level metadata:
    ```yaml
    metadata:
@@ -68,23 +66,22 @@ merge -> pdf
      subject: "Tailored for: {target} — {role}"       # from JD
      keywords: ["{target company}", "{role}"]          # from JD
    ```
-   The tool returns JSON: `{ "pdf": "<path>", "pageCount": <n>, "markdown": "<path>", "json": "<path>" }`.
-   It automatically merges the three YAMLs, validates against JSON Resume schema, generates markdown, and renders to PDF.
-6. **Page-fit verification.** Read `./techniques/page-layout.md` if it exists — follow its page-fit verification loop instructions (page limit, trim cascade, max iterations). Re-run step 5 after each trim. If no page-layout technique exists, check whether the resume exceeds 2 pages and flag it to the user for guidance.
-7. If you are Claude, present the resume in an artifact
-8. **Harvest bullets into embeddings**
+   The tool returns JSON: `{ "pdf": "<path>", "pageCount": <n> }`.
+7. **Page-fit verification.** Read `./techniques/page-layout.md` if it exists — follow its page-fit verification loop instructions (page limit, trim cascade, max iterations). Edit the rendered markdown directly and re-run step 6 after each trim. If no page-layout technique exists, check whether the resume exceeds 2 pages and flag it to the user for guidance.
+8. If you are Claude, present the resume in an artifact
+9. **Harvest bullets into embeddings**
    Call `mcp__bullet-embeddings__harvest` with `file` set to the **absolute path** of the AI YAML file.
    This indexes all generated bullets for future reuse intelligence. No user interaction needed.
    - If the user already opted out of embeddings during the Plan phase query step, skip this step silently.
    - If `harvest` returns an error containing "Ollama is not reachable" or the tool call fails (MCP not connected), report the error to the user and move on — do not block the rest of the workflow.
-9. **Finalize** — Once the user approves or deems the resume good enough:
+10. **Finalize** — Once the user approves or deems the resume good enough:
     - Copy the final PDF to the working directory root with the user's name from `contact.yaml`: `./<Name>_Resume.pdf` (e.g., `./Ahmad_Akilan_Resume.pdf`)
     - Present the path to the user
-10. **Next steps** — After presenting the resume, suggest these follow-up actions:
+11. **Next steps** — After presenting the resume, suggest these follow-up actions:
     - **Apply** — provide the original LinkedIn job URL from the JD front matter (`rel:source`) so the user can go apply directly
     - **Cover letter** — offer to run `/cover` to generate a tailored cover letter while the JD context is fresh
     - **Feedback** — offer to run `/feedback` to capture corrections, clarifications, and per-bullet signals as ground truth for future resumes
-11. **Technique update check** — Compare the user's `./techniques/` against the technique library at `<skill-base-dir>/techniques-library/`:
+12. **Technique update check** — Compare the user's `./techniques/` against the technique library at `<skill-base-dir>/techniques-library/`:
     - **New techniques**: If library techniques are not present in `./techniques/` and were not available when the user last ran `/onboard`, tip:
       > New technique available: **{name}** — {summary}. Run `/onboard` to add it, or create `./techniques/{name}.md` manually.
     - **Updated techniques**: Compare the `version` field in library frontmatter against when the user last onboarded. If a library technique has a higher version, tip:
@@ -122,6 +119,77 @@ skills:
       - Strategy
       - Leadership
 ```
+
+#### oh-my-cv Markdown Template
+
+The rendered markdown file must follow this exact structure. The renderer's markdown-it parser with definition-list plugin converts this to HTML for PDF generation.
+
+```markdown
+---
+name: John Doe <br><small>Professional Label</small>
+header:
+  - text: ":tabler--phone: +1 234 567 890"
+    link: "tel:+1234567890"
+  - text: ":tabler--mail: john@example.com"
+    link: "mailto:john@example.com"
+  - text: ":tabler--brand-github: johndoe"
+    link: "https://github.com/johndoe"
+  - text: ":tabler--brand-linkedin: johndoe"
+    link: "https://www.linkedin.com/in/johndoe/"
+  - text: ":charm--person: https://johndoe.dev"
+    link: "https://johndoe.dev"
+    newLine: true
+  - text: ":ic--outline-location-on: City, Region"
+  - text: ":mdi--passport-biometric: Work Authorization"
+---
+
+## Work Experience <span>N+ years</span>
+
+**Position** | Company
+  ~ Location | MM/YYYY - MM/YYYY
+
+- Achievement bullet 1
+- Achievement bullet 2
+
+**Another Position** | Another Company
+  ~ Location | MM/YYYY - Present
+
+- Achievement bullet
+
+## Education
+
+**Institution**
+  ~ Location
+
+Degree in Area
+  ~ YYYY - YYYY
+
+## Skills
+
+**Category:** :icon--name: Keyword1, :icon--name: Keyword2, Keyword3
+```
+
+**Formatting rules:**
+
+- **Frontmatter `name`**: `Name <br><small>Label</small>` (label from AI overlay's `basics.label`)
+- **Header items**: Include only fields present in `contact.yaml`. Use the icon shortcodes listed in the Header Icon Shortcodes table. Items with `newLine: true` start a new line in the header.
+- **Years of experience**: Compute from the earliest `work[].startDate` to current year
+- **Work entries**: `**Position** | Company` on first line, `~ Location | MM/YYYY - MM/YYYY` on second line (indented with 2 spaces before `~`). Omit entries from `base.yaml` that have no highlights in the AI overlay.
+- **Date format**: Convert ISO 8601 partial dates: `YYYY-MM` → `MM/YYYY`, `YYYY` → `YYYY`. Missing `endDate` → `Present`.
+- **Education**: `**Institution**` / `~ Location` / `Degree in Area` / `~ StartYear - EndYear`
+- **Skills**: `**Category:** keyword1, keyword2` — decorate keywords with icon shortcodes per step 4
+
+**Header Icon Shortcodes:**
+
+| Field | Shortcode |
+|-------|-----------|
+| Phone | `:tabler--phone:` |
+| Email | `:tabler--mail:` |
+| GitHub | `:tabler--brand-github:` |
+| LinkedIn | `:tabler--brand-linkedin:` |
+| Website | `:charm--person:` |
+| Location | `:ic--outline-location-on:` |
+| Visa / Work Auth | `:mdi--passport-biometric:` |
 
 #### Icon Shortcode Reference
 

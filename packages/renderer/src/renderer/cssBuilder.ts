@@ -64,16 +64,21 @@ function loadDefaultTemplateCss(): string {
   return preprocessCss(resumeTemplateCss);
 }
 
-function loadUserCss(cssPath?: string): string {
-  if (!cssPath) return "";
-  let raw: string;
-  try {
-    raw = fs.readFileSync(cssPath, "utf-8");
-  } catch {
-    console.warn(`Warning: CSS file not found at ${cssPath}, skipping user CSS.`);
-    return "";
+function loadUserCss(cssPathOrContent?: string): string {
+  if (!cssPathOrContent) return "";
+  if (cssPathOrContent.startsWith("/")) {
+    // Absolute path — read from disk
+    let raw: string;
+    try {
+      raw = fs.readFileSync(cssPathOrContent, "utf-8");
+    } catch {
+      console.warn(`Warning: CSS file not found at ${cssPathOrContent}, skipping user CSS.`);
+      return "";
+    }
+    return preprocessCss(raw);
   }
-  return preprocessCss(raw);
+  // Inline CSS content
+  return preprocessCss(cssPathOrContent);
 }
 
 function buildDynamicCss(styles: ResumeStyles): string {

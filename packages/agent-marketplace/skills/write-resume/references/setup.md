@@ -6,11 +6,11 @@ First-time setup for the write-resume skill package.
 
 The write-resume skill requires two MCP servers:
 
-1. **oh-my-cv-render** — Merges YAML files (JSON Resume schema) and renders resumes to PDF
+1. **oh-my-cv-render** — Renders oh-my-cv markdown resumes to PDF
 2. **linkedin-fetcher** — Fetches LinkedIn job descriptions
 3. **bullet-embeddings** (optional) — Indexes achievement bullets for reuse intelligence (requires Ollama)
 
-All resume merging and rendering is handled by the `oh-my-cv-render` MCP server — no external binaries (jq, mustache, python3) are needed.
+Resume PDF rendering is handled by the `oh-my-cv-render` MCP server — no external binaries (jq, mustache, python3) are needed.
 
 ### Working Directory
 
