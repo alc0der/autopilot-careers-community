@@ -8,4 +8,6 @@ logs/
 .claude-sessions
 .structurizr/
 workspace.json
-.claude/settings.local.json
+**/.claude/settings.local.json
+.env
+__pycache__/
