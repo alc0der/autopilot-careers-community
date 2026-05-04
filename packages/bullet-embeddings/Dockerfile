@@ -2,8 +2,12 @@
 # Build: docker build -f packages/bullet-embeddings/Dockerfile -t autopilot/bullet-embeddings .
 #
 # Runtime requirements:
-#   - Ollama must be accessible; set OLLAMA_BASE_URL
-#       Apple Container / Docker: http://host.containers.internal:11434 (default)
+#   - Ollama must be accessible; set OLLAMA_BASE_URL at runtime if the default
+#     doesn't match your environment:
+#       Apple Container:  http://192.168.64.1:11434  (bridge100 gateway — default)
+#       Docker Desktop:   http://host.docker.internal:11434
+#   - Ollama must bind to 0.0.0.0 (not 127.0.0.1) so the container can reach it.
+#     Start with: OLLAMA_HOST=0.0.0.0 ollama serve
 #   - Mount a persistent volume at /data for the Vectra vector indexes
 #
 # Example:
@@ -41,10 +45,11 @@ WORKDIR /app
 COPY --from=builder /deploy .
 COPY --from=builder /app/packages/bullet-embeddings/dist ./dist
 
-# OLLAMA_BASE_URL: address of the Ollama server (host.containers.internal works for
-#                  both Apple Container and Docker Desktop host networking)
+# OLLAMA_BASE_URL: address of the Ollama server.
+#   Apple Container default: 192.168.64.1 is the bridge100 gateway — always reachable
+#   from container VMs as long as Ollama binds to 0.0.0.0 (not 127.0.0.1).
 # BULLET_DATA_DIR: where Vectra indexes are persisted (mount a volume here)
-ENV OLLAMA_BASE_URL=http://host.containers.internal:11434 \
+ENV OLLAMA_BASE_URL=http://192.168.64.1:11434 \
     BULLET_DATA_DIR=/data \
     MCP_TRANSPORT=http \
     MCP_PORT=3003
