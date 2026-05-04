@@ -8,7 +8,7 @@ function textHash(text: string): string {
   return createHash("sha256").update(text).digest("hex");
 }
 
-export function registerEmbedAchievementTool(server: McpServer): void {
+export function registerEmbedAchievementTool(server: McpServer, userId: string): void {
   server.tool(
     "embed_achievement",
     "Embed a single achievement into the achievements index",
@@ -31,7 +31,7 @@ export function registerEmbedAchievementTool(server: McpServer): void {
         if (errResponse) return errResponse;
         throw err;
       }
-      const index = await getAchievementsIndex();
+      const index = await getAchievementsIndex(userId);
 
       // Remove existing if same id
       const existing = await index.listItemsByMetadata({ id: { $eq: id } });

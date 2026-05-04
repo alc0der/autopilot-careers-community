@@ -1,14 +1,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { getAchievementsIndex, getBulletsIndex } from "../lib/vectra.js";
 
-export function registerStatsTool(server: McpServer): void {
+export function registerStatsTool(server: McpServer, userId: string): void {
   server.tool(
     "stats",
     "Get collection sizes, feedback distribution, and top reused bullets",
     {},
     async () => {
-      const achievementsIdx = await getAchievementsIndex();
-      const bulletsIdx = await getBulletsIndex();
+      const achievementsIdx = await getAchievementsIndex(userId);
+      const bulletsIdx = await getBulletsIndex(userId);
 
       const achievementItems = await achievementsIdx.listItems();
       const bulletItems = await bulletsIdx.listItems();

@@ -4,7 +4,7 @@ import { getEmbedding, ollamaErrorResponse } from "../lib/embeddings.js";
 import { getBulletsIndex } from "../lib/vectra.js";
 import type { IndexItem, MetadataTypes } from "vectra";
 
-export function registerFeedbackTool(server: McpServer): void {
+export function registerFeedbackTool(server: McpServer, userId: string): void {
   server.tool(
     "feedback",
     "Record human signal on a bullet point",
@@ -27,7 +27,7 @@ export function registerFeedbackTool(server: McpServer): void {
         };
       }
 
-      const index = await getBulletsIndex();
+      const index = await getBulletsIndex(userId);
       let targetItem: IndexItem<Record<string, MetadataTypes>> | undefined;
 
       if (id) {

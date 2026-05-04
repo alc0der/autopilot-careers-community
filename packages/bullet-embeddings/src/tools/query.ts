@@ -131,7 +131,7 @@ function aggregateCluster(cluster: ClusterInfo): {
   };
 }
 
-export function registerQueryTool(server: McpServer): void {
+export function registerQueryTool(server: McpServer, userId: string): void {
   server.tool(
     "query",
     "Find similar bullets for a JD or text query, with trust signals",
@@ -164,8 +164,8 @@ export function registerQueryTool(server: McpServer): void {
         throw err;
       }
 
-      const bulletsIdx = await getBulletsIndex();
-      const achievementsIdx = await getAchievementsIndex();
+      const bulletsIdx = await getBulletsIndex(userId);
+      const achievementsIdx = await getAchievementsIndex(userId);
 
       const results: QueryResult[] = [];
 

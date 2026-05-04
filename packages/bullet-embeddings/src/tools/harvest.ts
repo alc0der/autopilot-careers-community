@@ -36,7 +36,7 @@ function textHash(text: string): string {
   return createHash("sha256").update(text).digest("hex");
 }
 
-export function registerHarvestTool(server: McpServer): void {
+export function registerHarvestTool(server: McpServer, userId: string): void {
   server.tool(
     "harvest",
     "Embed bullets from an AI YAML resume (inline content) into Vectra for trust analysis",
@@ -58,8 +58,8 @@ export function registerHarvestTool(server: McpServer): void {
       const resumeStem = filename.replace(/_ai\.yaml$/, "");
       const { date, company, role } = parseResumeStem(filename);
 
-      const bulletsIdx = await getBulletsIndex();
-      const achievementsIdx = await getAchievementsIndex();
+      const bulletsIdx = await getBulletsIndex(userId);
+      const achievementsIdx = await getAchievementsIndex(userId);
 
       // Collect all bullet texts
       const allTexts: string[] = [];

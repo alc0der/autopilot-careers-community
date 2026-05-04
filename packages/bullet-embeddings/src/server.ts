@@ -7,18 +7,27 @@ import { registerEmbedAchievementTool } from "./tools/embed-achievement.js";
 import { registerQueryTool } from "./tools/query.js";
 import { registerFeedbackTool } from "./tools/feedback.js";
 import { registerStatsTool } from "./tools/stats.js";
-import { initIndexes } from "./lib/vectra.js";
+import { initIndexes, migrateLegacyLayout } from "./lib/vectra.js";
 
-function createServer(): McpServer {
+const USER_HEADER = "x-autopilot-user";
+const USER_ID_PATTERN = /^[a-zA-Z0-9_\-.@]+$/;
+
+function isValidUserId(userId: string | undefined): userId is string {
+  if (!userId) return false;
+  if (userId === "." || userId === "..") return false;
+  return USER_ID_PATTERN.test(userId);
+}
+
+function createServer(userId: string): McpServer {
   const server = new McpServer({
     name: "bullet-embeddings",
     version: "1.0.0",
   });
-  registerHarvestTool(server);
-  registerEmbedAchievementTool(server);
-  registerQueryTool(server);
-  registerFeedbackTool(server);
-  registerStatsTool(server);
+  registerHarvestTool(server, userId);
+  registerEmbedAchievementTool(server, userId);
+  registerQueryTool(server, userId);
+  registerFeedbackTool(server, userId);
+  registerStatsTool(server, userId);
   return server;
 }
 
@@ -37,7 +46,12 @@ async function checkOllama() {
 
 async function main() {
   await checkOllama();
-  await initIndexes();
+
+  const seedUserId = process.env.BULLET_USER_ID ?? "local";
+  if (!isValidUserId(seedUserId)) {
+    throw new Error(`Invalid BULLET_USER_ID: ${seedUserId}`);
+  }
+  await migrateLegacyLayout(seedUserId);
 
   if (process.env.MCP_TRANSPORT === "http") {
     const port = parseInt(process.env.MCP_PORT ?? "3003", 10);
@@ -45,7 +59,16 @@ async function main() {
     app.use(express.json());
 
     app.post("/mcp", async (req, res) => {
-      const server = createServer();
+      const userId = req.header(USER_HEADER);
+      if (!isValidUserId(userId)) {
+        res.status(401).json({
+          jsonrpc: "2.0",
+          error: { code: -32001, message: `Missing or invalid ${USER_HEADER} header` },
+          id: null,
+        });
+        return;
+      }
+      const server = createServer(userId);
       try {
         const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
         await server.connect(transport);
@@ -69,7 +92,8 @@ async function main() {
 
     app.listen(port, () => console.error(`bullet-embeddings MCP HTTP on :${port}`));
   } else {
-    const server = createServer();
+    await initIndexes(seedUserId);
+    const server = createServer(seedUserId);
     const transport = new StdioServerTransport();
     await server.connect(transport);
   }

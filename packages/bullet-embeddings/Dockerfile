@@ -48,7 +48,11 @@ COPY --from=builder /app/packages/bullet-embeddings/dist ./dist
 # OLLAMA_BASE_URL: address of the Ollama server.
 #   Apple Container default: 192.168.64.1 is the bridge100 gateway — always reachable
 #   from container VMs as long as Ollama binds to 0.0.0.0 (not 127.0.0.1).
-# BULLET_DATA_DIR: where Vectra indexes are persisted (mount a volume here)
+# BULLET_DATA_DIR: where Vectra indexes are persisted (mount a volume here).
+#   Per-user indexes live at <BULLET_DATA_DIR>/<userId>/{achievements,bullets}/.
+# BULLET_USER_ID: seed user id for stdio mode and one-time legacy migration.
+#   Hosted (HTTP) callers identify themselves via the X-Autopilot-User request
+#   header populated by the auth proxy; requests without it are rejected 401.
 ENV OLLAMA_BASE_URL=http://192.168.64.1:11434 \
     BULLET_DATA_DIR=/data \
     MCP_TRANSPORT=http \
