@@ -68,6 +68,7 @@ export async function createBrowser(options?: { headless?: boolean }) {
   const browser = await puppeteer_extra.launch({
     headless,
     defaultViewport: null,
+    pipe: true, // avoids uv_tty_init EINVAL in containers (no TTY available)
     ...(headless ? {} : { slowMo: 1000 }),
     args,
     ...(browserProps.executablePath ? { executablePath: browserProps.executablePath } : {}),
