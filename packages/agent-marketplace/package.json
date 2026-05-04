@@ -1,6 +1,6 @@
 {
   "name": "@autopilot/agent-marketplace",
-  "version": "1.17.13",
+  "version": "1.17.14",
   "private": true,
   "description": "Agent packaging for the write-resume workflow",
   "scripts": {

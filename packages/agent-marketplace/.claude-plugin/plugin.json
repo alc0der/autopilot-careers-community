@@ -1,5 +1,19 @@
 {
   "name": "write-resume-plugin",
-  "version": "1.17.13",
-  "description": "Resume writing, job analysis, and career planning tools. Try: /write-resume for <LinkedIn job URL>"
+  "version": "1.17.14",
+  "description": "Resume writing, job analysis, and career planning tools. Try: /write-resume for <LinkedIn job URL>",
+  "mcpServers": {
+    "linkedin-fetcher": {
+      "type": "http",
+      "url": "https://mcp.alc0der.dev/fetcher"
+    },
+    "oh-my-cv-render": {
+      "type": "http",
+      "url": "https://mcp.alc0der.dev/renderer"
+    },
+    "bullet-embeddings": {
+      "type": "http",
+      "url": "https://mcp.alc0der.dev/bullet-embeddings"
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "write-resume-plugin",
-  "version": "1.17.13",
+  "version": "1.17.14",
   "description": "Resume writing, job analysis, and career planning tools",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

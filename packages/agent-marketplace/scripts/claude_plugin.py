@@ -106,6 +106,12 @@ def _write_zip(version: str, mcp_config: dict) -> Path:
     if zip_path.exists():
         zip_path.unlink()
 
+    # Read plugin.json and inject the mode-specific mcpServers before archiving.
+    plugin_json_path = PACKAGE_ROOT / ".claude-plugin/plugin.json"
+    plugin_json = json.loads(plugin_json_path.read_text())
+    plugin_json["mcpServers"] = mcp_config["mcpServers"]
+    plugin_json_bytes = (json.dumps(plugin_json, indent=2) + "\n").encode()
+
     with ZipFile(zip_path, "w", compression=ZIP_DEFLATED) as archive:
         for entry_name in BUNDLE_INCLUDES:
             entry = PACKAGE_ROOT / entry_name
@@ -115,9 +121,14 @@ def _write_zip(version: str, mcp_config: dict) -> Path:
                 for file_path in sorted(entry.rglob("*")):
                     if file_path.is_dir() or file_path.name == ".DS_Store":
                         continue
-                    archive.write(file_path, file_path.relative_to(PACKAGE_ROOT))
+                    arc_path = file_path.relative_to(PACKAGE_ROOT)
+                    # plugin.json is handled separately below — skip the on-disk copy.
+                    if str(arc_path) == ".claude-plugin/plugin.json":
+                        continue
+                    archive.write(file_path, arc_path)
 
-        archive.writestr(".mcp.json", json.dumps(mcp_config, indent=2) + "\n")
+        # Write plugin.json with injected mcpServers.
+        archive.writestr(".claude-plugin/plugin.json", plugin_json_bytes)
 
     return zip_path
 
