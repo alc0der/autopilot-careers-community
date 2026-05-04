@@ -7,6 +7,7 @@ import glob
 import json
 import os
 import shutil
+import socket
 import subprocess
 import sys
 from pathlib import Path
@@ -37,7 +38,21 @@ def _version_bump() -> None:
     )
 
 
+def _containers_reachable(ports: tuple[int, ...] = (3001, 3002, 3003), timeout: float = 0.5) -> bool:
+    """Return True if all container MCP ports are accepting connections."""
+    for port in ports:
+        try:
+            with socket.create_connection(("localhost", port), timeout=timeout):
+                pass
+        except OSError:
+            return False
+    return True
+
+
 def _detect_mcp_mode(root: Path) -> str:
+    # Container HTTP has priority: if all three ports are reachable, use container mode.
+    if _containers_reachable():
+        return "container"
     local_packages = (
         root / "packages/fetcher/package.json",
         root / "packages/renderer/package.json",
