@@ -4,7 +4,6 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { z } from "zod/v4";
 import { fetchJobAsMarkdown, RateLimitError } from "./core";
-import { createPuppeteerFetcher } from "./fetchers/puppeteer";
 
 console.log = (...args: unknown[]) => console.error(...args);
 console.info = (...args: unknown[]) => console.error(...args);
@@ -32,7 +31,7 @@ function createServer(): McpServer {
       }
 
       try {
-        const markdown = await fetchJobAsMarkdown({ url, id }, createPuppeteerFetcher());
+        const markdown = await fetchJobAsMarkdown({ url, id });
         return {
           content: [{ type: "text" as const, text: markdown }],
         };
