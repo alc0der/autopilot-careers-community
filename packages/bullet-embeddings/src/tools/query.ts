@@ -1,6 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { readFile } from "fs/promises";
 import { getEmbedding, ollamaErrorResponse } from "../lib/embeddings.js";
 import {
   getAchievementsIndex,
@@ -137,29 +136,24 @@ export function registerQueryTool(server: McpServer): void {
     "query",
     "Find similar bullets for a JD or text query, with trust signals",
     {
-      jd: z.string().optional().describe("Path to annotated JD file"),
+      jd_text: z.string().optional().describe("Annotated JD content (full text)"),
       text: z.string().optional().describe("Free text query"),
       top: z.coerce.number().optional().default(20).describe("Number of results"),
       jobId: z.string().optional().describe("Filter by job_id"),
     },
-    async ({ jd, text, top, jobId }) => {
-      if (!jd && !text) {
+    async ({ jd_text, text, top, jobId }) => {
+      if (!jd_text && !text) {
         return {
           content: [
             {
               type: "text" as const,
-              text: JSON.stringify({ error: "Provide either jd or text parameter" }),
+              text: JSON.stringify({ error: "Provide either jd_text or text parameter" }),
             },
           ],
         };
       }
 
-      let queryText: string;
-      if (jd) {
-        queryText = await readFile(jd, "utf-8");
-      } else {
-        queryText = text!;
-      }
+      const queryText: string = jd_text ?? text!;
 
       let queryEmbedding: number[];
       try {

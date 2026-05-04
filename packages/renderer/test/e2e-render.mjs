@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * E2E test: spawns the MCP server over stdio and calls render_resume
- * in both local (file-path) and remote (inline-content) modes.
+ * with inline markdown content.
  *
  * Usage:  node test/e2e-render.mjs
  */
@@ -13,23 +13,12 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SERVER = path.resolve(__dirname, "../bundle/oh-my-cv-render-mcp.js");
 
-// ── Test fixtures ──────────────────────────────────────────────────
-const LOCAL_TOOL_ARGS = {
-  input:
-    "/Users/alc0der/code/alc0der/thate-db/db/rendered/20260402_Sully.ai_Head_of_Engineering_UAE_Resume.md",
-  output: "/tmp/20260402_Sully.ai_Head_of_Engineering_UAE_Resume.pdf",
-  metadata: {
-    title: "Ahmad Akilan — Sully.ai Head of Engineering UAE",
-    author: "Ahmad Akilan",
-    subject: "Tailored for: Sully.ai — Head of Engineering, UAE",
-    keywords: ["Sully.ai", "Head of Engineering"],
-  },
-};
-
 const INLINE_MARKDOWN = `---
 name: Test User <br><small>Software Engineer</small>
 header:
-  - text: "test@example.com"
+  - text: ":tabler--phone: +1 234 567 890"
+    link: "tel:+12345678901"
+  - text: ":tabler--mail: test@example.com"
     link: "mailto:test@example.com"
 ---
 
@@ -38,7 +27,7 @@ header:
 **Software Engineer** | Acme Corp
   ~ San Francisco, CA | 01/2020 - Present
 
-- Built scalable microservices handling 10M requests/day
+- Built scalable microservices on :devicon--java: Java handling 10M requests/day
 - Led migration from monolith to event-driven architecture
 
 ## Education
@@ -68,13 +57,6 @@ function rpc(method, params = {}) {
   return JSON.stringify({ jsonrpc: "2.0", id: randomUUID(), method, params });
 }
 
-// ── Test runner ────────────────────────────────────────────────────
-const tests = [
-  { name: "local mode", args: LOCAL_TOOL_ARGS },
-  { name: "inline mode", args: INLINE_TOOL_ARGS },
-];
-
-let currentTest = 0;
 let initialized = false;
 
 const child = spawn("node", [SERVER], {
@@ -94,15 +76,15 @@ child.stdout.on("data", (chunk) => {
 
     const msg = JSON.parse(line);
 
-    // After initialize response → send initialized + first test
+    // After initialize response → send initialized + render
     if (msg.result?.serverInfo && !initialized) {
       initialized = true;
       send(rpc("notifications/initialized"));
-      console.log(`\n--- Test: ${tests[currentTest].name} ---`);
+      console.log(`\n--- Test: inline render ---`);
       send(
         rpc("tools/call", {
           name: "render_resume",
-          arguments: tests[currentTest].args,
+          arguments: INLINE_TOOL_ARGS,
         })
       );
       return;
@@ -110,63 +92,49 @@ child.stdout.on("data", (chunk) => {
 
     // Tool call response
     if (msg.result?.content) {
-      const content = msg.result.content[0];
-
       if (msg.result.isError) {
-        console.error(`FAIL [${tests[currentTest].name}]:`, content.text);
+        const errorBlock = msg.result.content.find((c) => c.type === "text");
+        console.error("FAIL:", errorBlock?.text ?? "(unknown error)");
         process.exit(1);
       }
 
-      if (tests[currentTest].name === "local mode") {
-        // Local mode: expect text content with JSON
-        if (content.type !== "text") {
-          console.error(`FAIL [local mode]: expected text content, got ${content.type}`);
-          process.exit(1);
-        }
-        const result = JSON.parse(content.text);
-        console.log("OK:", result);
-        if (result.pageCount < 1) {
-          console.error("FAIL: pageCount < 1");
-          process.exit(1);
-        }
-      } else {
-        // Inline mode: expect resource content with blob
-        if (content.type !== "resource") {
-          console.error(`FAIL [inline mode]: expected resource content, got ${content.type}`);
-          process.exit(1);
-        }
-        const resource = content.resource;
-        if (!resource.blob) {
-          console.error("FAIL [inline mode]: missing blob in resource");
-          process.exit(1);
-        }
-        if (resource.mimeType !== "application/pdf") {
-          console.error(`FAIL [inline mode]: expected application/pdf, got ${resource.mimeType}`);
-          process.exit(1);
-        }
-        const pdfBytes = Buffer.from(resource.blob, "base64");
-        console.log(`OK: ${resource.uri} (${pdfBytes.length} bytes)`);
-        if (pdfBytes.length < 100) {
-          console.error("FAIL [inline mode]: PDF too small");
-          process.exit(1);
-        }
+      const resourceBlock = msg.result.content.find((c) => c.type === "resource");
+      const textBlock = msg.result.content.find((c) => c.type === "text");
+
+      if (!resourceBlock) {
+        console.error("FAIL: missing resource content block");
+        process.exit(1);
+      }
+      const resource = resourceBlock.resource;
+      if (!resource.blob) {
+        console.error("FAIL: missing blob in resource");
+        process.exit(1);
+      }
+      if (resource.mimeType !== "application/pdf") {
+        console.error(`FAIL: expected application/pdf, got ${resource.mimeType}`);
+        process.exit(1);
+      }
+      const pdfBytes = Buffer.from(resource.blob, "base64");
+      console.log(`OK: ${resource.uri} (${pdfBytes.length} bytes)`);
+      if (pdfBytes.length < 100) {
+        console.error("FAIL: PDF too small");
+        process.exit(1);
       }
 
-      // Move to next test or finish
-      currentTest++;
-      if (currentTest < tests.length) {
-        console.log(`\n--- Test: ${tests[currentTest].name} ---`);
-        send(
-          rpc("tools/call", {
-            name: "render_resume",
-            arguments: tests[currentTest].args,
-          })
-        );
-      } else {
-        console.log("\nAll tests passed.");
-        child.kill();
-        process.exit(0);
+      if (!textBlock) {
+        console.error("FAIL: missing pageCount text block");
+        process.exit(1);
       }
+      const meta = JSON.parse(textBlock.text);
+      if (typeof meta.pageCount !== "number" || meta.pageCount < 1) {
+        console.error(`FAIL: invalid pageCount ${meta.pageCount}`);
+        process.exit(1);
+      }
+      console.log(`OK: pageCount=${meta.pageCount}`);
+
+      console.log("\nAll tests passed.");
+      child.kill();
+      process.exit(0);
     }
   }
 });

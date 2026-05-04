@@ -61,15 +61,15 @@ model {
     claudeDesktop -> ohmycvRender "Connects via MCP"
 
     # Orchestrator relationships
-    writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml; writes resume YAMLs and rendered output"
-    writeResumePlugin -> linkedinFetcher "Fetches job descriptions via fetch_job"
-    writeResumePlugin -> resumeEmbeddings "Queries similar bullets, harvests new bullets, records feedback"
-    writeResumePlugin -> ohmycvRender "Renders Markdown to PDF via render_resume"
+    # The skill is the sole filesystem owner: MCP servers never read or write user files (ADR 0004).
+    writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml, JD, and AI YAMLs; writes resume YAMLs and decoded PDFs"
+    writeResumePlugin -> linkedinFetcher "Fetches job descriptions via fetch_job (URL/ID input)"
+    writeResumePlugin -> resumeEmbeddings "Sends inline JD/YAML content for query, harvest, feedback"
+    writeResumePlugin -> ohmycvRender "Sends inline Markdown to render_resume; receives PDF bytes"
 
     # MCP server relationships
     linkedinFetcher -> linkedin "Scrapes job postings from"
     resumeEmbeddings -> ollama "Generates embeddings via nomic-embed-text"
-    resumeEmbeddings -> thateDb "Reads resume YAMLs during harvest"
 
     # ── Deployment environments ──────────────────────────────────────────────
 

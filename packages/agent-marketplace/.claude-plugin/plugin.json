@@ -1,6 +1,6 @@
 {
   "name": "write-resume-plugin",
-  "version": "1.17.14",
+  "version": "1.18.1",
   "description": "Resume writing, job analysis, and career planning tools. Try: /write-resume for <LinkedIn job URL>",
   "mcpServers": {
     "linkedin-fetcher": {

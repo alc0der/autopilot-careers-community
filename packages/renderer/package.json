@@ -1,6 +1,6 @@
 {
   "name": "@autopilot/renderer",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Headless Markdown-to-PDF resume renderer",
   "bin": {
     "oh-my-cv-render": "bundle/oh-my-cv-render.js"

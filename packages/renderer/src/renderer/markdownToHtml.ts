@@ -4,6 +4,7 @@ import MarkdownItDeflist from "markdown-it-deflist";
 // @ts-expect-error missing types
 import LinkAttributes from "markdown-it-link-attributes";
 import * as yamlParser from "js-yaml";
+import { expandIcons } from "../converter/icons";
 
 type ResumeHeaderItem = {
   readonly text: string;
@@ -49,9 +50,10 @@ function parseFrontMatter(content: string): { body: string; frontMatter: ResumeF
 }
 
 function renderHeaderItem(item: ResumeHeaderItem, hasSeparator: boolean): string {
+  const text = expandIcons(item.text);
   const content = item.link
-    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.text}</a>`
-    : item.text;
+    ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${text}</a>`
+    : text;
 
   const element = `<span class="resume-header-item ${hasSeparator ? "" : "no-separator"}">
       ${content}
@@ -91,7 +93,7 @@ md.use(LinkAttributes, {
 
 export function markdownToHtml(markdownWithFrontmatter: string): string {
   const { body, frontMatter } = parseFrontMatter(markdownWithFrontmatter);
-  const content = resolveDeflist(md.render(body));
+  const content = resolveDeflist(md.render(expandIcons(body)));
   const header = renderHeader(frontMatter);
   return header + content;
 }

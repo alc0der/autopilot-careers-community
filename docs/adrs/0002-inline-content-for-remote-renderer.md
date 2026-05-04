@@ -4,7 +4,9 @@ Date: 2026-04-11
 
 ## Status
 
-Accepted
+Superseded by [ADR 0004. Extend inline content transfer to all MCP connectors](0004-inline-markdown-exchange-for-claude-cowork.md).
+
+The core decision below — inline content transfer with `EmbeddedResource` responses — is unchanged. ADR 0004 generalises it to `harvest` and `query`, and retires the transitional `startsWith("/")` dual-mode described in the *Backwards compatibility* section. The analysis sections (MCP primitives, options A–D, payload sizing, `merge_and_render` scope reduction) remain authoritative reference material.
 
 ## Context
 

@@ -54,11 +54,12 @@ md -> pdf
    - Decorate skills with icon shortcodes: `:icon-set--icon-name:` (e.g., `:vscode-icons--file-type-aws: AWS`)
    - Read `./techniques/skill-logo-limit.md` if it exists and follow its logo count rules. If absent, use a reasonable number of logos (avoid overuse).
 5. **Generate rendered markdown.** Read `base.yaml` and `contact.yaml`, merge with the AI overlay data from step 4, and write the complete oh-my-cv markdown file to `rendered/YYYYMMDD_<Target>_<Role>_Resume.md`. Follow the **oh-my-cv Markdown Template** section below exactly. Also write a merged JSON Resume document to `rendered/YYYYMMDD_<Target>_<Role>_Resume.json`.
-6. **Render to PDF** using the `mcp__oh-my-cv-render__render_resume` MCP tool.
-   Call with:
-   - `input`: absolute path to `rendered/<Resume>.md`
-   - `output`: absolute path to `rendered/<Resume>.pdf`
-   - `metadata` to stamp PDF-level metadata:
+6. **Render to PDF** using the `mcp__oh-my-cv-render__render_resume` MCP tool. The renderer never touches the filesystem — the skill reads the markdown, sends content, and writes the decoded PDF.
+   - Read `rendered/<Resume>.md` from disk.
+   - Call with:
+     - `input`: the markdown text (string)
+     - `filename`: the stem `YYYYMMDD_<Target>_<Role>_Resume` (no path, no extension — used as the response URI label)
+     - `metadata` to stamp PDF-level metadata:
    ```yaml
    metadata:
      title: "{name} — {target company} {role}"      # from contact.yaml + JD
@@ -66,11 +67,14 @@ md -> pdf
      subject: "Tailored for: {target} — {role}"       # from JD
      keywords: ["{target company}", "{role}"]          # from JD
    ```
-   The tool returns JSON: `{ "pdf": "<path>", "pageCount": <n> }`.
+   - The tool returns two content blocks: a `resource` (the PDF) and a `text` block with `{ "pageCount": <n> }`. Locate the resource via `result.content.find(c => c.type === "resource")`, decode `c.resource.blob` from base64, and write the bytes to `rendered/<Resume>.pdf`. Read `pageCount` from the text block for step 7.
 7. **Page-fit verification.** Read `./techniques/page-layout.md` if it exists — follow its page-fit verification loop instructions (page limit, trim cascade, max iterations). Edit the rendered markdown directly and re-run step 6 after each trim. If no page-layout technique exists, check whether the resume exceeds 2 pages and flag it to the user for guidance.
 8. If you are Claude, present the resume in an artifact
 9. **Harvest bullets into embeddings**
-   Call `mcp__bullet-embeddings__harvest` with `file` set to the **absolute path** of the AI YAML file.
+   Read the AI YAML file (`resumes/YYYYMMDD_<Target>_<Role>_ai.yaml`) from disk and call `mcp__bullet-embeddings__harvest` with:
+   - `content`: the YAML text
+   - `filename`: the basename, e.g. `20260410_Energetech_Resume_ai.yaml` (used by the server to derive `resumeStem`, `date`, `company`, `role`, and `resume_file`)
+
    This indexes all generated bullets for future reuse intelligence. No user interaction needed.
    - If the user already opted out of embeddings during the Plan phase query step, skip this step silently.
    - If `harvest` returns an error containing "Ollama is not reachable" or the tool call fails (MCP not connected), report the error to the user and move on — do not block the rest of the workflow.

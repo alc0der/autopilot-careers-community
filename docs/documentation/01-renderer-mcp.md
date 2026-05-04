@@ -14,43 +14,9 @@ The **oh-my-cv-render** container exposes one MCP tool over stdio. The write-res
 
 ### render_resume
 
-Accepts two modes: **local** (file paths) and **remote** (inline content). The mode is detected automatically from the `input` parameter — absolute paths (starting with `/`) trigger local mode, anything else is treated as inline markdown content.
+Accepts inline markdown content and returns the rendered PDF as a base64-encoded `EmbeddedResource` alongside the page count. The renderer never touches the filesystem — the skill reads the markdown source, sends content, and writes the decoded PDF.
 
-#### Local Mode
-
-The skill writes the rendered markdown to disk, then passes the file path. The tool reads from disk, renders to PDF, writes the output, and returns the path.
-
-##### Request
-
-```json
-{
-  "input": "/path/to/resume.md",
-  "output": "/path/to/resume.pdf",
-  "metadata": {
-    "title": "Ahmad Akilan — Staff SWE",
-    "author": "Ahmad Akilan",
-    "subject": "Tailored for: Kraken — Staff Software Engineer",
-    "keywords": ["Kraken", "Staff Software Engineer"]
-  }
-}
-```
-
-Only `input` is required. `output` defaults to the input path with a `.pdf` extension. `css` is auto-detected by walking up from the input directory looking for `style.css`, or can be passed as an absolute path.
-
-##### Response (success)
-
-```json
-{
-  "pdf": "/path/to/resume.pdf",
-  "pageCount": 1
-}
-```
-
-#### Remote Mode
-
-The skill passes markdown content inline. The tool renders it and returns the PDF as a base64-encoded embedded resource.
-
-##### Request
+#### Request
 
 ```json
 {
@@ -63,9 +29,16 @@ The skill passes markdown content inline. The tool renders it and returns the PD
 }
 ```
 
-`filename` provides the output stem (no path, no extension). `css` can be passed as inline CSS content; if omitted, the server uses its bundled default stylesheet.
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `input` | string | yes | Full markdown content of the rendered resume. |
+| `filename` | string | no | Stem used in the response URI label (e.g. `render://20260410_Energetech_Resume.pdf`). Defaults to `"resume"`. The server does **not** use this as a filesystem path. |
+| `css` | string | no | Inline CSS overrides. If omitted, the server uses its bundled default stylesheet. |
+| `metadata` | object | no | `title`, `author`, `subject`, `keywords` — stamped into the PDF document properties. |
 
-##### Response (success)
+#### Response (success)
+
+Two content blocks: a `resource` carrying the PDF bytes, and a `text` block carrying the page count.
 
 ```json
 {
@@ -77,16 +50,20 @@ The skill passes markdown content inline. The tool renders it and returns the PD
         "mimeType": "application/pdf",
         "blob": "<base64-encoded PDF bytes>"
       }
+    },
+    {
+      "type": "text",
+      "text": "{\"pageCount\":1}"
     }
   ]
 }
 ```
 
-The client is responsible for decoding and writing the PDF to the user's directory.
+The `uri` is a label, not a fetchable path. The client decodes `blob` and writes the PDF wherever it chose. The `pageCount` text block supports the skill's page-fit verification loop.
 
 #### Response (error)
 
-Both modes return `isError: true` with a text content block:
+`isError: true` with a text content block:
 
 ```text
 Error rendering resume: <error message>

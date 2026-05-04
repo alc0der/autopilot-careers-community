@@ -19,7 +19,7 @@ export type PdfMetadata = {
   keywords?: string[];
 };
 
-const RENDERER_VERSION = "2.2.0";
+const RENDERER_VERSION = "2.2.1";
 
 const BROWSER_CANDIDATES: Record<string, string[]> = {
   chrome: [

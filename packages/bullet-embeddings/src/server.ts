@@ -12,7 +12,7 @@ import { initIndexes } from "./lib/vectra.js";
 function createServer(): McpServer {
   const server = new McpServer({
     name: "bullet-embeddings",
-    version: "0.1.0",
+    version: "1.0.0",
   });
   registerHarvestTool(server);
   registerEmbedAchievementTool(server);

@@ -1,9 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { readFile } from "fs/promises";
 import { parse } from "yaml";
 import { createHash } from "crypto";
-import { basename } from "path";
 import { getEmbeddings, getEmbedding, ollamaErrorResponse } from "../lib/embeddings.js";
 import { getBulletsIndex, getAchievementsIndex } from "../lib/vectra.js";
 
@@ -41,10 +39,12 @@ function textHash(text: string): string {
 export function registerHarvestTool(server: McpServer): void {
   server.tool(
     "harvest",
-    "Embed bullets from an AI YAML resume file into Vectra for trust analysis",
-    { file: z.string().describe("Path to AI YAML file") },
-    async ({ file }) => {
-      const content = await readFile(file, "utf-8");
+    "Embed bullets from an AI YAML resume (inline content) into Vectra for trust analysis",
+    {
+      content: z.string().describe("Full YAML text of the *_ai.yaml file"),
+      filename: z.string().describe("Basename of the AI YAML file (e.g. '20260410_Energetech_Resume_ai.yaml') — used to derive resumeStem, date, company, role, resume_file"),
+    },
+    async ({ content, filename }) => {
       const data = parse(content) as AiYaml;
 
       if (!data.jobs || data.jobs.length === 0) {
@@ -55,7 +55,6 @@ export function registerHarvestTool(server: McpServer): void {
         };
       }
 
-      const filename = basename(file);
       const resumeStem = filename.replace(/_ai\.yaml$/, "");
       const { date, company, role } = parseResumeStem(filename);
 

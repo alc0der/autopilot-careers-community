@@ -20,7 +20,7 @@ views {
         autolayout
     }
 
-    dynamic resumeSkill "ColdStart" "Scenario: embedding database wiped. User requests a resume via CoWork, system bootstraps with empty index then rebuilds over successive resumes." {
+    dynamic resumeSkill "ColdStart" "Scenario: embedding database wiped. User requests a resume via CoWork, system bootstraps with empty index then rebuilds over successive resumes. Per ADR 0004, the skill is the sole filesystem owner — MCP servers receive inline content, not paths." {
         claudeDesktop -> writeResumePlugin "Invokes /fetch with job URL"
         writeResumePlugin -> linkedinFetcher "Calls fetch_job"
         linkedinFetcher -> linkedin "Scrapes job posting"
@@ -29,14 +29,17 @@ views {
         writeResumePlugin -> thateDb "Reads base.yaml and prior resumes for context"
         writeResumePlugin -> thateDb "Saves annotated JD to db/jd-analyzed/"
         claudeDesktop -> writeResumePlugin "Invokes /synthesize"
-        writeResumePlugin -> resumeEmbeddings "Queries for similar bullets (returns empty — cold start)"
+        writeResumePlugin -> thateDb "Reads annotated JD"
+        writeResumePlugin -> resumeEmbeddings "Queries similar bullets (sends jd_text inline; returns empty — cold start)"
         resumeEmbeddings -> ollama "Embeds query text"
         writeResumePlugin -> thateDb "Reads base.yaml, contact.yaml"
         writeResumePlugin -> thateDb "Writes new AI YAML to db/resumes/"
-        writeResumePlugin -> ohmycvRender "Renders Markdown to PDF"
-        writeResumePlugin -> resumeEmbeddings "Harvests bullets from new resume"
+        writeResumePlugin -> thateDb "Reads rendered Markdown"
+        writeResumePlugin -> ohmycvRender "Sends inline Markdown to render_resume; receives PDF bytes"
+        writeResumePlugin -> thateDb "Writes decoded PDF to db/resumes/"
+        writeResumePlugin -> thateDb "Reads new AI YAML for harvest"
+        writeResumePlugin -> resumeEmbeddings "Harvests bullets (sends YAML content + filename inline)"
         resumeEmbeddings -> ollama "Embeds each bullet"
-        resumeEmbeddings -> thateDb "Reads resume YAML during harvest"
         autolayout lr
     }
 
