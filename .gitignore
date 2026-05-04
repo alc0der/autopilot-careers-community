@@ -11,3 +11,6 @@ workspace.json
 **/.claude/settings.local.json
 .env
 __pycache__/
+.containers/
+.playwright-mcp/
+plugins-settings-*.js
