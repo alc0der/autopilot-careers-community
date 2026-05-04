@@ -6,12 +6,17 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "mcp:install": "python3 scripts/claude_mcp.py install",
-    "mcp:status": "python3 scripts/claude_mcp.py status",
+    "mcp:install:claude": "python3 scripts/claude_mcp.py install",
+    "mcp:install:container:claude": "python3 scripts/claude_mcp.py install --mode container",
+    "mcp:status:claude": "python3 scripts/claude_mcp.py status",
     "bundle": "pnpm --dir packages/agent-marketplace bundle",
     "claude:deploy": "pnpm --dir packages/agent-marketplace claude:deploy",
     "docs": "container run --rm -p 8080:8080 -v \"$(pwd)\":/usr/local/structurizr structurizr/lite:latest",
-    "codex:publish": "pnpm --dir packages/agent-marketplace codex:publish"
+    "codex:publish": "pnpm --dir packages/agent-marketplace codex:publish",
+    "mcp:containers:build": "sh -c 'if command -v container-compose >/dev/null 2>&1; then container-compose build; else docker compose build; fi'",
+    "mcp:containers:start": "sh -c 'if command -v container-compose >/dev/null 2>&1; then container-compose up -d; else docker compose up -d; fi'",
+    "mcp:containers:stop": "sh -c 'if command -v container-compose >/dev/null 2>&1; then container-compose down; else docker compose down; fi'",
+    "mcp:containers:config": "MCP_MODE=container pnpm codex:publish && MCP_MODE=container python3 packages/agent-marketplace/scripts/claude_plugin.py deploy"
   },
   "devDependencies": {
     "turbo": "^2.0.0",

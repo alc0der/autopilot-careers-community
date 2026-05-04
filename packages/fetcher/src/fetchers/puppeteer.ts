@@ -1,8 +1,9 @@
 import { createBrowser } from "../browsers";
 import { checkLoginStatus, isLinkedInUrl } from "../linkedIn";
 import { promptLogin as didUserConfirmedLogin } from "../app_cli";
+import type { HtmlFetcher } from "./index";
 
-export const fetchJobWithPuppeteer = async (url: string) => {
+export const fetchJobWithPuppeteer = async (url: string): Promise<string> => {
   const browser = await createBrowser();
   const page = await browser.newPage();
   const response = await page.goto(url);
@@ -26,3 +27,5 @@ export const fetchJobWithPuppeteer = async (url: string) => {
   await browser.close();
   return pageContent;
 };
+
+export const createPuppeteerFetcher = (): HtmlFetcher => fetchJobWithPuppeteer;

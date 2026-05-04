@@ -5,7 +5,7 @@ const shared = {
   platform: "node",
   target: "node18",
   format: "cjs",
-  external: ["puppeteer-core"],
+  external: ["puppeteer-core", "express"],
   loader: {
     ".css": "text",
     ".otf": "base64",

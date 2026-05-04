@@ -1,11 +1,12 @@
 import { Ollama } from "ollama";
 
 const MODEL = "nomic-embed-text";
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL ?? "http://localhost:11434";
 
 export class OllamaUnavailableError extends Error {
   constructor(cause: unknown) {
     super(
-      `Ollama is not reachable at http://localhost:11434.\n` +
+      `Ollama is not reachable at ${OLLAMA_BASE_URL}.\n` +
         `Required model: ${MODEL}\n` +
         `Original error: ${cause}`
     );
@@ -17,7 +18,7 @@ let client: Ollama | null = null;
 
 function getClient(): Ollama {
   if (!client) {
-    client = new Ollama();
+    client = new Ollama({ host: OLLAMA_BASE_URL });
   }
   return client;
 }

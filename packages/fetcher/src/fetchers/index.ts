@@ -1,18 +1,17 @@
 import { fetchJobWithApi, RateLimitError } from "./api";
-import { fetchJobWithPuppeteer } from "./puppeteer";
-import { parseArticle } from "../html-processor";
 
 export { RateLimitError } from "./api";
 
-export const fetchJob = async (urlOrId: string, usePuppeteer = false) => {
-  // Use Puppeteer for non-LinkedIn URLs or when requested
+export type HtmlFetcher = (url: string) => Promise<string>;
+
+export const fetchJob = async (urlOrId: string, htmlFetcher?: HtmlFetcher) => {
   const isLinkedIn = urlOrId.includes("linkedin.com") || /^\d+$/.test(urlOrId);
 
-  if (usePuppeteer || !isLinkedIn) {
-    const url = /^\d+$/.test(urlOrId)
-      ? `https://www.linkedin.com/jobs/view/${urlOrId}`
-      : urlOrId;
-    const html = await fetchJobWithPuppeteer(url);
+  if (!isLinkedIn) {
+    if (!htmlFetcher) {
+      throw new Error(`No htmlFetcher provided for non-LinkedIn URL: ${urlOrId}`);
+    }
+    const html = await htmlFetcher(urlOrId);
     return { html, title: "Job Posting" };
   }
 
@@ -32,16 +31,17 @@ export const fetchJob = async (urlOrId: string, usePuppeteer = false) => {
     `;
     return { html, title: `${jobData.title} | ${jobData.company}`, jobData };
   } catch (error) {
-    // Let rate limit errors propagate so the MCP layer can inform the agent
     if (error instanceof RateLimitError) {
       throw error;
     }
-    // Fallback to Puppeteer for other API failures
-    console.log(`API failed (${error instanceof Error ? error.message : error}), falling back to Puppeteer`);
+    if (!htmlFetcher) {
+      throw error;
+    }
+    console.log(`API failed (${error instanceof Error ? error.message : error}), falling back to htmlFetcher`);
     const url = /^\d+$/.test(urlOrId)
       ? `https://www.linkedin.com/jobs/view/${urlOrId}`
       : urlOrId;
-    const html = await fetchJobWithPuppeteer(url);
+    const html = await htmlFetcher(url);
     return { html, title: "Job Posting" };
   }
 };

@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { mkdir } from "fs/promises";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = join(__dirname, "..", "..", "data");
+const DATA_DIR = process.env.BULLET_DATA_DIR ?? join(__dirname, "..", "..", "data");
 
 let achievementsIndex: LocalIndex | null = null;
 let bulletsIndex: LocalIndex | null = null;

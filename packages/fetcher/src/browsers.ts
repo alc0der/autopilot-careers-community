@@ -36,7 +36,14 @@ const maybeNeeded = {
   args: ["--start-maximized", "--no-sandbox", "--disable-setuid-sandbox"],
 };
 
-const browserProps = googleChromeTest;
+// CHROME_EXECUTABLE_PATH / CHROME_USER_DATA_DIR let container environments
+// supply a system Chromium instead of relying on macOS-specific paths.
+const browserProps: ChromeVersion = process.env.CHROME_EXECUTABLE_PATH
+  ? {
+      executablePath: process.env.CHROME_EXECUTABLE_PATH,
+      userDataDir: process.env.CHROME_USER_DATA_DIR ?? "/tmp/chrome-user-data",
+    }
+  : googleChromeTest;
 
 export async function createBrowser(options?: { headless?: boolean }) {
   const headless = options?.headless ?? true;
@@ -54,6 +61,7 @@ export async function createBrowser(options?: { headless?: boolean }) {
     defaultViewport: null,
     ...(headless ? {} : { slowMo: 1000 }),
     args,
+    ...(browserProps.executablePath ? { executablePath: browserProps.executablePath } : {}),
     userDataDir: browserProps.userDataDir,
   });
 }

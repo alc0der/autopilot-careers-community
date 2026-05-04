@@ -65,6 +65,24 @@ def _build_mcp_config(mode: str, root: Path) -> dict[str, object]:
             }
         }
 
+    if mode == "container":
+        return {
+            "mcpServers": {
+                "linkedin-fetcher": {
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3001/mcp", "--allow-http"],
+                },
+                "oh-my-cv-render": {
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3002/mcp", "--allow-http"],
+                },
+                "bullet-embeddings": {
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3003/mcp", "--allow-http"],
+                },
+            }
+        }
+
     return {
         "mcpServers": {
             "linkedin-fetcher": {

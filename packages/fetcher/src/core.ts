@@ -2,8 +2,9 @@ import { extractArticle, htmlToMarkdown } from "./htmlToMarkdown";
 import { extractReadModeHTML } from "./markdownProcessor";
 import { normalizeMarkdown } from "./normalizeMarkdown";
 import { classifyJobPosting } from "./classifyJobPosting";
-import { fetchJob, RateLimitError } from "./fetchers";
+import { fetchJob, RateLimitError, type HtmlFetcher } from "./fetchers";
 export { RateLimitError } from "./fetchers";
+export type { HtmlFetcher } from "./fetchers";
 import { fileLogger as fileLoggerFn, logger } from "./loggers";
 
 function resolveUrl(input: { url?: string; id?: string }): { url: URL; id: string } {
@@ -21,12 +22,15 @@ function resolveUrl(input: { url?: string; id?: string }): { url: URL; id: strin
   throw new Error("Either url or id must be provided");
 }
 
-export async function fetchJobAsMarkdown(input: { url?: string; id?: string }): Promise<string> {
+export async function fetchJobAsMarkdown(
+  input: { url?: string; id?: string },
+  htmlFetcher?: HtmlFetcher,
+): Promise<string> {
   const { url, id } = resolveUrl(input);
   const urlString = url.toString();
   const fileLogger = fileLoggerFn(id);
 
-  const { html: htmlContent, title, jobData } = await fetchJob(urlString);
+  const { html: htmlContent, title, jobData } = await fetchJob(urlString, htmlFetcher);
   logger.info(`Job fetched: ${title}`);
   fileLogger.info(htmlContent);
 

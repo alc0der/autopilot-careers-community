@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 SERVER_CONFIG = {
-    "linkedin-fetcher": "packages/fetcher",
-    "oh-my-cv-render": "packages/renderer",
-    "bullet-embeddings": "packages/bullet-embeddings",
+    "linkedin-fetcher": {"path": "packages/fetcher",           "port": 3001},
+    "oh-my-cv-render":  {"path": "packages/renderer",          "port": 3002},
+    "bullet-embeddings":{"path": "packages/bullet-embeddings", "port": 3003},
 }
 DEFAULT_CONFIG_PATH = Path.home() / "Library/Application Support/Claude/claude_desktop_config.json"
 
@@ -35,14 +35,21 @@ def install(args: argparse.Namespace) -> None:
     if not isinstance(mcp_servers, dict):
         raise SystemExit(f"Invalid mcpServers section in {config_path}")
 
-    for name, relative_path in SERVER_CONFIG.items():
-        mcp_servers[name] = {
-            "command": "pnpm",
-            "args": ["--prefix", str(root / relative_path), "--silent", "run", "mcp"],
-        }
+    if args.mode == "container":
+        for name, cfg in SERVER_CONFIG.items():
+            mcp_servers[name] = {
+                "command": "npx",
+                "args": ["-y", "mcp-remote", f"http://localhost:{cfg['port']}/mcp", "--allow-http"],
+            }
+    else:
+        for name, cfg in SERVER_CONFIG.items():
+            mcp_servers[name] = {
+                "command": "pnpm",
+                "args": ["--prefix", str(root / cfg["path"]), "--silent", "run", "mcp"],
+            }
 
     config_path.write_text(json.dumps(data, indent=2) + "\n")
-    print(f"Updated {config_path}")
+    print(f"Updated {config_path} (mode: {args.mode})")
 
 
 def status(args: argparse.Namespace) -> None:
@@ -59,9 +66,12 @@ def status(args: argparse.Namespace) -> None:
         config = mcp_servers.get(name)
         if not isinstance(config, dict):
             continue
-        args_value = config.get("args", [])
-        if isinstance(args_value, list):
-            print(f"{name}: {' '.join(map(str, args_value))}")
+        if "url" in config:
+            print(f"{name}: {config['url']}")
+        else:
+            args_value = config.get("args", [])
+            if isinstance(args_value, list):
+                print(f"{name}: {' '.join(map(str, args_value))}")
 
 
 def main() -> None:
@@ -71,6 +81,7 @@ def main() -> None:
     install_parser = subparsers.add_parser("install")
     install_parser.add_argument("--root", default=str(Path.cwd()))
     install_parser.add_argument("--config", default=str(default_config_path()))
+    install_parser.add_argument("--mode", choices=["local", "container"], default="local")
     install_parser.set_defaults(func=install)
 
     status_parser = subparsers.add_parser("status")

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
@@ -13,9 +14,9 @@ PACKAGE_ROOT = Path(__file__).resolve().parent.parent
 REPO_ROOT = PACKAGE_ROOT.parent.parent
 ZIP_NAME = "write-resume-plugin-codex"
 DEFAULT_TARGET_PROJECT_ROOT = Path.home() / "Documents/Projects/Career on Autopilot"
-DEFAULT_FETCHER_URL = "https://mcp.alc0der.dev/fetcher"
-DEFAULT_RENDERER_URL = "https://mcp.alc0der.dev/renderer"
-DEFAULT_EMBEDDINGS_URL = "https://mcp.alc0der.dev/bullet-embeddings"
+DEFAULT_FETCHER_URL = "https://mcp.autopilot.careers/fetcher"
+DEFAULT_RENDERER_URL = "https://mcp.autopilot.careers/renderer"
+DEFAULT_EMBEDDINGS_URL = "https://mcp.autopilot.careers/bullet-embeddings"
 MARKETPLACE_NAME = "autopilot-careers"
 PLUGIN_NAME = "write-resume-plugin"
 CODEX_CACHE_ROOT = Path.home() / ".codex" / "plugins" / "cache"
@@ -93,6 +94,24 @@ def build_mcp_config(mode: str, root: Path) -> dict[str, object]:
             }
         }
 
+    if mode == "container":
+        return {
+            "mcpServers": {
+                "linkedin-fetcher": {
+                    "url": "http://localhost:3001/mcp",
+                    "enabled": True,
+                },
+                "oh-my-cv-render": {
+                    "url": "http://localhost:3002/mcp",
+                    "enabled": True,
+                },
+                "bullet-embeddings": {
+                    "url": "http://localhost:3003/mcp",
+                    "enabled": True,
+                },
+            }
+        }
+
     return {
         "mcpServers": {
             "linkedin-fetcher": {
@@ -136,6 +155,7 @@ def render_codex_mcp_toml(mcp_config: dict) -> str:
     for name, spec in servers.items():
         lines = [f"[mcp_servers.{name}]"]
         if "url" in spec:
+            lines.append(f'type = "http"')
             lines.append(f"url = {_toml_string(spec['url'])}")
         else:
             command = spec["command"]
@@ -198,6 +218,26 @@ def write_codex_mcp_servers(config_path: Path, mcp_config: dict) -> bool:
     return False
 
 
+CODEX_CLI = Path("/Applications/Codex.app/Contents/Resources/codex")
+
+
+def ensure_marketplace_registered(project_root: Path) -> bool:
+    """Register the local marketplace with the Codex CLI if not already present.
+
+    The CLI writes a [marketplaces.autopilot-careers] entry to ~/.codex/config.toml
+    and populates the plugin cache, so CoWork picks up the latest version on
+    next launch. Returns True if the registration ran (idempotent — safe to re-run).
+    """
+    if not CODEX_CLI.exists():
+        return False
+    result = subprocess.run(
+        [str(CODEX_CLI), "plugin", "marketplace", "add", str(project_root)],
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0
+
+
 def sync_codex_plugin_cache(plugin_dir: Path) -> Path:
     """Mirror the workspace plugin into Codex's runtime cache.
 
@@ -252,6 +292,7 @@ def main() -> None:
     reset_path(legacy_skills_dir)
     mcp_toml_updated = write_codex_mcp_servers(codex_config_path, mcp_config)
     cache_dir = sync_codex_plugin_cache(output_dir)
+    marketplace_registered = ensure_marketplace_registered(target_project_root)
 
     zip_path = write_zip(output_dir, version)
 
@@ -263,6 +304,8 @@ def main() -> None:
     if mcp_toml_updated:
         print(f"Updated MCP server tables in {codex_config_path}")
     print(f"Synced Codex runtime cache at {cache_dir}")
+    if marketplace_registered:
+        print(f"Registered marketplace autopilot-careers in ~/.codex/config.toml")
     print(f"Created {zip_path}")
 
 

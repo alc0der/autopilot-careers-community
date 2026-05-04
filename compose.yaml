@@ -1,0 +1,40 @@
+# MCP services for local container mode.
+#
+# Start:  container-compose up -d   (Apple)  |  docker compose up -d   (Docker)
+# Stop:   container-compose down             |  docker compose down
+# Build:  container-compose build            |  docker compose build
+#
+# OLLAMA_BASE_URL: override if the default doesn't reach your Ollama instance.
+#   Apple Container:  http://host.containers.internal:11434  (baked into image)
+#   Docker Desktop:   http://host.docker.internal:11434
+#   Note: container-compose v0.11.0 does not expand ${VAR:-default} in
+#   environment: values (bug). The Dockerfile ENV default is the real default.
+
+services:
+  linkedin-fetcher:
+    build:
+      context: .
+      dockerfile: packages/fetcher/Dockerfile
+    image: autopilot/fetcher
+    ports:
+      - "3001:3001"
+
+  oh-my-cv-render:
+    build:
+      context: .
+      dockerfile: packages/renderer/Dockerfile
+    image: autopilot/renderer
+    ports:
+      - "3002:3002"
+
+  bullet-embeddings:
+    build:
+      context: .
+      dockerfile: packages/bullet-embeddings/Dockerfile
+    image: autopilot/bullet-embeddings
+    ports:
+      - "3003:3003"
+    environment:
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
+    volumes:
+      - .containers/bullet-embeddings-data:/data

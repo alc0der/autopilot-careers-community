@@ -6,6 +6,7 @@ import { processOptions } from "./app_cli";
 import { isLinkedInUrl, renameLinkedInJob } from "./linkedIn";
 import { logger } from "./loggers";
 import { fetchJobAsMarkdown } from "./core";
+import { createPuppeteerFetcher } from "./fetchers/puppeteer";
 
 program
   .version(packageJson.version)
@@ -20,7 +21,7 @@ const { url, id } = processOptions(program.opts());
 
 (async () => {
   try {
-    const fullMarkdown = await fetchJobAsMarkdown({ url: url.toString(), id });
+    const fullMarkdown = await fetchJobAsMarkdown({ url: url.toString(), id }, createPuppeteerFetcher());
 
     if (program.opts().stdout) {
       process.stdout.write(fullMarkdown);
