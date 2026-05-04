@@ -70,4 +70,120 @@ model {
     linkedinFetcher -> linkedin "Scrapes job postings from"
     resumeEmbeddings -> ollama "Generates embeddings via nomic-embed-text"
     resumeEmbeddings -> thateDb "Reads resume YAMLs during harvest"
+
+    # ── Deployment environments ──────────────────────────────────────────────
+
+    deploymentEnvironment "Local (stdio)" {
+        deploymentNode "Developer Machine" "" "macOS" {
+            deploymentNode "Claude Desktop" "" "Electron / CoWork" {
+                containerInstance claudeDesktop
+                containerInstance writeResumePlugin
+            }
+            deploymentNode "db/" "" "Local filesystem" {
+                containerInstance thateDb
+            }
+            deploymentNode "pnpm Processes" "" "Node.js · stdio transport" {
+                containerInstance linkedinFetcher
+                containerInstance ohmycvRender
+                containerInstance resumeEmbeddings
+            }
+            deploymentNode "Ollama" "" "localhost:11434" {
+                softwareSystemInstance ollama
+            }
+        }
+    }
+
+    deploymentEnvironment "Local (container)" {
+        deploymentNode "Developer Machine" "" "macOS" {
+            deploymentNode "Claude Desktop" "" "Electron / CoWork" {
+                containerInstance claudeDesktop
+                containerInstance writeResumePlugin
+            }
+            deploymentNode "db/" "" "Local filesystem" {
+                containerInstance thateDb
+            }
+            deploymentNode "OCI Containers" "" "Docker / Apple Container · compose.yaml" {
+                deploymentNode "linkedin-fetcher :3001" "" "Node.js · HTTP" {
+                    containerInstance linkedinFetcher
+                }
+                deploymentNode "oh-my-cv-render :3002" "" "Node.js · HTTP" {
+                    containerInstance ohmycvRender
+                }
+                deploymentNode "bullet-embeddings :3003" "" "Node.js · HTTP" {
+                    containerInstance resumeEmbeddings
+                }
+            }
+            deploymentNode "Ollama" "" "host.containers.internal:11434" {
+                softwareSystemInstance ollama
+            }
+        }
+    }
+
+    deploymentEnvironment "Plugin Distribution (Claude)" {
+        deploymentNode "Workstation" "" "macOS · autopilot-careers monorepo" {
+            deploymentNode "packages/agent-marketplace" "" "pnpm bundle" {
+                claudeZip = infrastructureNode "write-resume-plugin-{v}.zip" "Claude Desktop plugin archive. Contains .claude-plugin/plugin.json, skills/, .mcp.json." "ZIP"
+            }
+            deploymentNode "scripts/claude_mcp.py" "" "python3 scripts/claude_mcp.py install" {
+                mcpEntries = infrastructureNode "MCP server entries" "linkedin-fetcher · oh-my-cv-render · bullet-embeddings as npx mcp-remote stdio bridges." "JSON"
+            }
+        }
+
+        deploymentNode "Claude Desktop" "" "~/Library/Application Support/Claude" {
+            cdConfig = infrastructureNode "claude_desktop_config.json" "mcpServers entries written by claude_mcp.py install. Used by standalone Claude Desktop." "JSON"
+            deploymentNode "CoWork session" "" "local-agent-mode-sessions/*/rpm/" {
+                rpmDir = infrastructureNode "plugin_*/" "Extracted here by claude_plugin.py deploy. Contains skills/, .mcp.json, .claude-plugin/." "Plugin files"
+            }
+        }
+
+        claudeZip -> rpmDir "extracted by claude_plugin.py deploy"
+        mcpEntries -> cdConfig "written by claude_mcp.py install"
+    }
+
+    deploymentEnvironment "Plugin Distribution (Codex)" {
+        deploymentNode "Workstation" "" "macOS · autopilot-careers monorepo" {
+            deploymentNode "packages/agent-marketplace" "" "pnpm bundle" {
+                codexZip = infrastructureNode "write-resume-plugin-codex-{v}.zip" "Codex plugin archive. Contains .codex-plugin/, skills/, .mcp.json." "ZIP"
+            }
+        }
+
+        deploymentNode "Career on Autopilot project" "" "~/Documents/Projects/Career on Autopilot" {
+            pluginSrc = infrastructureNode "plugin source" ".codex/plugins/write-resume-plugin/ — extracted from zip by publish_codex_plugin.py." "Plugin files"
+            mktJson = infrastructureNode "marketplace.json" ".agents/plugins/marketplace.json — defines the autopilot-careers marketplace URL." "JSON"
+        }
+
+        deploymentNode "Codex CLI data" "" "~/.codex" {
+            pluginCache = infrastructureNode "plugin cache" "plugins/cache/autopilot-careers/write-resume-plugin/local/ — synced from project source." "Plugin files"
+            codexToml = infrastructureNode "config.toml" "[marketplaces.autopilot-careers] entry written by codex plugin marketplace add." "TOML"
+        }
+
+        deploymentNode "Codex Desktop" "" "Codex app · reads ~/.codex at launch" {
+            codexLoaded = infrastructureNode "Loaded plugin" "Discovered via [marketplaces.autopilot-careers] in config.toml; plugin files read from cache." "Plugin files"
+        }
+
+        codexZip -> pluginSrc "extracted by publish_codex_plugin.py"
+        codexZip -> pluginCache "synced by publish_codex_plugin.py"
+        mktJson -> codexToml "registered by codex plugin marketplace add"
+        pluginCache -> codexLoaded "loaded at startup"
+    }
+
+    deploymentEnvironment "Hosted" {
+        deploymentNode "Developer Machine" "" "macOS" {
+            deploymentNode "Claude Desktop" "" "Electron / CoWork" {
+                containerInstance claudeDesktop
+                containerInstance writeResumePlugin
+            }
+            deploymentNode "db/" "" "Local filesystem" {
+                containerInstance thateDb
+            }
+        }
+        deploymentNode "mcp.autopilot.careers" "" "Cloud · HTTPS" {
+            containerInstance linkedinFetcher
+            containerInstance ohmycvRender
+            containerInstance resumeEmbeddings
+            deploymentNode "Ollama" "" "localhost:11434" {
+                softwareSystemInstance ollama
+            }
+        }
+    }
 }

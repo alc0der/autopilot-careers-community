@@ -48,6 +48,31 @@ views {
         autolayout lr
     }
 
+    deployment * "Plugin Distribution (Claude)" "DeploymentClaudePlugin" "How the Claude Desktop plugin zip is built on the workstation and deployed to CoWork, plus MCP server entries written to claude_desktop_config.json." {
+        include *
+        autolayout lr
+    }
+
+    deployment * "Plugin Distribution (Codex)" "DeploymentCodexPlugin" "How the Codex plugin zip is built on the workstation, extracted to the project directory, synced to the Codex CLI cache, and loaded by Codex Desktop." {
+        include *
+        autolayout lr
+    }
+
+    deployment * "Local (stdio)" "DeploymentStdio" "MCP servers as pnpm child processes on the developer machine." {
+        include *
+        autolayout lr
+    }
+
+    deployment * "Local (container)" "DeploymentContainer" "MCP servers as OCI containers, bridged via mcp-remote." {
+        include *
+        autolayout lr
+    }
+
+    deployment * "Hosted" "DeploymentHosted" "MCP servers hosted at mcp.autopilot.careers." {
+        include *
+        autolayout lr
+    }
+
     styles {
         element "Person" {
             shape Person
@@ -82,6 +107,11 @@ views {
         element "Agent" {
             shape Robot
             background #DA7756
+            color #FFFFFF
+        }
+        element "Infrastructure Node" {
+            shape Pipe
+            background #999999
             color #FFFFFF
         }
     }
