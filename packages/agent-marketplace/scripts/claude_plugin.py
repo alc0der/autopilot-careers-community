@@ -84,16 +84,16 @@ def _build_mcp_config(mode: str, root: Path) -> dict[str, object]:
         return {
             "mcpServers": {
                 "linkedin-fetcher": {
-                    "type": "http",
-                    "url": "http://localhost:3001/mcp",
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3001/mcp", "--allow-http"],
                 },
                 "oh-my-cv-render": {
-                    "type": "http",
-                    "url": "http://localhost:3002/mcp",
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3002/mcp", "--allow-http"],
                 },
                 "bullet-embeddings": {
-                    "type": "http",
-                    "url": "http://localhost:3003/mcp",
+                    "command": "npx",
+                    "args": ["-y", "mcp-remote", "http://localhost:3003/mcp", "--allow-http"],
                 },
             }
         }
