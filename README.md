@@ -2,6 +2,13 @@
 
 A system for resume tailoring, job application support, and career planning.
 
+## Usage
+
+Start a chat thread in Claude or Codex:
+```
+/write-resume for https://www.linkedin.com/jobs/view/${jobUrl:-1234567890}
+```
+
 ## Installation
 
 ### Codex
@@ -29,13 +36,6 @@ If your career data directory lives inside `~/Documents` or `~/Desktop` and you 
 3. **Pin the folder as "Always Keep on This Mac"** — right-click the project folder in Finder → Download Now. This reduces but may not fully eliminate the issue.
 
 > **Note:** Restarting Claude, killing processes, or rebooting will **not** resolve this — iCloud re-establishes its locks immediately upon restart.
-
-## Usage
-
-Start a chat thread in Claude or Codex:
-```
-/write-resume for https://www.linkedin.com/jobs/view/${jobUrl:-1234567890}
-```
 
 ## Contributing
 
