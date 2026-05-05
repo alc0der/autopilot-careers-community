@@ -1,5 +1,0 @@
-#!/usr/bin/env node
-
-// Delegate to the esbuild bundle which has all dependencies inlined
-// (CSS, markdown-it, etc.) except puppeteer-core (external).
-require('../bundle/oh-my-cv-render.js');
